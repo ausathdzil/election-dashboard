@@ -1,5 +1,5 @@
 import { MapCard } from '@/components/map/map-card';
-import { SearchArticle } from '@/components/search/search-article';
+import { ArticleCard } from '@/components/search/article-card';
 import { TopNews } from '@/components/top-sources/top-news';
 import { NewsTrends } from '@/components/trends/news-trends';
 
@@ -26,7 +26,7 @@ export default async function Home(props: HomeProps) {
         searchParams={{ start_date, end_date, granularity, province }}
       />
       <TopNews province={province} />
-      <SearchArticle searchParams={{ q, page, size }} />
+      <ArticleCard searchParams={{ q, page, size }} />
     </main>
   );
 }

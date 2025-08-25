@@ -1,5 +1,4 @@
 // biome-ignore-all lint/suspicious/noArrayIndexKey: Required for pagination keys
-
 'use client';
 
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
@@ -7,7 +6,7 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import type { GetNewsResponse } from '@/lib/types';
 
-export function ArticlePagination(news: GetNewsResponse) {
+export function SearchPagination(news: GetNewsResponse) {
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const router = useRouter();

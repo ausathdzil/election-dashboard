@@ -45,6 +45,14 @@ export function Article({ article }: { article: ArticleType }) {
               minute: 'numeric',
             })}
           </span>
+          {article.province && article.city && (
+            <>
+              <span>&bull;</span>
+              <span>{article.city}</span>
+              <span>&bull;</span>
+              <span>{article.province}</span>
+            </>
+          )}
         </CardFooter>
       </Card>
     </Link>

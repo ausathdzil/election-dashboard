@@ -10,17 +10,18 @@ import {
 } from '@/components/ui/card';
 import { getNews } from '@/lib/data';
 import { Article } from './article';
-import { ArticlePagination } from './article-pagination';
+import { ArticleActions } from './article-actions';
 import { SearchInput } from './search-input';
+import { SearchPagination } from './search-pagination';
 
-type SearchArticleProps = {
+type ArticleCardProps = {
   searchParams: {
     q: string;
     page: string;
     size: string;
   };
 };
-export async function SearchArticle(props: SearchArticleProps) {
+export async function ArticleCard(props: ArticleCardProps) {
   const news = await getNews(props.searchParams);
 
   return (
@@ -30,6 +31,7 @@ export async function SearchArticle(props: SearchArticleProps) {
           <SearchIcon />
           Search Articles
         </CardTitle>
+        <ArticleActions />
       </CardHeader>
       <CardContent className="space-y-4">
         <Suspense fallback={null}>
@@ -40,7 +42,7 @@ export async function SearchArticle(props: SearchArticleProps) {
         ))}
       </CardContent>
       <CardFooter>
-        <ArticlePagination {...news} />
+        <SearchPagination {...news} />
       </CardFooter>
     </Card>
   );

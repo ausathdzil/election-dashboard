@@ -22,7 +22,7 @@ export async function TopNews(props: TopNewsProps) {
       </CardHeader>
       <CardContent className="grid grid-cols-1 items-stretch gap-6 md:grid-cols-2">
         <div className="min-w-0">
-          <TopNewsBarChart chartData={topNewsSource.data} />
+          <TopNewsBarChart data={topNewsSource.data} />
         </div>
         <div className="min-w-0">
           <TopNewsPieChart data={topNewsSource.data} />

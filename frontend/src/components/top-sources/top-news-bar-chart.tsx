@@ -10,13 +10,28 @@ import {
 } from '@/components/ui/chart';
 import type { NewsSource } from '@/lib/types';
 
-export function TopNewsBarChart({ chartData }: { chartData: NewsSource[] }) {
-  const chartConfig = {
-    article_count: {
-      label: 'Articles',
-      color: 'var(--chart-1)',
-    },
-  } satisfies ChartConfig;
+const chartColors = [
+  'var(--chart-1)',
+  'var(--chart-2)',
+  'var(--chart-3)',
+  'var(--chart-4)',
+  'var(--chart-5)',
+];
+
+export function TopNewsBarChart({ data }: { data: NewsSource[] }) {
+  const chartData = data.map((item, index) => ({
+    source: item.author,
+    articles: item.article_count,
+    fill: chartColors[index % chartColors.length],
+  }));
+
+  const chartConfig = data.reduce((acc, item, index) => {
+    acc[item.author] = {
+      label: item.author,
+      color: chartColors[index % chartColors.length],
+    };
+    return acc;
+  }, {} as ChartConfig);
 
   return (
     <ChartContainer className="h-[280px] w-full" config={chartConfig}>
@@ -24,7 +39,7 @@ export function TopNewsBarChart({ chartData }: { chartData: NewsSource[] }) {
         <CartesianGrid vertical={false} />
         <XAxis
           axisLine={false}
-          dataKey="author"
+          dataKey="source"
           tickLine={false}
           tickMargin={10}
         />
@@ -32,7 +47,7 @@ export function TopNewsBarChart({ chartData }: { chartData: NewsSource[] }) {
           content={<ChartTooltipContent hideLabel />}
           cursor={false}
         />
-        <Bar dataKey="article_count" fill="var(--color-article_count)" />
+        <Bar dataKey="articles" fill="var(--color-article_count)" />
       </BarChart>
     </ChartContainer>
   );

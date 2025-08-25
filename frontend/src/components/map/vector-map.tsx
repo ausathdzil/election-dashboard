@@ -94,6 +94,7 @@ export function VectorMap({ summaryData }: MapDataProps) {
 
     const map = new mapboxgl.Map({
       container: mapContainerRef.current,
+      projection: 'mercator',
       center: [INITIAL_LONGITUDE, INITIAL_LATITUDE],
       zoom: INITIAL_ZOOM,
     });
