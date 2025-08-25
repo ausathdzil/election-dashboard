@@ -20,10 +20,10 @@ export default async function Home(props: HomeProps) {
 
   return (
     <main className="flex w-full max-w-6xl flex-1 flex-col gap-8 border-x border-dashed p-8">
-      <SearchArticle searchParams={{ q, page, size }} />
       <MapCard />
       <TopNews />
       <NewsTrends searchParams={{ start_date, end_date, granularity }} />
+      <SearchArticle searchParams={{ q, page, size }} />
     </main>
   );
 }

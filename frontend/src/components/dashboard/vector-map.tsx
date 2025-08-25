@@ -22,6 +22,7 @@ import {
 import { getCitySummary } from '@/lib/data';
 import type { ProvinceSummary } from '@/lib/types';
 import { cn } from '@/lib/utils';
+import { Switch } from '../ui/switch';
 
 const INITIAL_LONGITUDE = 117.968_86;
 const INITIAL_LATITUDE = -2.5669;
@@ -35,12 +36,21 @@ type MapDataProps = {
 export function VectorMap({ summaryData }: MapDataProps) {
   const mapRef = useRef<mapboxgl.Map | null>(null);
   const mapContainerRef = useRef<HTMLDivElement>(null);
-  const [fullScreen, setFullScreen] = useState(false);
+  const selectedFeatureRef = useRef<TargetFeature | null>(null);
 
+  const [activeLayerIds, setActiveLayerIds] = useState<string[]>([
+    'province-fill',
+    'province-outline',
+    'province-hover-outline',
+    'city-circle',
+    'city-article-count',
+    'city-label',
+  ]);
+  const [mapLoaded, setMapLoaded] = useState<boolean>(false);
+  const [fullScreen, setFullScreen] = useState<boolean>(false);
   const [selectedFeature, setSelectedFeature] = useState<TargetFeature | null>(
     null
   );
-  const selectedFeatureRef = useRef<TargetFeature | null>(null);
 
   const { data: cityData, isLoading } = useQuery({
     queryKey: ['citySummary', selectedFeature?.properties.province],
@@ -68,27 +78,15 @@ export function VectorMap({ summaryData }: MapDataProps) {
 
     let _hoveredProvince: string | null = null;
 
-    const fullScreenControl = new mapboxgl.FullscreenControl({
-      container: document.querySelector('#map-container') as HTMLElement,
-    });
-    const geocoder = new MapboxGeocoder({
-      accessToken: mapboxgl.accessToken as string,
-      useBrowserFocus: true,
-      mapboxgl,
-    });
-
-    map.addControl(geocoder as unknown as mapboxgl.IControl);
-    map.addControl(fullScreenControl);
-
     map.on('load', () => {
       if (!API_URL) {
         return;
       }
+      setMapLoaded(true);
 
       map.addSource('geographies', {
         type: 'vector',
         tiles: [`${API_URL}/tiles/{z}/{x}/{y}`],
-        minzoom: 0,
         maxzoom: 14,
         promoteId: { geographies: 'ogc_fid' },
       });
@@ -213,7 +211,6 @@ export function VectorMap({ summaryData }: MapDataProps) {
         }
 
         const feature = e.features[0];
-        console.log('Province clicked:', feature.properties);
 
         if (selectedFeatureRef.current) {
           setSelectedFeature(null);
@@ -221,7 +218,6 @@ export function VectorMap({ summaryData }: MapDataProps) {
 
         if (feature && feature.properties?.feature_type === 'province') {
           setSelectedFeature(feature as TargetFeature);
-          console.log('Selected feature set:', feature.properties);
         }
       });
 
@@ -308,8 +304,28 @@ export function VectorMap({ summaryData }: MapDataProps) {
       });
     });
 
+    const fullScreenControl = new mapboxgl.FullscreenControl({
+      container: document.querySelector('#map-container') as HTMLElement,
+    });
+    const navigationControl = new mapboxgl.NavigationControl();
+    const geocoder = new MapboxGeocoder({
+      accessToken: mapboxgl.accessToken as string,
+      useBrowserFocus: true,
+      mapboxgl,
+    });
+
+    map.addControl(geocoder as unknown as mapboxgl.IControl);
+    map.addControl(fullScreenControl);
+    map.addControl(navigationControl);
+
     document.addEventListener('fullscreenchange', () => {
       setFullScreen(document.fullscreenElement !== null);
+    });
+
+    map.on('idle', () => {
+      if (!map.getLayer('province-fill') || !map.getLayer('city-circle')) {
+        return;
+      }
     });
 
     return () => {
@@ -321,62 +337,150 @@ export function VectorMap({ summaryData }: MapDataProps) {
     selectedFeatureRef.current = selectedFeature;
   }, [selectedFeature]);
 
-  function handleClick(coordinates: [number, number]): void {
+  useEffect(() => {
+    if (!mapLoaded) {
+      return;
+    }
+
+    const map = mapRef.current;
+
+    const allLayerIds = [
+      'province-fill',
+      'province-outline',
+      'province-hover-outline',
+      'city-circle',
+      'city-article-count',
+      'city-label',
+    ];
+
+    for (const layerId of allLayerIds) {
+      if (activeLayerIds.includes(layerId)) {
+        map?.setLayoutProperty(layerId, 'visibility', 'visible');
+      } else {
+        map?.setLayoutProperty(layerId, 'visibility', 'none');
+      }
+    }
+  }, [activeLayerIds]);
+
+  const handleFlyTo = (coordinates: [number, number]): void => {
     mapRef.current?.flyTo({
       center: coordinates,
       zoom: 10,
     });
-  }
+  };
+
+  const handleSwitchLayer = (layerGroup: 'province' | 'city') => {
+    const provinceLayers = [
+      'province-fill',
+      'province-outline',
+      'province-hover-outline',
+    ];
+    const cityLayers = ['city-circle', 'city-article-count', 'city-label'];
+
+    const layersToToggle =
+      layerGroup === 'province' ? provinceLayers : cityLayers;
+    const allLayersCurrentlyVisible = layersToToggle.every((layer) =>
+      activeLayerIds.includes(layer)
+    );
+
+    if (allLayersCurrentlyVisible) {
+      // Hide all layers in the group
+      setActiveLayerIds(
+        activeLayerIds.filter((id) => !layersToToggle.includes(id))
+      );
+    } else {
+      // Show all layers in the group
+      const newActiveLayers = [...activeLayerIds];
+      layersToToggle.forEach((layer) => {
+        if (!newActiveLayers.includes(layer)) {
+          newActiveLayers.push(layer);
+        }
+      });
+      setActiveLayerIds(newActiveLayers);
+    }
+  };
+
+  const isProvinceVisible = () => {
+    return [
+      'province-fill',
+      'province-outline',
+      'province-hover-outline',
+    ].every((layer) => activeLayerIds.includes(layer));
+  };
+
+  const isCityVisible = () => {
+    return ['city-circle', 'city-article-count', 'city-label'].every((layer) =>
+      activeLayerIds.includes(layer)
+    );
+  };
 
   return (
     <div className={cn('relative h-[500px] flex-1', fullScreen && 'h-screen')}>
       <div className="size-full" ref={mapContainerRef} />
-      {selectedFeature && (
-        <div className="absolute top-2 left-2 z-50 size-fit max-w-[500px] bg-black/50 p-2">
-          <div className="text-center font-bold">
-            {selectedFeature.properties.name ||
-              selectedFeature.properties.province}
+      <div className="absolute top-2 left-2 z-50 flex flex-col gap-2">
+        <div className="flex flex-col bg-black/50 p-4 w-[150px]">
+          <div className="flex items-center justify-between">
+            <span>Province</span>
+            <Switch
+              checked={isProvinceVisible()}
+              onCheckedChange={() => handleSwitchLayer('province')}
+            />
           </div>
-          {isLoading ? (
-            <div className="text-sm">Loading...</div>
-          ) : (
-            <Table>
-              <TableHeader>
-                <TableRow className="text-black">
-                  <TableHead>City</TableHead>
-                  <TableHead>Articles</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {cityData?.features.map((feature) => (
-                  <TableRow
-                    className="hover:cursor-pointer"
-                    key={feature.properties.city || feature.properties.name}
-                    onClick={() =>
-                      handleClick(
-                        feature.geometry.coordinates as [number, number]
-                      )
-                    }
-                  >
-                    <TableCell>
-                      {feature.properties.city || feature.properties.name}
-                    </TableCell>
-                    <TableCell>{feature.properties.article_count}</TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-              <TableFooter>
-                <TableRow>
-                  <TableCell>Total</TableCell>
-                  <TableCell>
-                    {selectedFeature.properties.article_count}
-                  </TableCell>
-                </TableRow>
-              </TableFooter>
-            </Table>
-          )}
+          <div className="flex items-center justify-between">
+            <span>City</span>
+            <Switch
+              checked={isCityVisible()}
+              onCheckedChange={() => handleSwitchLayer('city')}
+            />
+          </div>
         </div>
-      )}
+        {selectedFeature && (
+          <div className="size-fit max-w-[500px] bg-black/50 p-2">
+            <div className="text-center font-bold">
+              {selectedFeature.properties.name ||
+                selectedFeature.properties.province}
+            </div>
+            {isLoading ? (
+              <div className="text-sm">Loading...</div>
+            ) : (
+              <Table>
+                <TableHeader>
+                  <TableRow className="text-black">
+                    <TableHead>City</TableHead>
+                    <TableHead>Articles</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {cityData?.features.map((feature) => (
+                    <TableRow
+                      className="hover:cursor-pointer"
+                      key={feature.properties.city || feature.properties.name}
+                      onClick={() =>
+                        handleFlyTo(
+                          feature.geometry.coordinates as [number, number]
+                        )
+                      }
+                    >
+                      <TableCell>
+                        {feature.properties.city || feature.properties.name}
+                      </TableCell>
+                      <TableCell>{feature.properties.article_count}</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+                <TableFooter>
+                  <TableRow>
+                    <TableCell>Total</TableCell>
+                    <TableCell>
+                      {selectedFeature.properties.article_count}
+                    </TableCell>
+                  </TableRow>
+                </TableFooter>
+              </Table>
+            )}
+          </div>
+        )}
+      </div>
     </div>
   );
 }
