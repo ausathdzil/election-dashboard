@@ -323,7 +323,7 @@ export function VectorMap({ summaryData }: MapDataProps) {
     });
 
     map.on('idle', () => {
-      if (!map.getLayer('province-fill') || !map.getLayer('city-circle')) {
+      if (!(map.getLayer('province-fill') && map.getLayer('city-circle'))) {
         return;
       }
     });
@@ -360,7 +360,7 @@ export function VectorMap({ summaryData }: MapDataProps) {
         map?.setLayoutProperty(layerId, 'visibility', 'none');
       }
     }
-  }, [activeLayerIds]);
+  }, [activeLayerIds, mapLoaded]);
 
   const handleFlyTo = (coordinates: [number, number]): void => {
     mapRef.current?.flyTo({
@@ -384,18 +384,16 @@ export function VectorMap({ summaryData }: MapDataProps) {
     );
 
     if (allLayersCurrentlyVisible) {
-      // Hide all layers in the group
       setActiveLayerIds(
         activeLayerIds.filter((id) => !layersToToggle.includes(id))
       );
     } else {
-      // Show all layers in the group
       const newActiveLayers = [...activeLayerIds];
-      layersToToggle.forEach((layer) => {
+      for (const layer of layersToToggle) {
         if (!newActiveLayers.includes(layer)) {
           newActiveLayers.push(layer);
         }
-      });
+      }
       setActiveLayerIds(newActiveLayers);
     }
   };
@@ -418,7 +416,7 @@ export function VectorMap({ summaryData }: MapDataProps) {
     <div className={cn('relative h-[500px] flex-1', fullScreen && 'h-screen')}>
       <div className="size-full" ref={mapContainerRef} />
       <div className="absolute top-2 left-2 z-50 flex flex-col gap-2">
-        <div className="flex flex-col bg-black/50 p-4 w-[150px]">
+        <div className="flex w-[150px] flex-col bg-black/50 p-4">
           <div className="flex items-center justify-between">
             <span>Province</span>
             <Switch
