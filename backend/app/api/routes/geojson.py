@@ -39,6 +39,7 @@ def get_tile(session: SessionDep, z: int, x: int, y: int):
             content=tile,
             media_type="application/vnd.mapbox-vector-tile",
             headers={
+                "Cache-Control": "public, max-age=3600, stale-while-revalidate=600",
                 "Access-Control-Allow-Origin": "*",
             },
         )

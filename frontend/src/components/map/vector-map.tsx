@@ -112,8 +112,9 @@ export function VectorMap({ summaryData }: MapDataProps) {
       map.addSource('geographies', {
         type: 'vector',
         tiles: [`${API_URL}/tiles/{z}/{x}/{y}`],
+        minzoom: 8,
         maxzoom: 14,
-        promoteId: { geographies: 'ogc_fid' },
+        promoteId: { geographies: 'feature_id' },
       });
 
       const maxCount = Math.max(
