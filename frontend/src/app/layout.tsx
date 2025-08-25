@@ -26,12 +26,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body
-        className={cn(
-          notoSansJP.variable,
-          'font-sans antialiased'
-        )}
-      >
+      <body className={cn(notoSansJP.variable, 'font-sans antialiased')}>
         <QueryProvider>
           <ThemeProvider
             attribute="class"

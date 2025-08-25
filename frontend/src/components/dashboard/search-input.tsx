@@ -30,13 +30,17 @@ export function SearchInput() {
       params.delete('q');
       params.delete('page');
     }
-    router.replace(`${pathname}?${params}`, { scroll: false });
+    const newParams =
+      `${pathname}?${params.toString()}` as __next_route_internal_types__.RouteImpl<string>;
+    router.replace(newParams, { scroll: false });
   }, DEBOUNCE_TIME);
 
   const handleSizeChange = (size: string) => {
     const params = new URLSearchParams(searchParams);
     params.set('size', size);
-    router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+    const newParams =
+      `${pathname}?${params.toString()}` as __next_route_internal_types__.RouteImpl<string>;
+    router.replace(newParams, { scroll: false });
   };
 
   return (

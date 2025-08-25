@@ -1,4 +1,5 @@
 // biome-ignore-all lint/complexity/noExcessiveLinesPerFunction: Mapbox
+// biome-ignore-all lint/correctness/useExhaustiveDependencies: Prevent map from resetting
 // biome-ignore-all lint/style/noMagicNumbers: Mapbox
 'use client';
 
@@ -24,7 +25,7 @@ import {
 import { getCitySummary } from '@/lib/data';
 import type { ProvinceSummary } from '@/lib/types';
 import { cn } from '@/lib/utils';
-import { Switch } from '../ui/switch';
+import { Switch } from '@/components/ui/switch';
 
 const DEBOUNCE_TIME = 500;
 
@@ -77,7 +78,9 @@ export function VectorMap({ summaryData }: MapDataProps) {
       } else {
         params.delete('province');
       }
-      router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+      const newParams =
+        `${pathname}?${params.toString()}` as __next_route_internal_types__.RouteImpl<string>;
+      router.replace(newParams, { scroll: false });
     },
     DEBOUNCE_TIME
   );
@@ -354,7 +357,7 @@ export function VectorMap({ summaryData }: MapDataProps) {
     return () => {
       map.remove();
     };
-  }, []);
+  }, [handleProvinceClick]);
 
   useEffect(() => {
     selectedFeatureRef.current = selectedFeature;
@@ -439,7 +442,7 @@ export function VectorMap({ summaryData }: MapDataProps) {
     <div className={cn('relative h-[500px] flex-1', fullScreen && 'h-screen')}>
       <div className="size-full" ref={mapContainerRef} />
       <div className="absolute top-2 left-2 z-50 flex flex-col gap-2">
-        <div className="flex w-[150px] flex-col bg-black/50 text-white p-4">
+        <div className="flex w-[150px] flex-col bg-black/50 p-4 text-white">
           <div className="flex items-center justify-between">
             <span>Province</span>
             <Switch
@@ -456,7 +459,7 @@ export function VectorMap({ summaryData }: MapDataProps) {
           </div>
         </div>
         {selectedFeature && (
-          <div className="size-fit max-w-[500px] bg-black/50 text-white p-2">
+          <div className="size-fit max-w-[500px] bg-black/50 p-2 text-white">
             <div className="text-center font-bold">
               {selectedFeature.properties.name ||
                 selectedFeature.properties.province}

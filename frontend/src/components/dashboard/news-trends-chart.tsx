@@ -48,7 +48,9 @@ export function NewsTrendsChart({ chartData }: { chartData: NewsTrend[] }) {
       params.set('end_date', '2023-12-10');
       params.set('granularity', 'monthly');
     }
-    router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+    const newParams =
+      `${pathname}?${params.toString()}` as __next_route_internal_types__.RouteImpl<string>;
+    router.replace(newParams, { scroll: false });
   }, DEBOUNCE_TIME);
 
   const handleGranularityChange = useDebouncedCallback(
@@ -59,7 +61,9 @@ export function NewsTrendsChart({ chartData }: { chartData: NewsTrend[] }) {
       } else {
         params.set('granularity', 'monthly');
       }
-      router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+      const newParams =
+        `${pathname}?${params.toString()}` as __next_route_internal_types__.RouteImpl<string>;
+      router.replace(newParams, { scroll: false });
     },
     DEBOUNCE_TIME
   );

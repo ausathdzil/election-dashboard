@@ -15,7 +15,11 @@ export function Article({ article }: { article: ArticleType }) {
   const publishDate = new Date(article.publish_date);
 
   return (
-    <Link href={article.url} rel="noopener noreferrer" target="_blank">
+    <Link
+      href={article.url as __next_route_internal_types__.RouteImpl<string>}
+      rel="noopener noreferrer"
+      target="_blank"
+    >
       <Card className="hover:border-primary">
         <CardHeader>
           <CardTitle>{article.title}</CardTitle>

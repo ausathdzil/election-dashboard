@@ -17,7 +17,9 @@ export function ArticlePagination(news: GetNewsResponse) {
   const handlePageChange = (page: number) => {
     const params = new URLSearchParams(searchParams);
     params.set('page', page.toString());
-    router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+    const newParams =
+      `${pathname}?${params.toString()}` as __next_route_internal_types__.RouteImpl<string>;
+    router.replace(newParams, { scroll: false });
   };
 
   return (
