@@ -21,8 +21,8 @@ import {
   ChartTooltipContent,
 } from '@/components/ui/chart';
 import type { NewsTrend } from '@/lib/types';
-import { DatePicker } from '../date-picker';
-import { Granularity } from '../granularity';
+import { DatePicker } from './date-picker';
+import { Granularity } from './granularity';
 
 const DEBOUNCE_TIME = 500;
 
@@ -120,7 +120,8 @@ export function NewsTrendsChart({ chartData }: { chartData: NewsTrend[] }) {
                 return date.toLocaleDateString('en-US', {
                   month: 'short',
                   day:
-                    searchParams.get('granularity') === 'daily'
+                    searchParams.get('granularity') === 'daily' ||
+                    searchParams.get('granularity') === 'weekly'
                       ? 'numeric'
                       : undefined,
                 });
@@ -136,7 +137,8 @@ export function NewsTrendsChart({ chartData }: { chartData: NewsTrend[] }) {
                     return new Date(value).toLocaleDateString('en-US', {
                       month: 'short',
                       day:
-                        searchParams.get('granularity') === 'daily'
+                        searchParams.get('granularity') === 'daily' ||
+                        searchParams.get('granularity') === 'weekly'
                           ? 'numeric'
                           : undefined,
                     });

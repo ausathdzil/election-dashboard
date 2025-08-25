@@ -1,4 +1,4 @@
-import { NewsTrendsChart } from '@/components/dashboard/news-trends-chart';
+import { NewsTrendsChart } from '@/components/trends/news-trends-chart';
 import { Card } from '@/components/ui/card';
 import { getNewsTrends } from '@/lib/data';
 

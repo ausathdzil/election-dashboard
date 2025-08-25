@@ -1,7 +1,7 @@
-import { MapCard } from '@/components/dashboard/map-card';
-import { NewsTrends } from '@/components/dashboard/news-trends';
-import { SearchArticle } from '@/components/dashboard/search-article';
-import { TopNews } from '@/components/dashboard/top-news';
+import { MapCard } from '@/components/map/map-card';
+import { SearchArticle } from '@/components/search/search-article';
+import { TopNews } from '@/components/top-sources/top-news';
+import { NewsTrends } from '@/components/trends/news-trends';
 
 type HomeProps = {
   searchParams: Promise<{
