@@ -7,6 +7,7 @@ type NewsTrendsProps = {
     start_date: string;
     end_date: string;
     granularity: string;
+    province: string;
   };
 };
 

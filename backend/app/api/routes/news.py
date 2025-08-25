@@ -84,9 +84,14 @@ def get_news(
 
 
 @router.get("/top-sources", response_model=TopNewsSourcePublic)
-def get_top_sources(session: SessionDep, limit: Annotated[int, Query(ge=1)] = 5):
+def get_top_sources(
+    session: SessionDep,
+    limit: Annotated[int, Query(ge=1)] = 5,
+    province: str | None = None,
+):
     statement = (
         select(News.author, func.count(News.id).label("article_count"))
+        .where(News.province == province if province else True)
         .group_by(News.author)
         .order_by(func.count(News.id).desc())
         .limit(limit)
@@ -110,6 +115,7 @@ def get_trends(
         datetime, Query(ge=MIN_START_DATE, le=MAX_END_DATE)
     ] = MAX_END_DATE,
     granularity: Annotated[Granularity, Query()] = Granularity.MONTHLY,
+    province: str | None = None,
 ):
     if start_date > end_date:
         raise HTTPException(
@@ -131,7 +137,11 @@ def get_trends(
 
     statement = (
         select(bucket.label("bucket"), func.count(News.id).label("article_count"))
-        .where(News.publish_date >= start_date, News.publish_date <= effective_end_date)
+        .where(
+            News.publish_date >= start_date,
+            News.publish_date <= effective_end_date,
+            News.province == province if province else True,
+        )
         .group_by(bucket)
         .order_by(bucket)
     )

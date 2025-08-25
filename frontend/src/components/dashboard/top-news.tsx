@@ -5,15 +5,19 @@ import { getTopNewsSource } from '@/lib/data';
 import { TopNewsBarChart } from './top-news-bar-chart';
 import { TopNewsPieChart } from './top-news-pie-chart';
 
-export async function TopNews() {
-  const topNewsSource = await getTopNewsSource();
+type TopNewsProps = {
+  province: string;
+};
+
+export async function TopNews(props: TopNewsProps) {
+  const topNewsSource = await getTopNewsSource({ province: props.province });
 
   return (
     <Card>
       <CardHeader>
         <CardTitle className="flex items-center gap-4">
           <NewspaperIcon />
-          Top News Source
+          Top News Source {props.province ? `- ${props.province}` : ''}
         </CardTitle>
       </CardHeader>
       <CardContent className="grid grid-cols-1 items-stretch gap-6 md:grid-cols-2">

@@ -5,7 +5,9 @@
 import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
 import { useQuery } from '@tanstack/react-query';
 import mapboxgl, { type TargetFeature } from 'mapbox-gl';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
+import { useDebouncedCallback } from 'use-debounce';
 
 import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css';
 import 'mapbox-gl/dist/mapbox-gl.css';
@@ -23,6 +25,8 @@ import { getCitySummary } from '@/lib/data';
 import type { ProvinceSummary } from '@/lib/types';
 import { cn } from '@/lib/utils';
 import { Switch } from '../ui/switch';
+
+const DEBOUNCE_TIME = 500;
 
 const INITIAL_LONGITUDE = 117.968_86;
 const INITIAL_LATITUDE = -2.5669;
@@ -52,6 +56,10 @@ export function VectorMap({ summaryData }: MapDataProps) {
     null
   );
 
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
+  const router = useRouter();
+
   const { data: cityData, isLoading } = useQuery({
     queryKey: ['citySummary', selectedFeature?.properties.province],
     queryFn: () =>
@@ -60,6 +68,19 @@ export function VectorMap({ summaryData }: MapDataProps) {
       }),
     enabled: Boolean(selectedFeature?.properties.province),
   });
+
+  const handleProvinceClick = useDebouncedCallback(
+    (province: string | null) => {
+      const params = new URLSearchParams(searchParams);
+      if (province) {
+        params.set('province', province);
+      } else {
+        params.delete('province');
+      }
+      router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+    },
+    DEBOUNCE_TIME
+  );
 
   useEffect(() => {
     mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN;
@@ -218,6 +239,7 @@ export function VectorMap({ summaryData }: MapDataProps) {
 
         if (feature && feature.properties?.feature_type === 'province') {
           setSelectedFeature(feature as TargetFeature);
+          handleProvinceClick(feature.properties.province as string);
         }
       });
 
@@ -228,6 +250,7 @@ export function VectorMap({ summaryData }: MapDataProps) {
 
         if (features.length === 0 && selectedFeatureRef.current) {
           setSelectedFeature(null);
+          handleProvinceClick(null);
         }
       });
 
@@ -331,7 +354,7 @@ export function VectorMap({ summaryData }: MapDataProps) {
     return () => {
       map.remove();
     };
-  }, [summaryData]);
+  }, []);
 
   useEffect(() => {
     selectedFeatureRef.current = selectedFeature;
@@ -416,7 +439,7 @@ export function VectorMap({ summaryData }: MapDataProps) {
     <div className={cn('relative h-[500px] flex-1', fullScreen && 'h-screen')}>
       <div className="size-full" ref={mapContainerRef} />
       <div className="absolute top-2 left-2 z-50 flex flex-col gap-2">
-        <div className="flex w-[150px] flex-col bg-black/50 p-4">
+        <div className="flex w-[150px] flex-col bg-black/50 text-white p-4">
           <div className="flex items-center justify-between">
             <span>Province</span>
             <Switch
@@ -433,7 +456,7 @@ export function VectorMap({ summaryData }: MapDataProps) {
           </div>
         </div>
         {selectedFeature && (
-          <div className="size-fit max-w-[500px] bg-black/50 p-2">
+          <div className="size-fit max-w-[500px] bg-black/50 text-white p-2">
             <div className="text-center font-bold">
               {selectedFeature.properties.name ||
                 selectedFeature.properties.province}
@@ -443,9 +466,9 @@ export function VectorMap({ summaryData }: MapDataProps) {
             ) : (
               <Table>
                 <TableHeader>
-                  <TableRow className="text-black">
-                    <TableHead>City</TableHead>
-                    <TableHead>Articles</TableHead>
+                  <TableRow>
+                    <TableHead className="text-white">City</TableHead>
+                    <TableHead className="text-white">Articles</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>

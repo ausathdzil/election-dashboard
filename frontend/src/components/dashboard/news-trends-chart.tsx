@@ -24,7 +24,7 @@ import type { NewsTrend } from '@/lib/types';
 import { DatePicker } from '../date-picker';
 import { Granularity } from '../granularity';
 
-const DEBOUNCE_TIME = 1000;
+const DEBOUNCE_TIME = 500;
 
 const formatDate = (date: Date) => {
   const year = date.getFullYear();
@@ -76,7 +76,10 @@ export function NewsTrendsChart({ chartData }: { chartData: NewsTrend[] }) {
       <CardHeader>
         <CardTitle className="flex items-center gap-4">
           <TrendingUpIcon />
-          Article Trends
+          Article Trends{' '}
+          {searchParams.get('province')
+            ? `- ${searchParams.get('province')}`
+            : ''}
         </CardTitle>
         <CardAction className="flex gap-4">
           <DatePicker handleRangeChange={handleRangeChange} />
@@ -112,7 +115,10 @@ export function NewsTrendsChart({ chartData }: { chartData: NewsTrend[] }) {
                 const date = new Date(value);
                 return date.toLocaleDateString('en-US', {
                   month: 'short',
-                  day: 'numeric',
+                  day:
+                    searchParams.get('granularity') === 'daily'
+                      ? 'numeric'
+                      : undefined,
                 });
               }}
               tickLine={false}
@@ -125,7 +131,10 @@ export function NewsTrendsChart({ chartData }: { chartData: NewsTrend[] }) {
                   labelFormatter={(value) => {
                     return new Date(value).toLocaleDateString('en-US', {
                       month: 'short',
-                      day: 'numeric',
+                      day:
+                        searchParams.get('granularity') === 'daily'
+                          ? 'numeric'
+                          : undefined,
                     });
                   }}
                 />

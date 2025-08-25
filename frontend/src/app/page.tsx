@@ -11,18 +11,21 @@ type HomeProps = {
     start_date: string;
     end_date: string;
     granularity: string;
+    province: string;
   }>;
 };
 
 export default async function Home(props: HomeProps) {
-  const { q, page, size, start_date, end_date, granularity } =
+  const { q, page, size, start_date, end_date, granularity, province } =
     await props.searchParams;
 
   return (
     <main className="flex w-full max-w-6xl flex-1 flex-col gap-8 border-x border-dashed p-8">
       <MapCard />
-      <TopNews />
-      <NewsTrends searchParams={{ start_date, end_date, granularity }} />
+      <NewsTrends
+        searchParams={{ start_date, end_date, granularity, province }}
+      />
+      <TopNews province={province} />
       <SearchArticle searchParams={{ q, page, size }} />
     </main>
   );

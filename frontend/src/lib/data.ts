@@ -38,8 +38,21 @@ export async function getNews(params: GetNewsParams): Promise<GetNewsResponse> {
   return data;
 }
 
-export async function getTopNewsSource(): Promise<GetTopNewsSourceResponse> {
-  const response = await fetch(`${API_URL}/news/top-sources`);
+type GetTopNewsSourceParams = {
+  province: string | null;
+};
+
+export async function getTopNewsSource(
+  params: GetTopNewsSourceParams
+): Promise<GetTopNewsSourceResponse> {
+  const searchParams = new URLSearchParams();
+  if (params.province) {
+    searchParams.set('province', params.province);
+  }
+
+  const response = await fetch(
+    `${API_URL}/news/top-sources?${searchParams.toString()}`
+  );
 
   if (!response.ok) {
     throw new Error('Failed to fetch top news source');
@@ -53,6 +66,7 @@ type GetNewsTrendsParams = {
   start_date: string | null;
   end_date: string | null;
   granularity: string | null;
+  province: string | null;
 };
 
 export async function getNewsTrends(
@@ -67,6 +81,9 @@ export async function getNewsTrends(
   }
   if (params.granularity) {
     searchParams.set('granularity', params.granularity);
+  }
+  if (params.province) {
+    searchParams.set('province', params.province);
   }
 
   const response = await fetch(

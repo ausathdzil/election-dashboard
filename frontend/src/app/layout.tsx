@@ -1,7 +1,7 @@
 import { NewspaperIcon } from 'lucide-react';
 
 import type { Metadata } from 'next';
-// import { Noto_Sans_JP } from 'next/font/google';
+import { Noto_Sans_JP } from 'next/font/google';
 import './globals.css';
 
 import { ModeToggle } from '@/components/mode-toggle';
@@ -9,10 +9,10 @@ import { QueryProvider } from '@/components/query-provider';
 import { ThemeProvider } from '@/components/theme-provider';
 import { cn } from '@/lib/utils';
 
-// const notoSansJP = Noto_Sans_JP({
-//   subsets: ['latin'],
-//   variable: '--font-noto-sans-jp',
-// });
+const notoSansJP = Noto_Sans_JP({
+  subsets: ['latin'],
+  variable: '--font-noto-sans-jp',
+});
 
 export const metadata: Metadata = {
   title: 'Election Dashboard',
@@ -28,7 +28,7 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body
         className={cn(
-          // notoSansJP.variable,
+          notoSansJP.variable,
           'font-sans antialiased'
         )}
       >
