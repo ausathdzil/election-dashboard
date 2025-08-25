@@ -6,8 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "npx ultracite lint",
-    "format": "npx ultracite format"
+    "lint": "pnpm dlx ultracite lint",
+    "format": "pnpm dlx ultracite format"
   },
   "dependencies": {
     "@mapbox/mapbox-gl-geocoder": "^5.1.0",
@@ -47,7 +47,6 @@
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx,json,jsonc,css,scss,md,mdx}": [
-      "npx ultracite format",
       "pnpm dlx ultracite format"
     ]
   },
