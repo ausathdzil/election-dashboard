@@ -49,3 +49,8 @@ class UserPublic(UserBase):
 class UsersPublic(SQLModel):
     data: list[UserPublic]
     count: int
+    page: int
+    size: int
+    total_pages: int
+    has_next: bool
+    has_prev: bool

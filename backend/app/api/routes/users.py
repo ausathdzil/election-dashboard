@@ -1,10 +1,11 @@
 import uuid
+from typing import Annotated
 
 from app.api.deps import CurrentUser, SessionDep, get_current_superuser
 from app.crud.user import create_user, get_user_by_email, update_user
 from app.models.generic import Message
 from app.models.user import User, UserCreate, UserPublic, UsersPublic, UserUpdate
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, Query, status
 from sqlmodel import func, select
 
 router = APIRouter(prefix="/users", tags=["users"])
@@ -15,14 +16,44 @@ router = APIRouter(prefix="/users", tags=["users"])
     dependencies=[Depends(get_current_superuser)],
     response_model=UsersPublic,
 )
-def admin_read_users(session: SessionDep) -> UsersPublic:
-    count_statement = select(func.count()).select_from(User)
+def admin_read_users(
+    session: SessionDep,
+    q: Annotated[str | None, Query(max_length=50)] = None,
+    page: Annotated[int | None, Query(ge=1)] = 1,
+    size: Annotated[int | None, Query(ge=5, le=20)] = 5,
+) -> UsersPublic:
+    if q:
+        base_statement = select(User).where(
+            (User.email.ilike(f"%{q}%")) | (User.full_name.ilike(f"%{q}%"))
+        )
+    else:
+        base_statement = select(User)
+
+    count_statement = select(func.count()).select_from(base_statement.subquery())
     count = session.exec(count_statement).one()
-    statement = select(User)
-    users = session.exec(statement).all()
+
+    total_pages = (count + size - 1) // size if count > 0 else 0
+    has_next = page < total_pages
+    has_prev = page > 1
+
+    skip = (page - 1) * size
+
+    statement = base_statement.offset(skip).limit(size)
+    result = session.exec(statement).all()
+
+    users = []
+    for user in result:
+        user_item = UserPublic.model_validate(user)
+        users.append(user_item)
+
     return UsersPublic(
         data=users,
         count=count,
+        page=page,
+        size=size,
+        total_pages=total_pages,
+        has_next=has_next,
+        has_prev=has_prev,
     )
 
 
