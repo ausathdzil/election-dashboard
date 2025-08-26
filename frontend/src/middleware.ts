@@ -11,13 +11,13 @@ export default async function middleware(req: NextRequest) {
 
   const session = await verifySession();
 
-  if (isProtectedRoute && !session.userId) {
+  if (isProtectedRoute && !session.id) {
     return NextResponse.redirect(new URL('/login', req.nextUrl));
   }
 
   if (
     isPublicRoute &&
-    session?.userId &&
+    session?.id &&
     !req.nextUrl.pathname.startsWith('/profile')
   ) {
     return NextResponse.redirect(new URL('/profile', req.nextUrl));

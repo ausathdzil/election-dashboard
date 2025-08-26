@@ -6,7 +6,7 @@ import { cache } from 'react';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
-export async function getUser(accessToken: string | undefined) {
+export async function getCurrentUser(accessToken: string | undefined) {
   const response = await fetch(`${API_URL}/users/me`, {
     headers: {
       Authorization: `Bearer ${accessToken}`,
@@ -25,11 +25,11 @@ export const verifySession = cache(async () => {
   const cookieStore = await cookies();
   const cookie = cookieStore.get('access_token');
 
-  const user = await getUser(cookie?.value);
+  const user = await getCurrentUser(cookie?.value);
 
   if (!user.id) {
     redirect('/login');
   }
 
-  return { isAuth: true, userId: user.id };
+  return user;
 });
