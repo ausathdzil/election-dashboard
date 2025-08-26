@@ -3,6 +3,7 @@ export type User = {
   is_superuser: boolean;
   full_name: string | null;
   id: string;
+  created_at: string;
 };
 
 export type Users = {

@@ -59,6 +59,7 @@ export default async function AdminPage(props: AdminPageProps) {
                 <TableHead>Name</TableHead>
                 <TableHead>Email</TableHead>
                 <TableHead>Role</TableHead>
+                <TableHead>Created At</TableHead>
                 <TableHead></TableHead>
               </TableRow>
             </TableHeader>
@@ -72,6 +73,13 @@ export default async function AdminPage(props: AdminPageProps) {
                   <TableCell>{user.email}</TableCell>
                   <TableCell>
                     {user.is_superuser ? 'Super User' : 'User'}
+                  </TableCell>
+                  <TableCell>
+                    {new Date(user.created_at).toLocaleDateString('en-ID', {
+                      year: 'numeric',
+                      month: 'long',
+                      day: 'numeric',
+                    })}
                   </TableCell>
                 </TableRow>
               ))}

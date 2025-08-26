@@ -27,7 +27,7 @@ def admin_read_users(
             (User.email.ilike(f"%{q}%")) | (User.full_name.ilike(f"%{q}%"))
         )
     else:
-        base_statement = select(User)
+        base_statement = select(User).order_by(User.created_at.desc())
 
     count_statement = select(func.count()).select_from(base_statement.subquery())
     count = session.exec(count_statement).one()
