@@ -34,7 +34,10 @@ services:
       - .env
     environment:
       - ENVIRONMENT=${ENVIRONMENT:-local}
-      - BACKEND_CORS_ORIGINS=${BACKEND_CORS_ORIGINS:-http://localhost:3000}
+      - BACKEND_CORS_ORIGINS=${BACKEND_CORS_ORIGINS}
+      - SECRET_KEY=${SECRET_KEY?Variable not set}
+      - FIRST_SUPERUSER=${FIRST_SUPERUSER?Variable not set}
+      - FIRST_SUPERUSER_PASSWORD=${FIRST_SUPERUSER_PASSWORD?Variable not set}
       - PROJECT_NAME=${PROJECT_NAME:-Election Dashboard}
       - POSTGRES_SERVER=db
       - POSTGRES_PORT=${POSTGRES_PORT:-5432}
@@ -61,7 +64,10 @@ services:
       - .env
     environment:
       - ENVIRONMENT=${ENVIRONMENT:-local}
-      - BACKEND_CORS_ORIGINS=${BACKEND_CORS_ORIGINS:-http://localhost:3000}
+      - BACKEND_CORS_ORIGINS=${BACKEND_CORS_ORIGINS}
+      - SECRET_KEY=${SECRET_KEY?Variable not set}
+      - FIRST_SUPERUSER=${FIRST_SUPERUSER?Variable not set}
+      - FIRST_SUPERUSER_PASSWORD=${FIRST_SUPERUSER_PASSWORD?Variable not set}
       - PROJECT_NAME=${PROJECT_NAME:-Election Dashboard}
       - POSTGRES_SERVER=db
       - POSTGRES_PORT=${POSTGRES_PORT:-5432}
