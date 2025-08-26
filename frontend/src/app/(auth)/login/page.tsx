@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { useActionState } from 'react';
 
 import { Button } from '@/components/ui/button';
@@ -26,7 +27,6 @@ export default function LoginPage() {
           <p className="text-destructive text-sm">{state.errors.email}</p>
         )}
       </div>
-
       <div className="grid gap-1.5">
         <Label htmlFor="password">Password</Label>
         <Input
@@ -42,12 +42,16 @@ export default function LoginPage() {
           </div>
         )}
       </div>
-
       <Button disabled={pending} type="submit">
         Login
       </Button>
-
       <p className="text-sm">{state?.message}</p>
+      <p className="text-sm">
+        Don&apos;t have an account?{' '}
+        <Link className="hover:underline" href="/signup">
+          Sign up
+        </Link>
+      </p>
     </form>
   );
 }
