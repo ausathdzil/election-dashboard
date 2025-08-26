@@ -36,6 +36,7 @@ class News(NewsBase, table=True):
 
 
 class NewsWithRank(NewsBase):
+    id: int | None
     rank: float | None = Field(default=0.0)
 
 

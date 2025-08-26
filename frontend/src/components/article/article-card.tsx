@@ -12,8 +12,8 @@ import {
 import { getNews } from '@/lib/data';
 import { Article } from './article';
 import { ArticleActions } from './article-actions';
-import { SearchInput } from './search-input';
-import { SearchPagination } from './search-pagination';
+import { SearchInput } from '../search/search-input';
+import { SearchPagination } from '../search/search-pagination';
 
 type ArticleCardProps = {
   searchParams: {
@@ -40,7 +40,7 @@ export async function ArticleCard(props: ArticleCardProps) {
       </CardHeader>
       <CardContent className="space-y-4">
         <Suspense fallback={null}>
-          <SearchInput />
+          <SearchInput placeholder="Search for an article..." />
         </Suspense>
         {news.data.map((article) => (
           <Article article={article} key={article.id} />

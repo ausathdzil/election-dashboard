@@ -4,14 +4,22 @@
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
 import { Button } from '@/components/ui/button';
-import type { GetNewsResponse } from '@/lib/types';
 
-export function SearchPagination(news: GetNewsResponse) {
+type PaginationLike = {
+  count: number;
+  page: number;
+  size: number;
+  total_pages: number;
+  has_next: boolean;
+  has_prev: boolean;
+};
+
+export function SearchPagination(pageInfo: PaginationLike) {
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const router = useRouter();
 
-  const pagination = generatePagination(news.page, news.total_pages);
+  const pagination = generatePagination(pageInfo.page, pageInfo.total_pages);
 
   const handlePageChange = (page: number) => {
     const params = new URLSearchParams(searchParams);
@@ -24,13 +32,14 @@ export function SearchPagination(news: GetNewsResponse) {
   return (
     <div className="flex w-full items-center justify-between">
       <span className="text-muted-foreground text-sm">
-        Showing {(news.page - 1) * news.size + 1}-
-        {Math.min(news.page * news.size, news.count)} of {news.count} results
+        Showing {(pageInfo.page - 1) * pageInfo.size + 1}-
+        {Math.min(pageInfo.page * pageInfo.size, pageInfo.count)} of{' '}
+        {pageInfo.count} results
       </span>
       <div className="flex items-center space-x-2">
         <Button
-          disabled={!news.has_prev}
-          onClick={() => handlePageChange(news.page - 1)}
+          disabled={!pageInfo.has_prev}
+          onClick={() => handlePageChange(pageInfo.page - 1)}
           size="sm"
           variant="outline"
         >
@@ -44,14 +53,14 @@ export function SearchPagination(news: GetNewsResponse) {
               typeof page === 'number' ? handlePageChange(page) : undefined
             }
             size="sm"
-            variant={page === news.page ? 'default' : 'outline'}
+            variant={page === pageInfo.page ? 'default' : 'outline'}
           >
             {page}
           </Button>
         ))}
         <Button
-          disabled={!news.has_next}
-          onClick={() => handlePageChange(news.page + 1)}
+          disabled={!pageInfo.has_next}
+          onClick={() => handlePageChange(pageInfo.page + 1)}
           size="sm"
           variant="outline"
         >

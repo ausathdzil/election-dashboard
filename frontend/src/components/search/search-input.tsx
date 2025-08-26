@@ -9,7 +9,7 @@ import { Input } from '@/components/ui/input';
 
 const DEBOUNCE_TIME = 300;
 
-export function SearchInput() {
+export function SearchInput({ placeholder }: { placeholder: string }) {
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const router = useRouter();
@@ -36,7 +36,7 @@ export function SearchInput() {
         id="q"
         name="q"
         onChange={(e) => handleSearch(e.target.value)}
-        placeholder="Search for an article..."
+        placeholder={placeholder}
         type="search"
       />
       <div className="pointer-events-none absolute inset-y-0 start-0 flex items-center justify-center ps-3 text-muted-foreground/80 peer-disabled:opacity-50">

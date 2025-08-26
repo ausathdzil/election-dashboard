@@ -3,26 +3,7 @@ import 'server-only';
 import { cookies } from 'next/headers';
 import { cache } from 'react';
 
-import type { User } from '@/types/user';
-
-const API_URL = process.env.NEXT_PUBLIC_API_URL;
-
-export async function getCurrentUser(
-  accessToken: string | undefined
-): Promise<User | null> {
-  const response = await fetch(`${API_URL}/users/me`, {
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-    },
-  });
-
-  if (!response.ok) {
-    return null;
-  }
-
-  const data = await response.json();
-  return data;
-}
+import { getCurrentUser } from './data/user';
 
 export const verifySession = cache(async () => {
   const cookieStore = await cookies();
