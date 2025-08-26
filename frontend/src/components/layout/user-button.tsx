@@ -36,7 +36,7 @@ export function UserButton() {
           Login
         </Link>
         <Link className={buttonVariants()} href="/signup">
-          Sign up
+          Sign Up
         </Link>
       </div>
     );
