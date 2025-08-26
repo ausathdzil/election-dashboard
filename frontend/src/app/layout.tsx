@@ -1,10 +1,8 @@
-import { NewspaperIcon } from 'lucide-react';
 
 import type { Metadata } from 'next';
 import { Noto_Sans_JP } from 'next/font/google';
 import './globals.css';
 
-import { ModeToggle } from '@/components/mode-toggle';
 import { QueryProvider } from '@/components/query-provider';
 import { ThemeProvider } from '@/components/theme-provider';
 import { cn } from '@/lib/utils';
@@ -34,27 +32,10 @@ export default function RootLayout({
             disableTransitionOnChange
             enableSystem
           >
-            <div className="flex min-h-screen flex-col items-center">
-              <Header />
-              {children}
-            </div>
+            {children}
           </ThemeProvider>
         </QueryProvider>
       </body>
     </html>
-  );
-}
-
-function Header() {
-  return (
-    <header className="flex w-full justify-center border-b border-dashed">
-      <div className="flex w-full max-w-6xl items-center justify-between border-x border-dashed p-8">
-        <div className="flex items-center gap-4">
-          <NewspaperIcon className="stroke-primary" />
-          <h1>Indonesia 2024 Election Dashboard</h1>
-        </div>
-        <ModeToggle />
-      </div>
-    </header>
   );
 }
