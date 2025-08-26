@@ -6,15 +6,15 @@ import { z } from 'zod/v4';
 
 import {
   LoginFormSchema,
-  LoginFormState,
+  type LoginFormState,
   SignupFormSchema,
-  SignupFormState,
+  type SignupFormState,
 } from './definitions';
 import { deleteSession } from './session';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
-export async function signup(state: SignupFormState, formData: FormData) {
+export async function signup(_state: SignupFormState, formData: FormData) {
   const rawFormData = {
     name: formData.get('name') as string,
     email: formData.get('email') as string,
@@ -68,7 +68,7 @@ export async function signup(state: SignupFormState, formData: FormData) {
   redirect('/login');
 }
 
-export async function login(state: LoginFormState, formData: FormData) {
+export async function login(_state: LoginFormState, formData: FormData) {
   const rawFormData = {
     email: formData.get('email') as string,
     password: formData.get('password') as string,
@@ -86,7 +86,7 @@ export async function login(state: LoginFormState, formData: FormData) {
   const { email, password } = validatedFields.data;
 
   try {
-    const formData = new URLSearchParams({
+    const searchParams = new URLSearchParams({
       grant_type: 'password',
       username: email,
       password,
@@ -101,7 +101,7 @@ export async function login(state: LoginFormState, formData: FormData) {
         Accept: 'application/json',
         'Content-Type': 'application/x-www-form-urlencoded',
       },
-      body: formData.toString(),
+      body: searchParams.toString(),
     });
 
     const data = await response.json();

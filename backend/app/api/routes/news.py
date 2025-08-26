@@ -30,6 +30,7 @@ def get_news(
     q: Annotated[str | None, Query(max_length=50)] = None,
     page: Annotated[int | None, Query(ge=1)] = 1,
     size: Annotated[int | None, Query(ge=5, le=20)] = 5,
+    province: str | None = None,
 ):
     if q:
         base_statement = (
@@ -40,14 +41,19 @@ def get_news(
                 ).bindparams(q_param=q),
             )
             .where(
+                News.province == province if province else True,
                 text(
                     "news.search_vector @@ plainto_tsquery('indonesian', :q_param)"
-                ).bindparams(q_param=q)
+                ).bindparams(q_param=q),
             )
             .order_by(literal_column("rank").desc())
         )
     else:
-        base_statement = select(News).order_by(News.publish_date.desc())
+        base_statement = (
+            select(News)
+            .where(News.province == province if province else True)
+            .order_by(News.publish_date.desc())
+        )
 
     total_statement = select(func.count()).select_from(base_statement.subquery())
     total = session.exec(total_statement).one()

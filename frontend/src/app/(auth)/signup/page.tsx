@@ -11,15 +11,15 @@ export default function SignupPage() {
   const [state, action, pending] = useActionState(signup, undefined);
 
   return (
-    <form className="w-full max-w-sm space-y-4" action={action}>
+    <form action={action} className="w-full max-w-sm space-y-4">
       <div className="grid gap-1.5">
         <Label htmlFor="name">Name</Label>
         <Input
+          defaultValue={state?.fields.name}
           id="name"
+          maxLength={255}
           name="name"
           placeholder="John Doe"
-          defaultValue={state?.fields.name}
-          maxLength={255}
         />
         {state?.errors?.name && (
           <p className="text-destructive text-sm">{state.errors.name}</p>
@@ -29,11 +29,11 @@ export default function SignupPage() {
       <div className="grid gap-1.5">
         <Label htmlFor="email">Email</Label>
         <Input
+          defaultValue={state?.fields.email}
           id="email"
+          maxLength={255}
           name="email"
           placeholder="m@example.com"
-          defaultValue={state?.fields.email}
-          maxLength={255}
           required
         />
         {state?.errors?.email && (
@@ -44,13 +44,13 @@ export default function SignupPage() {
       <div className="grid gap-1.5">
         <Label htmlFor="password">Password</Label>
         <Input
-          id="password"
-          name="password"
-          type="password"
           defaultValue={state?.fields.password}
-          minLength={8}
+          id="password"
           maxLength={40}
+          minLength={8}
+          name="password"
           required
+          type="password"
         />
         {state?.errors?.password && (
           <div className="text-destructive text-sm">
@@ -67,11 +67,11 @@ export default function SignupPage() {
       <div className="grid gap-1.5">
         <Label htmlFor="confirm-password">Confirm Password</Label>
         <Input
+          defaultValue={state?.fields.confirmPassword}
           id="confirm-password"
           name="confirm-password"
-          type="password"
-          defaultValue={state?.fields.confirmPassword}
           required
+          type="password"
         />
         {state?.errors?.confirmPassword && (
           <p className="text-destructive text-sm">

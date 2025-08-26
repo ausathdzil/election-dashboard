@@ -11,15 +11,15 @@ export default function LoginPage() {
   const [state, action, pending] = useActionState(login, undefined);
 
   return (
-    <form className="w-full max-w-sm space-y-4" action={action}>
+    <form action={action} className="w-full max-w-sm space-y-4">
       <div className="grid gap-1.5">
         <Label htmlFor="email">Email</Label>
         <Input
+          defaultValue={state?.fields.email}
           id="email"
+          maxLength={255}
           name="email"
           placeholder="Email"
-          defaultValue={state?.fields.email}
-          maxLength={255}
           required
         />
         {state?.errors?.email && (
@@ -30,11 +30,11 @@ export default function LoginPage() {
       <div className="grid gap-1.5">
         <Label htmlFor="password">Password</Label>
         <Input
+          defaultValue={state?.fields.password}
           id="password"
           name="password"
-          type="password"
-          defaultValue={state?.fields.password}
           required
+          type="password"
         />
         {state?.errors?.password && (
           <div className="text-destructive text-sm">

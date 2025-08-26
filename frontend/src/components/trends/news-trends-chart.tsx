@@ -8,6 +8,7 @@ import type { DateRange } from 'react-day-picker';
 import { Area, AreaChart, CartesianGrid, XAxis } from 'recharts';
 import { useDebouncedCallback } from 'use-debounce';
 
+import { Badge } from '@/components/ui/badge';
 import {
   CardAction,
   CardContent,
@@ -81,9 +82,9 @@ export function NewsTrendsChart({ chartData }: { chartData: NewsTrend[] }) {
         <CardTitle className="flex items-center gap-4">
           <TrendingUpIcon />
           Article Trends{' '}
-          {searchParams.get('province')
-            ? `- ${searchParams.get('province')}`
-            : ''}
+          {searchParams.get('province') && (
+            <Badge>{searchParams.get('province')}</Badge>
+          )}
         </CardTitle>
         <CardAction className="flex gap-4">
           <DatePicker handleRangeChange={handleRangeChange} />

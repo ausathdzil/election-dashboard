@@ -1,6 +1,6 @@
 import { verifySession } from '@/lib/session';
 
-export default async function Profile() {
+export default async function ProfilePage() {
   const session = await verifySession();
 
   return (

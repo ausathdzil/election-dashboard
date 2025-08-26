@@ -2,7 +2,8 @@ import 'server-only';
 
 import { cookies } from 'next/headers';
 import { cache } from 'react';
-import { User } from '@/types/user';
+
+import type { User } from '@/types/user';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -33,7 +34,7 @@ export const verifySession = cache(async () => {
 
   const user = await getCurrentUser(cookie.value);
 
-  if (!user || !user.id) {
+  if (!user?.id) {
     return null;
   }
 

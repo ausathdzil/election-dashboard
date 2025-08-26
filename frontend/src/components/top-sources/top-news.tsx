@@ -1,5 +1,6 @@
 import { NewspaperIcon } from 'lucide-react';
 
+import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { getTopNewsSource } from '@/lib/data';
 import { TopNewsBarChart } from './top-news-bar-chart';
@@ -17,7 +18,8 @@ export async function TopNews(props: TopNewsProps) {
       <CardHeader>
         <CardTitle className="flex items-center gap-4">
           <NewspaperIcon />
-          Top News Source {props.province ? `- ${props.province}` : ''}
+          Top News Source
+          {props.province && <Badge>{props.province}</Badge>}
         </CardTitle>
       </CardHeader>
       <CardContent className="grid grid-cols-1 items-stretch gap-6 md:grid-cols-2">

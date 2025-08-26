@@ -12,6 +12,7 @@ type GetNewsParams = {
   q: string | null;
   page: string | null;
   size: string | null;
+  province: string | null;
 };
 
 export async function getNews(params: GetNewsParams): Promise<GetNewsResponse> {
@@ -25,10 +26,11 @@ export async function getNews(params: GetNewsParams): Promise<GetNewsResponse> {
   if (params.size) {
     searchParams.set('size', params.size);
   }
+  if (params.province) {
+    searchParams.set('province', params.province);
+  }
 
-  const response = await fetch(`${API_URL}/news?${searchParams.toString()}`, {
-    cache: 'no-store',
-  });
+  const response = await fetch(`${API_URL}/news?${searchParams.toString()}`);
 
   if (!response.ok) {
     throw new Error('Failed to fetch news');

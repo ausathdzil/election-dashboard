@@ -26,7 +26,7 @@ function Header() {
   return (
     <header className="flex w-full justify-center border-b border-dashed">
       <div className="flex w-full max-w-6xl items-center justify-between border-x border-dashed p-8">
-        <Link href="/" className="flex items-center gap-4">
+        <Link className="flex items-center gap-4" href="/">
           <NewspaperIcon className="stroke-primary" />
           <h1 className="hover:text-primary">
             Indonesia 2024 Election Dashboard

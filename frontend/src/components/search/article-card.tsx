@@ -1,6 +1,7 @@
 import { SearchIcon } from 'lucide-react';
 import { Suspense } from 'react';
 
+import { Badge } from '@/components/ui/badge';
 import {
   Card,
   CardContent,
@@ -19,6 +20,7 @@ type ArticleCardProps = {
     q: string;
     page: string;
     size: string;
+    province: string;
   };
 };
 export async function ArticleCard(props: ArticleCardProps) {
@@ -30,6 +32,9 @@ export async function ArticleCard(props: ArticleCardProps) {
         <CardTitle className="flex items-center gap-4">
           <SearchIcon />
           Search Articles
+          {props.searchParams.province && (
+            <Badge>{props.searchParams.province}</Badge>
+          )}
         </CardTitle>
         <ArticleActions />
       </CardHeader>

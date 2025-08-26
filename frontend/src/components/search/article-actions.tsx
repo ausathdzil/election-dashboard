@@ -1,5 +1,6 @@
 'use client';
 
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { CardAction } from '@/components/ui/card';
 import {
   Select,
@@ -8,7 +9,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
 export function ArticleActions() {
   const searchParams = useSearchParams();
@@ -42,7 +42,7 @@ function PageSizeSelect({
 }) {
   return (
     <div className="flex items-center gap-2">
-      <span className="text-sm text-muted-foreground">Articles per page:</span>
+      <span className="text-muted-foreground text-sm">Articles per page:</span>
       <Select
         defaultValue={initialSize ?? '5'}
         onValueChange={handleSizeChange}

@@ -13,6 +13,7 @@ import { useDebouncedCallback } from 'use-debounce';
 import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css';
 import 'mapbox-gl/dist/mapbox-gl.css';
 
+import { Switch } from '@/components/ui/switch';
 import {
   Table,
   TableBody,
@@ -25,7 +26,6 @@ import {
 import { getCitySummary } from '@/lib/data';
 import type { ProvinceSummary } from '@/lib/types';
 import { cn } from '@/lib/utils';
-import { Switch } from '@/components/ui/switch';
 
 const DEBOUNCE_TIME = 500;
 

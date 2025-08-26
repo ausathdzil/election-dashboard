@@ -26,7 +26,7 @@ export default async function Home(props: HomeProps) {
         searchParams={{ start_date, end_date, granularity, province }}
       />
       <TopNews province={province} />
-      <ArticleCard searchParams={{ q, page, size }} />
+      <ArticleCard searchParams={{ q, page, size, province }} />
     </main>
   );
 }

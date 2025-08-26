@@ -1,6 +1,7 @@
 'use client';
 
-import { HomeIcon, LogOutIcon, UserIcon } from 'lucide-react';
+import type { UrlObject } from 'node:url';
+import { HomeIcon, LogOutIcon, ShieldIcon, UserIcon } from 'lucide-react';
 import Link from 'next/link';
 
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
@@ -50,8 +51,8 @@ export function UserButton() {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent
-        className="w-(--radix-dropdown-menu-trigger-width) min-w-56"
         align="end"
+        className="w-(--radix-dropdown-menu-trigger-width) min-w-56"
         sideOffset={4}
       >
         <DropdownMenuLabel className="p-0 font-normal">
@@ -65,7 +66,7 @@ export function UserButton() {
               <span className="truncate font-medium">
                 {user.full_name ?? user.email.split('@')[0]}
               </span>
-              <span className="text-muted-foreground truncate text-xs">
+              <span className="truncate text-muted-foreground text-xs">
                 {user.email}
               </span>
             </div>
@@ -75,16 +76,30 @@ export function UserButton() {
         <DropdownMenuGroup>
           {navItems.map((item) => (
             <DropdownMenuItem
+              asChild
               className="cursor-pointer"
               key={item.title}
-              asChild
             >
-              <Link href={item.url as any}>
+              <Link
+                href={
+                  item.url as
+                    | UrlObject
+                    | __next_route_internal_types__.RouteImpl<string>
+                }
+              >
                 <item.icon />
                 {item.title}
               </Link>
             </DropdownMenuItem>
           ))}
+          {user.is_superuser && (
+            <DropdownMenuItem asChild className="cursor-pointer" key="admin">
+              <Link href="/admin">
+                <ShieldIcon />
+                Admin Dashboard
+              </Link>
+            </DropdownMenuItem>
+          )}
           <DropdownMenuSeparator />
           <DropdownMenuItem
             className="cursor-pointer"
