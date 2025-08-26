@@ -16,7 +16,7 @@ export default function SignupPage() {
         <Input
           id="name"
           name="name"
-          placeholder="Name"
+          placeholder="John Doe"
           defaultValue={state?.fields.name}
           maxLength={255}
         />
@@ -30,9 +30,10 @@ export default function SignupPage() {
         <Input
           id="email"
           name="email"
-          placeholder="Email"
+          placeholder="m@example.com"
           defaultValue={state?.fields.email}
           maxLength={255}
+          required
         />
         {state?.errors?.email && (
           <p className="text-destructive text-sm">{state.errors.email}</p>
@@ -48,6 +49,7 @@ export default function SignupPage() {
           defaultValue={state?.fields.password}
           minLength={8}
           maxLength={40}
+          required
         />
         {state?.errors?.password && (
           <div className="text-destructive text-sm">
@@ -60,6 +62,23 @@ export default function SignupPage() {
           </div>
         )}
       </div>
+
+      <div className="grid gap-1.5">
+        <Label htmlFor="confirm-password">Confirm Password</Label>
+        <Input
+          id="confirm-password"
+          name="confirm-password"
+          type="password"
+          defaultValue={state?.fields.confirmPassword}
+          required
+        />
+        {state?.errors?.confirmPassword && (
+          <p className="text-destructive text-sm">
+            {state.errors.confirmPassword[0]}
+          </p>
+        )}
+      </div>
+
       <Button disabled={pending} type="submit">
         Sign Up
       </Button>
