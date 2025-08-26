@@ -10,6 +10,7 @@ import {
   SignupFormSchema,
   SignupFormState,
 } from './definitions';
+import { deleteSession } from './session';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -125,4 +126,9 @@ export async function login(state: LoginFormState, formData: FormData) {
   }
 
   redirect('/');
+}
+
+export async function logout() {
+  await deleteSession();
+  redirect('/login');
 }
