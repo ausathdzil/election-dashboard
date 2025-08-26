@@ -1,14 +1,29 @@
 import type { Metadata } from 'next';
-import { Noto_Sans_JP } from 'next/font/google';
+import { Epilogue, Lexend, Outfit, Sora } from 'next/font/google';
 import './globals.css';
 
 import { QueryProvider } from '@/components/query-provider';
 import { ThemeProvider } from '@/components/theme-provider';
 import { cn } from '@/lib/utils';
 
-const notoSansJP = Noto_Sans_JP({
+const epilogue = Epilogue({
   subsets: ['latin'],
-  variable: '--font-noto-sans-jp',
+  variable: '--font-epilogue',
+});
+
+const lexend = Lexend({
+  subsets: ['latin'],
+  variable: '--font-lexend',
+});
+
+const outfit = Outfit({
+  subsets: ['latin'],
+  variable: '--font-outfit',
+});
+
+const sora = Sora({
+  subsets: ['latin'],
+  variable: '--font-sora',
 });
 
 export const metadata: Metadata = {
@@ -23,7 +38,15 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={cn(notoSansJP.variable, 'font-sans antialiased')}>
+      <body
+        className={cn(
+          epilogue.variable,
+          lexend.variable,
+          outfit.variable,
+          sora.variable,
+          'font-sans antialiased'
+        )}
+      >
         <QueryProvider>
           <ThemeProvider
             attribute="class"
