@@ -3,12 +3,12 @@ from typing import Annotated
 
 from app.api.deps import SessionDep
 from app.core.config import settings
-from app.core.security import authenticate, create_access_token, create_user, get_user_by_email
+from app.core.security import create_access_token
+from app.crud.user import authenticate, create_user, get_user_by_email
 from app.models.token import Token
+from app.models.user import User, UserCreate, UserPublic, UserRegister
 from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordRequestForm
-
-from app.models.user import User, UserCreate, UserPublic, UserRegister
 
 router = APIRouter(prefix="/auth", tags=["auth"])
 
@@ -28,7 +28,6 @@ def login(
     access_token_expires = timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
     return Token(
         access_token=create_access_token(user.id, expires_delta=access_token_expires),
-        token_type="bearer",
     )
 
 
@@ -38,7 +37,7 @@ def signup(session: SessionDep, user_in: UserRegister) -> User:
     if user:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail="User already exists",
+            detail="The user with this email already exists in the system",
         )
     user_create = UserCreate.model_validate(user_in)
     user = create_user(session=session, user_create=user_create)

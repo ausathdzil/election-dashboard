@@ -5,19 +5,21 @@ from sqlalchemy.dialects.postgresql import TSVECTOR
 from sqlmodel import Column, Computed, Field, SQLModel, text
 
 
-class News(SQLModel, table=True):
-    id: int | None = Field(default=None, primary_key=True)
+class NewsBase(SQLModel):
     title: str = Field(index=True)
     author: str | None = None
     publish_date: datetime | None = Field(index=True)
     article_text: str
     url: str | None = None
     main_image: str | None = None
-
     city: str | None = Field(index=True)
     province: str | None = Field(index=True)
     latitude: float | None = None
     longitude: float | None = None
+
+
+class News(NewsBase, table=True):
+    id: int | None = Field(default=None, primary_key=True)
 
     search_vector: str | None = Field(
         sa_column=Column(
@@ -33,7 +35,7 @@ class News(SQLModel, table=True):
     )
 
 
-class NewsWithRank(News):
+class NewsWithRank(NewsBase):
     rank: float | None = Field(default=0.0)
 
 

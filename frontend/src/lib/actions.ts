@@ -87,12 +87,8 @@ export async function login(_state: LoginFormState, formData: FormData) {
 
   try {
     const searchParams = new URLSearchParams({
-      grant_type: 'password',
       username: email,
       password,
-      scope: '',
-      client_id: 'string',
-      client_secret: '********',
     });
 
     const response = await fetch(`${API_URL}/auth/login`, {

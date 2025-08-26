@@ -1,6 +1,6 @@
 import pandas as pd
 from app.core.config import settings
-from app.core.security import create_user
+from app.crud.user import create_user
 from app.models.news import News
 from app.models.user import User, UserCreate
 from sqlmodel import Session, SQLModel, create_engine, select, text
