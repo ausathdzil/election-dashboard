@@ -1,52 +1,17 @@
+'use server';
+
+import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { z } from 'zod/v4';
 
+import {
+  LoginFormSchema,
+  LoginFormState,
+  SignupFormSchema,
+  SignupFormState,
+} from './definitions';
+
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
-
-export const SignupFormSchema = z
-  .object({
-    name: z
-      .string()
-      .max(255, { message: 'Name must be less than 255 characters long.' })
-      .trim(),
-    email: z
-      .email({ message: 'Please enter a valid email.' })
-      .max(255, { message: 'Email must be less than 255 characters long.' })
-      .trim(),
-    password: z
-      .string()
-      .min(8, { message: 'Be at least 8 characters long' })
-      .max(40, { message: 'Be less than 40 characters long' })
-      .regex(/[a-zA-Z]/, { message: 'Contain at least one letter.' })
-      .regex(/[0-9]/, { message: 'Contain at least one number.' })
-      .regex(/[^a-zA-Z0-9]/, {
-        message: 'Contain at least one special character.',
-      })
-      .trim(),
-    confirmPassword: z.string().min(1, { message: 'Confirm your password.' }),
-  })
-  .refine((data) => data.password === data.confirmPassword, {
-    message: 'Passwords do not match.',
-    path: ['confirmPassword'],
-  });
-
-export type SignupFormState =
-  | {
-      errors?: {
-        name?: string[];
-        email?: string[];
-        password?: string[];
-        confirmPassword?: string[];
-      };
-      fields: {
-        name: string;
-        email: string;
-        password: string;
-        confirmPassword: string;
-      };
-      message?: string;
-    }
-  | undefined;
 
 export async function signup(state: SignupFormState, formData: FormData) {
   const rawFormData = {
@@ -100,4 +65,64 @@ export async function signup(state: SignupFormState, formData: FormData) {
   }
 
   redirect('/login');
+}
+
+export async function login(state: LoginFormState, formData: FormData) {
+  const rawFormData = {
+    email: formData.get('email') as string,
+    password: formData.get('password') as string,
+  };
+
+  const validatedFields = LoginFormSchema.safeParse(rawFormData);
+
+  if (!validatedFields.success) {
+    return {
+      errors: z.flattenError(validatedFields.error).fieldErrors,
+      fields: { ...rawFormData },
+    };
+  }
+
+  const { email, password } = validatedFields.data;
+
+  try {
+    const formData = new URLSearchParams({
+      grant_type: 'password',
+      username: email,
+      password,
+      scope: '',
+      client_id: 'string',
+      client_secret: '********',
+    });
+
+    const response = await fetch(`${API_URL}/auth/login`, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: formData.toString(),
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.detail[0].msg ? data.detail[0].msg : data.detail);
+    }
+
+    const cookieStore = await cookies();
+    cookieStore.set('access_token', data.access_token);
+  } catch (error) {
+    if (error instanceof Error) {
+      return {
+        message: error.message,
+        fields: { ...rawFormData },
+      };
+    }
+    return {
+      message: 'Something went wrong.',
+      fields: { ...rawFormData },
+    };
+  }
+
+  redirect('/');
 }
