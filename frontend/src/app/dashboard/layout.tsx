@@ -19,7 +19,7 @@ export default function DashboardLayout({
       <DashboardSidebar />
       <div className="flex flex-1 flex-col">
         <DashboardHeader />
-        <main>{children}</main>
+        {children}
       </div>
     </SidebarProvider>
   );
