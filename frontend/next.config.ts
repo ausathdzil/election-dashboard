@@ -1,7 +1,6 @@
 import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
-  typedRoutes: true,
   images: {
     remotePatterns: [
       {
@@ -10,6 +9,8 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  transpilePackages: ['echarts', 'zrender'],
+  typedRoutes: true,
 };
 
 export default nextConfig;

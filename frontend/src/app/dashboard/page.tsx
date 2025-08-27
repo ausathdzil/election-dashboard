@@ -1,11 +1,14 @@
+import { TimelineChart } from '@/components/dashboard/timeline-chart';
 import {
   Card,
   CardAction,
+  CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { getNewsTrends } from '@/lib/data/news';
 import { cn } from '@/lib/utils';
 
 export default function DashboardPage() {
@@ -15,7 +18,7 @@ export default function DashboardPage() {
       <TimelineCard />
       <div className="grid grid-cols-2 gap-4">
         <AdditionalStatistics />
-        <TopRequestCard />
+        <TopNewsSourceCard />
       </div>
     </main>
   );
@@ -83,7 +86,14 @@ function StatisticCard({
   );
 }
 
-function TimelineCard() {
+async function TimelineCard() {
+  const chartData = await getNewsTrends({
+    start_date: '2023-01-01',
+    end_date: '2023-12-10',
+    granularity: 'monthly',
+    province: null,
+  });
+
   return (
     <Card className="border">
       <CardHeader>
@@ -98,6 +108,9 @@ function TimelineCard() {
           </Tabs>
         </CardAction>
       </CardHeader>
+      <CardContent>
+        <TimelineChart chartData={chartData.data} />
+      </CardContent>
     </Card>
   );
 }
@@ -164,12 +177,12 @@ function AdditionalStatisticCard({
   );
 }
 
-function TopRequestCard() {
+function TopNewsSourceCard() {
   return (
     <Card className="border">
       <CardHeader>
         <CardDescription>Top</CardDescription>
-        <CardTitle>Request</CardTitle>
+        <CardTitle>News Source</CardTitle>
         <CardAction>
           <Tabs defaultValue="month">
             <TabsList>

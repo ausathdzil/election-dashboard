@@ -86,7 +86,7 @@ type GetNewsTrendsParams = {
 
 export async function getNewsTrends(
   params: GetNewsTrendsParams
-): Promise<ArticleTrend[]> {
+): Promise<{ data: ArticleTrend[] }> {
   const searchParams = new URLSearchParams();
   if (params.start_date) {
     searchParams.set('start_date', params.start_date);
