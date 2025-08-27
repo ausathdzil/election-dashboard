@@ -6,6 +6,20 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { cn } from '@/lib/utils';
+
+export default function DashboardPage() {
+  return (
+    <main className="flex flex-1 flex-col gap-4 p-6">
+      <Statistics />
+      <TimelineCard />
+      <div className="grid grid-cols-2 gap-4">
+        <AdditionalStatistics />
+        <TopRequestCard />
+      </div>
+    </main>
+  );
+}
 
 const statistics = [
   {
@@ -34,16 +48,13 @@ const statistics = [
   },
 ];
 
-export default function DashboardPage() {
+function Statistics() {
   return (
-    <main className="flex flex-1 flex-col gap-4 p-6">
-      <div className="flex gap-4">
-        {statistics.map((statistic) => (
-          <StatisticCard key={statistic.title} {...statistic} />
-        ))}
-      </div>
-      <TimelineCard />
-    </main>
+    <div className="flex gap-4">
+      {statistics.map((statistic) => (
+        <StatisticCard key={statistic.title} {...statistic} />
+      ))}
+    </div>
   );
 }
 
@@ -78,6 +89,87 @@ function TimelineCard() {
       <CardHeader>
         <CardDescription>Timeline</CardDescription>
         <CardTitle>Data Timeline</CardTitle>
+        <CardAction>
+          <Tabs defaultValue="month">
+            <TabsList>
+              <TabsTrigger value="week">Week</TabsTrigger>
+              <TabsTrigger value="month">Month</TabsTrigger>
+            </TabsList>
+          </Tabs>
+        </CardAction>
+      </CardHeader>
+    </Card>
+  );
+}
+
+const additionalStatistics = [
+  {
+    active: true,
+    title: 'Total Token',
+    value: 120,
+    description: 'Total of all types of existing tokens',
+  },
+  {
+    title: 'Total Active',
+    value: 90,
+    description: 'Total of tokens that are still active and ready to use',
+  },
+  {
+    title: 'Total Revoke',
+    value: 12,
+    description: 'Total tokens that have been revoked',
+  },
+  {
+    title: 'Total Expire',
+    value: 18,
+    description: 'Total of expired tokens that are no longer active',
+  },
+];
+
+function AdditionalStatistics() {
+  return (
+    <div className="grid grid-cols-2 gap-4">
+      {additionalStatistics.map((statistic) => (
+        <AdditionalStatisticCard key={statistic.title} {...statistic} />
+      ))}
+    </div>
+  );
+}
+
+function AdditionalStatisticCard({
+  active,
+  title,
+  value,
+  description,
+}: {
+  active?: boolean;
+  title: string;
+  value: number;
+  description: string;
+}) {
+  return (
+    <Card
+      className={cn('border', active && 'bg-primary text-primary-foreground')}
+    >
+      <CardHeader>
+        <CardTitle className="flex flex-col gap-4">
+          <span className="font-semibold text-3xl">{value}</span>
+          <span className="font-normal">{title}</span>
+        </CardTitle>
+        <CardDescription className={active ? 'text-primary-foreground' : ''}>
+          {description}
+        </CardDescription>
+      </CardHeader>
+    </Card>
+  );
+}
+
+function TopRequestCard() {
+  return (
+    <Card className="border">
+      <CardHeader>
+        <CardDescription>Top</CardDescription>
+        <CardTitle>Request</CardTitle>
         <CardAction>
           <Tabs defaultValue="month">
             <TabsList>
