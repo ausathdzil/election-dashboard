@@ -3,22 +3,17 @@ import Link from 'next/link';
 
 import { ModeToggle } from '@/components/layout/mode-toggle';
 import { UserButton } from '@/components/layout/user-button';
-import { UserProvider } from '@/components/layout/user-provider';
-import { verifySession } from '@/lib/session';
 
 export default function DashboardLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const userPromise = verifySession();
   return (
-    <UserProvider userPromise={userPromise}>
-      <div className="flex min-h-screen flex-col items-center">
-        <Header />
-        {children}
-      </div>
-    </UserProvider>
+    <div className="flex min-h-screen flex-col items-center">
+      <Header />
+      {children}
+    </div>
   );
 }
 

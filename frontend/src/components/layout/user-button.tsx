@@ -1,7 +1,12 @@
 'use client';
 
 import type { UrlObject } from 'node:url';
-import { HomeIcon, LogOutIcon, ShieldIcon, UserIcon } from 'lucide-react';
+import {
+  ChartNoAxesColumnDecreasingIcon,
+  LogOutIcon,
+  ShieldIcon,
+  UserIcon,
+} from 'lucide-react';
 import Link from 'next/link';
 
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
@@ -20,9 +25,9 @@ import { useUser } from './user-provider';
 
 const navItems = [
   {
-    title: 'Profile',
-    url: '/profile',
-    icon: HomeIcon,
+    title: 'Dashboard',
+    url: '/dashboard',
+    icon: ChartNoAxesColumnDecreasingIcon,
   },
 ];
 
@@ -48,7 +53,7 @@ export function UserButton() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button size="icon" variant="outline">
+        <Button className="rounded-full" size="icon" variant="outline">
           <UserIcon className="h-[1.2rem] w-[1.2rem]" />
           <span className="sr-only">Toggle theme</span>
         </Button>
@@ -59,9 +64,9 @@ export function UserButton() {
         sideOffset={4}
       >
         <DropdownMenuLabel className="p-0 font-normal">
-          <div className="flex items-center gap-2 text-left text-sm">
-            <Avatar className="size-8 rounded-none">
-              <AvatarFallback className="rounded-none">
+          <div className="flex items-center gap-2 p-2 text-left text-sm">
+            <Avatar className="size-8">
+              <AvatarFallback>
                 {user.full_name?.charAt(0) ?? user.email.charAt(0)}
               </AvatarFallback>
             </Avatar>

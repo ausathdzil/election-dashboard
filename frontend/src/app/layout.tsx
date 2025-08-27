@@ -2,8 +2,10 @@ import type { Metadata } from 'next';
 import { Epilogue, Lexend, Outfit, Sora } from 'next/font/google';
 import './globals.css';
 
+import { UserProvider } from '@/components/layout/user-provider';
 import { QueryProvider } from '@/components/query-provider';
 import { ThemeProvider } from '@/components/theme-provider';
+import { verifySession } from '@/lib/session';
 import { cn } from '@/lib/utils';
 
 const epilogue = Epilogue({
@@ -36,6 +38,7 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const userPromise = verifySession();
   return (
     <html lang="en" suppressHydrationWarning>
       <body
@@ -47,16 +50,18 @@ export default function RootLayout({
           'font-sans antialiased'
         )}
       >
-        <QueryProvider>
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="system"
-            disableTransitionOnChange
-            enableSystem
-          >
-            {children}
-          </ThemeProvider>
-        </QueryProvider>
+        <UserProvider userPromise={userPromise}>
+          <QueryProvider>
+            <ThemeProvider
+              attribute="class"
+              defaultTheme="system"
+              disableTransitionOnChange
+              enableSystem
+            >
+              {children}
+            </ThemeProvider>
+          </QueryProvider>
+        </UserProvider>
       </body>
     </html>
   );

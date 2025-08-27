@@ -1,8 +1,8 @@
 import { type NextRequest, NextResponse } from 'next/server';
 import { verifySession } from './lib/session';
 
-const adminRoutes = ['/admin'];
-const protectedRoutes = ['/profile'];
+const adminRoutes = ['/election/admin'];
+const protectedRoutes = ['/election/profile', '/dashboard'];
 const publicRoutes = ['/login', '/signup'];
 
 export default async function middleware(req: NextRequest) {
