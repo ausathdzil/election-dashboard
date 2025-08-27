@@ -1,13 +1,16 @@
-import { CircleCheckIcon } from 'lucide-react';
-import Image from 'next/image';
-import Link from 'next/link';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button, buttonVariants } from '@/components/ui/button';
 import {
   Card,
+  CardContent,
   CardDescription,
+  CardFooter,
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
+import { CircleCheckIcon, StarIcon } from 'lucide-react';
+import Image from 'next/image';
+import Link from 'next/link';
 
 export default function Home() {
   return (
@@ -15,6 +18,7 @@ export default function Home() {
       <HeroSection />
       <AboutSection />
       <AdditionalFeaturesSection />
+      <TestimonialSection />
     </main>
   );
 }
@@ -331,5 +335,117 @@ function Decoration() {
         </linearGradient>
       </defs>
     </svg>
+  );
+}
+
+const statistics = [
+  {
+    label: 'Talenta Bergabung',
+    value: '2.3k+',
+  },
+  {
+    label: 'Klien',
+    value: '75',
+  },
+  {
+    label: 'Mentor',
+    value: '124',
+  },
+  {
+    label: 'Project',
+    value: '2.2k+',
+  },
+];
+
+const testimonials = [
+  {
+    rating: 5,
+    testimonial:
+      'Semoga dapat membantu dalam mencari pekerjaan dan meningkatkan skill',
+    name: 'Ranti Sotejo',
+    avatar: '/images/ranti-sotejo.png',
+  },
+  {
+    rating: 4,
+    testimonial:
+      'Vortex menyajikan informasi mulai dari program, basis data Klien, Talenta, Mentor hingga tips.',
+    name: 'Ahmad Raka',
+    avatar: '/images/ahmad-raka.png',
+  },
+];
+
+function TestimonialSection() {
+  return (
+    <section>
+      <div className="mx-auto flex w-full max-w-5xl items-center justify-between py-14">
+        {statistics.map((statistic) => (
+          <div className="space-y-4 text-center" key={statistic.label}>
+            <p className="font-semibold text-4xl text-primary">
+              {statistic.value}
+            </p>
+            <p>{statistic.label}</p>
+          </div>
+        ))}
+      </div>
+      <div className="flex">
+        <article className="w-full max-w-2/5 space-y-16 px-24 py-14">
+          <div className="space-y-4">
+            <h2 className="font-semibold text-primary">TESTIMONIAL</h2>
+            <h1 className="font-semibold text-5xl leading-16">
+              Ulasan tentang client Vortex
+            </h1>
+          </div>
+          <div className="space-y-4">
+            <h2 className="font-semibold text-5xl text-primary">A+ Rating</h2>
+            <p>Avg rating 4.8 makes us the best Website.</p>
+          </div>
+        </article>
+        <div className="w-full max-w-3/5 bg-primary/5 py-14 pl-14 flex gap-6">
+          {testimonials.map((testimonial) => (
+            <TestimonialCard key={testimonial.name} {...testimonial} />
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+type TestimonialCardProps = {
+  rating: number;
+  testimonial: string;
+  name: string;
+  avatar: string;
+};
+
+function TestimonialCard(props: TestimonialCardProps) {
+  const { rating, testimonial, name, avatar } = props;
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle className="flex items-center gap-4">
+          <div className="flex items-center gap-1">
+            {Array.from({ length: rating }).map((_, index) => (
+              <StarIcon
+                key={index}
+                className="fill-yellow-500 stroke-card size-6"
+              />
+            ))}
+          </div>
+          <p className="text-xl font-semibold translate-y-0.5">
+            {rating.toFixed(1)}
+          </p>
+        </CardTitle>
+      </CardHeader>
+      <CardContent>
+        <p className="text-xl leading-10">&quot;{testimonial}&quot;</p>
+      </CardContent>
+      <CardFooter className="flex items-center gap-4">
+        <Avatar className="size-12">
+          <AvatarImage src={avatar} />
+          <AvatarFallback>{name.slice(0, 2)}</AvatarFallback>
+        </Avatar>
+        <p className="text-xl font-semibold">{name}</p>
+      </CardFooter>
+    </Card>
   );
 }
