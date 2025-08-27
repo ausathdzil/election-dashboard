@@ -1,6 +1,5 @@
 'use client';
 
-import Link from 'next/link';
 import { useActionState } from 'react';
 
 import { Button } from '@/components/ui/button';
@@ -12,7 +11,7 @@ export default function SignupPage() {
   const [state, action, pending] = useActionState(signup, undefined);
 
   return (
-    <form action={action} className="w-full max-w-sm space-y-4">
+    <form action={action} className="w-full space-y-4">
       <div className="grid gap-1.5">
         <Label htmlFor="name">Name</Label>
         <Input
@@ -77,16 +76,10 @@ export default function SignupPage() {
           </p>
         )}
       </div>
-      <Button disabled={pending} type="submit">
+      <Button className="w-full" disabled={pending} type="submit">
         Sign Up
       </Button>
       <p className="text-sm">{state?.message}</p>
-      <p className="text-sm">
-        Already have an account?{' '}
-        <Link className="hover:underline" href="/login">
-          Login
-        </Link>
-      </p>
     </form>
   );
 }

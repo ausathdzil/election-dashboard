@@ -1,8 +1,8 @@
 'use client';
 
-import type { UrlObject } from 'node:url';
 import { HomeIcon, LogOutIcon, ShieldIcon, UserIcon } from 'lucide-react';
 import Link from 'next/link';
+import type { UrlObject } from 'node:url';
 
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Button, buttonVariants } from '@/components/ui/button';
@@ -32,10 +32,13 @@ export function UserButton() {
   if (!user) {
     return (
       <div className="flex items-center gap-4">
-        <Link className={buttonVariants({ variant: 'outline' })} href="/login">
-          Login
+        <Link
+          className={buttonVariants({ variant: 'ghost', size: 'auth' })}
+          href="/login"
+        >
+          Sign In
         </Link>
-        <Link className={buttonVariants()} href="/signup">
+        <Link className={buttonVariants({ size: 'auth' })} href="/signup">
           Sign Up
         </Link>
       </div>
@@ -94,7 +97,7 @@ export function UserButton() {
           ))}
           {user.is_superuser && (
             <DropdownMenuItem asChild className="cursor-pointer" key="admin">
-              <Link href="/admin">
+              <Link href="/election/admin">
                 <ShieldIcon />
                 Admin Dashboard
               </Link>

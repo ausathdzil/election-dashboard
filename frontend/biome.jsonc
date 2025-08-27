@@ -15,7 +15,7 @@
       "!dist",
       "!build",
       "!public",
-      "!src/components/ui",
+      "!src/components/ui/*",
       "!src/lib/types/*.d.ts"
     ]
   },
