@@ -1,3 +1,6 @@
+import { CircleCheckIcon, StarIcon } from 'lucide-react';
+import Image from 'next/image';
+import Link from 'next/link';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button, buttonVariants } from '@/components/ui/button';
 import {
@@ -8,9 +11,6 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { CircleCheckIcon, StarIcon } from 'lucide-react';
-import Image from 'next/image';
-import Link from 'next/link';
 
 export default function Home() {
   return (
@@ -380,7 +380,7 @@ function TestimonialSection() {
       <div className="mx-auto flex w-full max-w-5xl items-center justify-between py-14">
         {statistics.map((statistic) => (
           <div className="space-y-4 text-center" key={statistic.label}>
-            <p className="font-semibold text-4xl text-primary">
+            <p className="font-extrabold text-4xl text-primary">
               {statistic.value}
             </p>
             <p>{statistic.label}</p>
@@ -391,7 +391,7 @@ function TestimonialSection() {
         <article className="w-full max-w-2/5 space-y-16 px-24 py-14">
           <div className="space-y-4">
             <h2 className="font-semibold text-primary">TESTIMONIAL</h2>
-            <h1 className="font-semibold text-5xl leading-16">
+            <h1 className="font-bold text-5xl leading-16">
               Ulasan tentang client Vortex
             </h1>
           </div>
@@ -400,7 +400,7 @@ function TestimonialSection() {
             <p>Avg rating 4.8 makes us the best Website.</p>
           </div>
         </article>
-        <div className="w-full max-w-3/5 bg-primary/5 py-14 pl-14 flex gap-6">
+        <div className="flex w-full max-w-3/5 gap-6 bg-primary/5 py-14 pl-14">
           {testimonials.map((testimonial) => (
             <TestimonialCard key={testimonial.name} {...testimonial} />
           ))}
@@ -426,12 +426,13 @@ function TestimonialCard(props: TestimonialCardProps) {
           <div className="flex items-center gap-1">
             {Array.from({ length: rating }).map((_, index) => (
               <StarIcon
+                className="size-6 fill-yellow-500 stroke-card"
+                // biome-ignore lint/suspicious/noArrayIndexKey: No other way to do this
                 key={index}
-                className="fill-yellow-500 stroke-card size-6"
               />
             ))}
           </div>
-          <p className="text-xl font-semibold translate-y-0.5">
+          <p className="translate-y-0.5 font-semibold text-xl">
             {rating.toFixed(1)}
           </p>
         </CardTitle>
@@ -444,7 +445,7 @@ function TestimonialCard(props: TestimonialCardProps) {
           <AvatarImage src={avatar} />
           <AvatarFallback>{name.slice(0, 2)}</AvatarFallback>
         </Avatar>
-        <p className="text-xl font-semibold">{name}</p>
+        <p className="font-semibold text-xl">{name}</p>
       </CardFooter>
     </Card>
   );
