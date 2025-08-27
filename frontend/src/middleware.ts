@@ -20,13 +20,13 @@ export default async function middleware(req: NextRequest) {
   if (
     isPublicRoute &&
     session?.id &&
-    !req.nextUrl.pathname.startsWith('/profile')
+    !req.nextUrl.pathname.startsWith('/election/profile')
   ) {
-    return NextResponse.redirect(new URL('/profile', req.nextUrl));
+    return NextResponse.redirect(new URL('/election/profile', req.nextUrl));
   }
 
   if (isAdminRoute && !session?.is_superuser) {
-    return NextResponse.redirect(new URL('/profile', req.nextUrl));
+    return NextResponse.redirect(new URL('/election/profile', req.nextUrl));
   }
 
   return NextResponse.next();

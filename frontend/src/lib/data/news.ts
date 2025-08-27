@@ -59,7 +59,7 @@ type GetTopNewsSourceParams = {
 
 export async function getTopNewsSource(
   params: GetTopNewsSourceParams
-): Promise<NewsSource[]> {
+): Promise<{ data: NewsSource[] }> {
   const searchParams = new URLSearchParams();
   if (params.province) {
     searchParams.set('province', params.province);
@@ -113,29 +113,9 @@ export async function getNewsTrends(
   return data;
 }
 
-export async function getProvinceGeojson() {
-  const response = await fetch(`${API_URL}/geojson/province`);
-
-  if (!response.ok) {
-    throw new Error('Failed to fetch province geojson');
-  }
-
-  const data = await response.json();
-  return data;
-}
-
-export async function getCityRegencyGeojson() {
-  const response = await fetch(`${API_URL}/geojson/city-regency`);
-
-  if (!response.ok) {
-    throw new Error('Failed to fetch city regency geojson');
-  }
-
-  const data = await response.json();
-  return data;
-}
-
-export async function getProvinceSummary(): Promise<ProvinceSummary[]> {
+export async function getProvinceSummary(): Promise<{
+  data: ProvinceSummary[];
+}> {
   const response = await fetch(`${API_URL}/news/province-summary`);
 
   if (!response.ok) {
