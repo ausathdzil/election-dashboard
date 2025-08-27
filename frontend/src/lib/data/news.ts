@@ -15,18 +15,29 @@ type GetNewsParams = {
   province: string | null;
 };
 
+const MIN_PAGE_SIZE = 6;
+const MAX_PAGE_SIZE = 20;
+
 export async function getNews(params: GetNewsParams): Promise<News> {
   const searchParams = new URLSearchParams();
   if (params.q) {
     searchParams.set('q', params.q);
   }
   if (params.page) {
+    if (Number(params.page) < 1) {
+      searchParams.set('page', '1');
+    }
     searchParams.set('page', params.page);
   }
   if (params.size) {
-    searchParams.set('size', params.size);
-  } else {
-    searchParams.set('size', '6');
+    if (
+      Number(params.size) < MIN_PAGE_SIZE ||
+      Number(params.size) > MAX_PAGE_SIZE
+    ) {
+      searchParams.set('size', MIN_PAGE_SIZE.toString());
+    } else {
+      searchParams.set('size', params.size);
+    }
   }
   if (params.province) {
     searchParams.set('province', params.province);

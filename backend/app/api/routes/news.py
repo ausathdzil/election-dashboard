@@ -29,7 +29,7 @@ def get_news(
     session: SessionDep,
     q: Annotated[str | None, Query(max_length=50)] = None,
     page: Annotated[int | None, Query(ge=1)] = 1,
-    size: Annotated[int | None, Query(ge=5, le=20)] = 5,
+    size: Annotated[int | None, Query(ge=6, le=20)] = 6,
     province: str | None = None,
 ):
     if q:

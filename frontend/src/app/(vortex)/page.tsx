@@ -62,7 +62,12 @@ function HeroSection() {
             <Link className={buttonVariants({ size: 'lg' })} href="/signup">
               Daftar Sekarang
             </Link>
-            <Button size="lg" variant="outline">
+            <Button
+              className="border-foreground"
+              size="lg"
+              type="button"
+              variant="outline"
+            >
               Switch to Our Apps
             </Button>
           </div>

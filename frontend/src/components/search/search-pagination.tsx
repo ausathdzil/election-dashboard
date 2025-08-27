@@ -1,10 +1,9 @@
 // biome-ignore-all lint/suspicious/noArrayIndexKey: Required for pagination keys
 'use client';
 
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-
-import { Button } from '@/components/ui/button';
 import { ChevronLeftIcon, ChevronRightIcon } from 'lucide-react';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { Button } from '@/components/ui/button';
 
 type PaginationLike = {
   count: number;
