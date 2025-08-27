@@ -1,8 +1,8 @@
 'use client';
 
+import type { UrlObject } from 'node:url';
 import { HomeIcon, LogOutIcon, ShieldIcon, UserIcon } from 'lucide-react';
 import Link from 'next/link';
-import type { UrlObject } from 'node:url';
 
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Button, buttonVariants } from '@/components/ui/button';
@@ -33,12 +33,12 @@ export function UserButton() {
     return (
       <div className="flex items-center gap-4">
         <Link
-          className={buttonVariants({ variant: 'ghost', size: 'auth' })}
+          className={buttonVariants({ variant: 'ghost', size: 'rounded' })}
           href="/login"
         >
           Sign In
         </Link>
-        <Link className={buttonVariants({ size: 'auth' })} href="/signup">
+        <Link className={buttonVariants({ size: 'rounded' })} href="/signup">
           Sign Up
         </Link>
       </div>

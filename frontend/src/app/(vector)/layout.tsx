@@ -41,6 +41,10 @@ const navItems = [
     label: 'Kontak',
     href: '#',
   },
+  {
+    label: 'FaQ',
+    href: '#',
+  },
 ];
 
 function Header() {
