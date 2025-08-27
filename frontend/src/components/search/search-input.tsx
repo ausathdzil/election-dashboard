@@ -6,17 +6,23 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useDebouncedCallback } from 'use-debounce';
 
 import { Input } from '@/components/ui/input';
+import { cn } from '@/lib/utils';
 
 const DEBOUNCE_TIME = 300;
 
-export function SearchInput({ placeholder }: { placeholder: string }) {
+export function SearchInput({
+  className,
+  placeholder,
+}: {
+  className?: string;
+  placeholder: string;
+}) {
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const router = useRouter();
 
   const handleSearch = useDebouncedCallback((term: string) => {
     const params = new URLSearchParams(searchParams);
-    params.set('page', '1');
     if (term) {
       params.set('q', term);
     } else {
@@ -31,7 +37,7 @@ export function SearchInput({ placeholder }: { placeholder: string }) {
   return (
     <div className="relative">
       <Input
-        className="peer ps-9 pe-9"
+        className={cn('peer ps-9 pe-9', className)}
         defaultValue={searchParams.get('q')?.toString()}
         id="q"
         name="q"

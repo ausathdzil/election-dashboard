@@ -4,6 +4,7 @@
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
 import { Button } from '@/components/ui/button';
+import { ChevronLeftIcon, ChevronRightIcon } from 'lucide-react';
 
 type PaginationLike = {
   count: number;
@@ -40,10 +41,10 @@ export function SearchPagination(pageInfo: PaginationLike) {
         <Button
           disabled={!pageInfo.has_prev}
           onClick={() => handlePageChange(pageInfo.page - 1)}
-          size="sm"
-          variant="outline"
+          size="icon"
+          variant="ghost"
         >
-          Previous
+          <ChevronLeftIcon />
         </Button>
         {pagination.map((page, index) => (
           <Button
@@ -53,7 +54,7 @@ export function SearchPagination(pageInfo: PaginationLike) {
               typeof page === 'number' ? handlePageChange(page) : undefined
             }
             size="sm"
-            variant={page === pageInfo.page ? 'default' : 'outline'}
+            variant={page === pageInfo.page ? 'default' : 'ghost'}
           >
             {page}
           </Button>
@@ -61,10 +62,10 @@ export function SearchPagination(pageInfo: PaginationLike) {
         <Button
           disabled={!pageInfo.has_next}
           onClick={() => handlePageChange(pageInfo.page + 1)}
-          size="sm"
-          variant="outline"
+          size="icon"
+          variant="ghost"
         >
-          Next
+          <ChevronRightIcon />
         </Button>
       </div>
     </div>
