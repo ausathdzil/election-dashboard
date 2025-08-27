@@ -4,13 +4,13 @@ import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { z } from 'zod/v4';
 
+import { deleteSession } from '../session';
 import {
   LoginFormSchema,
   type LoginFormState,
   SignupFormSchema,
   type SignupFormState,
-} from './definitions';
-import { deleteSession } from './session';
+} from '../types/auth';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 

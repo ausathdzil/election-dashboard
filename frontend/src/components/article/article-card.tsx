@@ -1,4 +1,5 @@
 import { SearchIcon } from 'lucide-react';
+
 import { Suspense } from 'react';
 
 import { Badge } from '@/components/ui/badge';
@@ -9,11 +10,11 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { getNews } from '@/lib/data';
-import { Article } from './article';
-import { ArticleActions } from './article-actions';
+import { getNews } from '@/lib/data/news';
 import { SearchInput } from '../search/search-input';
 import { SearchPagination } from '../search/search-pagination';
+import { Article } from './article';
+import { ArticleActions } from './article-actions';
 
 type ArticleCardProps = {
   searchParams: {

@@ -8,7 +8,7 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from '@/components/ui/chart';
-import type { NewsSource } from '@/lib/types';
+import type { NewsSource } from '@/lib/types/news';
 
 const chartColors = [
   'var(--chart-1)',

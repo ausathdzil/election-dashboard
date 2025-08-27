@@ -8,7 +8,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import type { Article as ArticleType } from '@/lib/types';
+import type { Article as ArticleType } from '@/lib/types/news';
 
 const ARTICLE_PREVIEW_LENGTH = 100;
 

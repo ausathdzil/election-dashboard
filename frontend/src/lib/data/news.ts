@@ -1,10 +1,10 @@
 import type {
-  GetArticleTrendsResponse,
-  GetCitySummaryResponse,
-  GetNewsResponse,
-  GetProvinceSummaryResponse,
-  GetTopNewsSourceResponse,
-} from './types';
+  ArticleTrend,
+  CitySummary,
+  News,
+  NewsSource,
+  ProvinceSummary,
+} from '../types/news';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -15,7 +15,7 @@ type GetNewsParams = {
   province: string | null;
 };
 
-export async function getNews(params: GetNewsParams): Promise<GetNewsResponse> {
+export async function getNews(params: GetNewsParams): Promise<News> {
   const searchParams = new URLSearchParams();
   if (params.q) {
     searchParams.set('q', params.q);
@@ -46,7 +46,7 @@ type GetTopNewsSourceParams = {
 
 export async function getTopNewsSource(
   params: GetTopNewsSourceParams
-): Promise<GetTopNewsSourceResponse> {
+): Promise<NewsSource[]> {
   const searchParams = new URLSearchParams();
   if (params.province) {
     searchParams.set('province', params.province);
@@ -73,7 +73,7 @@ type GetNewsTrendsParams = {
 
 export async function getNewsTrends(
   params: GetNewsTrendsParams
-): Promise<GetArticleTrendsResponse> {
+): Promise<ArticleTrend[]> {
   const searchParams = new URLSearchParams();
   if (params.start_date) {
     searchParams.set('start_date', params.start_date);
@@ -122,7 +122,7 @@ export async function getCityRegencyGeojson() {
   return data;
 }
 
-export async function getProvinceSummary(): Promise<GetProvinceSummaryResponse> {
+export async function getProvinceSummary(): Promise<ProvinceSummary[]> {
   const response = await fetch(`${API_URL}/news/province-summary`);
 
   if (!response.ok) {
@@ -139,7 +139,7 @@ type CitySummaryParams = {
 
 export async function getCitySummary(
   params: CitySummaryParams
-): Promise<GetCitySummaryResponse> {
+): Promise<CitySummary> {
   const searchParams = new URLSearchParams();
   if (params.province) {
     searchParams.set('province', params.province);

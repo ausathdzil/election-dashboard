@@ -2,7 +2,7 @@ import { NewspaperIcon } from 'lucide-react';
 
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { getTopNewsSource } from '@/lib/data';
+import { getTopNewsSource } from '@/lib/data/news';
 import { TopNewsBarChart } from './top-news-bar-chart';
 import { TopNewsPieChart } from './top-news-pie-chart';
 

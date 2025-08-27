@@ -17,8 +17,8 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { getCitySummary } from '@/lib/data';
-import type { ProvinceSummary } from '@/lib/types';
+import { getCitySummary } from '@/lib/data/news';
+import type { ProvinceSummary } from '@/lib/types/news';
 
 const INITIAL_LONGITUDE = 117.968_86;
 const INITIAL_LATITUDE = -2.5669;

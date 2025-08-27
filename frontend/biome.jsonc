@@ -16,7 +16,7 @@
       "!build",
       "!public",
       "!src/components/ui",
-      "!src/types/*.d.ts"
+      "!src/lib/types/*.d.ts"
     ]
   },
   "linter": {

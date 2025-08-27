@@ -14,7 +14,7 @@ export type Article = {
   rank: number;
 };
 
-export type GetNewsResponse = {
+export type News = {
   data: Article[];
   count: number;
   page: number;
@@ -29,26 +29,14 @@ export type NewsSource = {
   article_count: number;
 };
 
-export type GetTopNewsSourceResponse = {
-  data: NewsSource[];
-};
-
-export type NewsTrend = {
+export type ArticleTrend = {
   bucket: string;
   article_count: number;
-};
-
-export type GetArticleTrendsResponse = {
-  data: NewsTrend[];
 };
 
 export type ProvinceSummary = {
   province: string;
   article_count: number;
-};
-
-export type GetProvinceSummaryResponse = {
-  data: ProvinceSummary[];
 };
 
 type GeoJSONGeometry = {
@@ -69,7 +57,7 @@ export type Feature = {
   properties: Properties;
 };
 
-export type GetCitySummaryResponse = {
+export type CitySummary = {
   type: string;
   features: Feature[];
 };

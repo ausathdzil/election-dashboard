@@ -1,4 +1,4 @@
-import { User, Users } from '@/types/user';
+import type { User, Users } from '@/lib/types/user';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 

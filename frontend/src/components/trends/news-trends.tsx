@@ -1,6 +1,6 @@
 import { NewsTrendsChart } from '@/components/trends/news-trends-chart';
 import { Card } from '@/components/ui/card';
-import { getNewsTrends } from '@/lib/data';
+import { getNewsTrends } from '@/lib/data/news';
 
 type NewsTrendsProps = {
   searchParams: {

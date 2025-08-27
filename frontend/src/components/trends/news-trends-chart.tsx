@@ -21,7 +21,7 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from '@/components/ui/chart';
-import type { NewsTrend } from '@/lib/types';
+import type { ArticleTrend } from '@/lib/types/news';
 import { DatePicker } from './date-picker';
 import { Granularity } from './granularity';
 
@@ -34,7 +34,7 @@ const formatDate = (date: Date) => {
   return `${year}-${month}-${day}`;
 };
 
-export function NewsTrendsChart({ chartData }: { chartData: NewsTrend[] }) {
+export function NewsTrendsChart({ chartData }: { chartData: ArticleTrend[] }) {
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const router = useRouter();

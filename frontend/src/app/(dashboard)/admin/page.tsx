@@ -32,7 +32,7 @@ export default async function AdminPage(props: AdminPageProps) {
   const cookieStore = await cookies();
   const accessToken = cookieStore.get('access_token');
 
-  if (!session?.is_superuser || !accessToken) {
+  if (!(session?.is_superuser && accessToken)) {
     forbidden();
   }
 
@@ -60,7 +60,7 @@ export default async function AdminPage(props: AdminPageProps) {
                 <TableHead>Email</TableHead>
                 <TableHead>Role</TableHead>
                 <TableHead>Created At</TableHead>
-                <TableHead></TableHead>
+                <TableHead />
               </TableRow>
             </TableHeader>
             <TableBody>

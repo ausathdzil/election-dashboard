@@ -1,7 +1,7 @@
 import { MapIcon } from 'lucide-react';
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { getProvinceSummary } from '@/lib/data';
+import { getProvinceSummary } from '@/lib/data/news';
 // import { MapData } from './map-data';
 import { VectorMap } from './vector-map';
 

@@ -1,5 +1,5 @@
-import { MapCard } from '@/components/map/map-card';
 import { ArticleCard } from '@/components/article/article-card';
+import { MapCard } from '@/components/map/map-card';
 import { TopNews } from '@/components/top-sources/top-news';
 import { NewsTrends } from '@/components/trends/news-trends';
 

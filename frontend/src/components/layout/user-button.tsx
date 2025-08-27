@@ -15,7 +15,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { logout } from '@/lib/actions';
+import { logout } from '@/lib/actions/auth';
 import { useUser } from './user-provider';
 
 const navItems = [

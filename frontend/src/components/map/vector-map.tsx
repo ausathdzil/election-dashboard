@@ -23,8 +23,8 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { getCitySummary } from '@/lib/data';
-import type { ProvinceSummary } from '@/lib/types';
+import { getCitySummary } from '@/lib/data/news';
+import type { ProvinceSummary } from '@/lib/types/news';
 import { cn } from '@/lib/utils';
 
 const DEBOUNCE_TIME = 500;
