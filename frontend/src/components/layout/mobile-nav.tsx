@@ -52,7 +52,7 @@ export function MobileNav(props: MobileNavProps) {
       <PopoverTrigger asChild>
         <Button className="lg:hidden" size="sm" variant="ghost">
           <MenuIcon />
-          <span className="translate-y-0.5">Menu</span>
+          <span className="translate-y-0.5 text-xl">Menu</span>
         </Button>
       </PopoverTrigger>
       <PopoverContent
@@ -63,24 +63,19 @@ export function MobileNav(props: MobileNavProps) {
         sideOffset={14}
       >
         <div className="flex flex-col gap-12 overflow-auto p-6">
-          <div className="flex flex-col gap-4">
-            <span className="font-medium text-muted-foreground text-sm">
-              Menu
-            </span>
-            <nav className="flex flex-col gap-3">
-              {navItems.map((item, index) => (
-                <MobileLink
-                  href={
-                    item.href as __next_route_internal_types__.RouteImpl<string>
-                  }
-                  key={index}
-                  onOpenChange={setOpen}
-                >
-                  {item.label}
-                </MobileLink>
-              ))}
-            </nav>
-          </div>
+          <nav className="flex flex-col gap-3">
+            {navItems.map((item, index) => (
+              <MobileLink
+                href={
+                  item.href as __next_route_internal_types__.RouteImpl<string>
+                }
+                key={index}
+                onOpenChange={setOpen}
+              >
+                {item.label}
+              </MobileLink>
+            ))}
+          </nav>
           {user ? (
             <div className="flex flex-col gap-4">
               <span className="font-medium text-muted-foreground text-sm">

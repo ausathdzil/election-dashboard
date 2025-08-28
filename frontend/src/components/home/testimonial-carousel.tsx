@@ -18,6 +18,7 @@ import {
   CarouselContent,
   CarouselItem,
 } from '@/components/ui/carousel';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 const testimonials = [
   {
@@ -47,6 +48,7 @@ export function TestimonialCarousel() {
   const [api, setApi] = useState<CarouselApi>();
   const [current, setCurrent] = useState(0);
   const [count, setCount] = useState(testimonials.length);
+  const isMobile = useIsMobile();
 
   useEffect(() => {
     if (!api) {
@@ -62,7 +64,7 @@ export function TestimonialCarousel() {
   }, [api]);
 
   return (
-    <div className="flex w-full max-w-3/5 flex-col gap-4 bg-primary/5 py-14 pl-14">
+    <div className="flex w-full lg:max-w-3/5 flex-col gap-4 bg-primary/5 p-8 lg:py-14 lg:pl-14">
       <Carousel
         opts={{
           align: 'start',
@@ -72,7 +74,7 @@ export function TestimonialCarousel() {
       >
         <CarouselContent>
           {testimonials.map((testimonial) => (
-            <CarouselItem className="basis-1/2" key={testimonial.name}>
+            <CarouselItem className="lg:basis-1/2" key={testimonial.name}>
               <div className="p-1">
                 <TestimonialCard key={testimonial.name} {...testimonial} />
               </div>
@@ -122,14 +124,14 @@ export function TestimonialCard(props: TestimonialCardProps) {
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <p className="text-xl leading-10">&quot;{testimonial}&quot;</p>
+        <p className="lg:text-lg lg:leading-10">&quot;{testimonial}&quot;</p>
       </CardContent>
       <CardFooter className="flex items-center gap-4">
-        <Avatar className="size-12">
+        <Avatar className="size-8 lg:size-12">
           <AvatarImage src={avatar} />
           <AvatarFallback>{name.slice(0, 2)}</AvatarFallback>
         </Avatar>
-        <p className="font-semibold text-xl">{name}</p>
+        <p className="font-semibold lg:text-xl">{name}</p>
       </CardFooter>
     </Card>
   );
