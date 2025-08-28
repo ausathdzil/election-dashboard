@@ -64,7 +64,7 @@ function Header() {
         <MobileNav navItems={navItems} />
         <UserButton />
       </div>
-      <nav className="absolute hidden md:block">
+      <nav className="absolute hidden lg:block">
         <ul className="flex w-full justify-center gap-12 font-semibold">
           {navItems.map((item) => (
             <li key={item.label}>
