@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { Outfit } from 'next/font/google';
+import { Lexend } from 'next/font/google';
 import './globals.css';
 
 import { UserProvider } from '@/components/layout/user-provider';
@@ -8,9 +8,9 @@ import { ThemeProvider } from '@/components/theme-provider';
 import { verifySession } from '@/lib/session';
 import { cn } from '@/lib/utils';
 
-const outfit = Outfit({
+const lexend = Lexend({
   subsets: ['latin'],
-  variable: '--font-outfit',
+  variable: '--font-lexend',
 });
 
 export const metadata: Metadata = {
@@ -27,7 +27,7 @@ export default function RootLayout({
 
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={cn(outfit.variable, 'font-sans antialiased')}>
+      <body className={cn(lexend.variable, 'font-sans antialiased')}>
         <UserProvider userPromise={userPromise}>
           <QueryProvider>
             <ThemeProvider

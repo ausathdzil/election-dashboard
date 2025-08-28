@@ -1,5 +1,4 @@
-import uuid
-from datetime import datetime, timezone
+from datetime import datetime
 
 from pydantic import EmailStr
 from sqlmodel import Field, SQLModel
@@ -36,14 +35,8 @@ class UpdatePassword(SQLModel):
     new_password: str = Field(min_length=8, max_length=40)
 
 
-class User(UserBase, table=True):
-    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
-    hashed_password: str
-    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
-
-
 class UserPublic(UserBase):
-    id: uuid.UUID
+    id: int
     created_at: datetime
 
 
