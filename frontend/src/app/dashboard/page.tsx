@@ -1,5 +1,14 @@
+// biome-ignore-all lint/suspicious/noArrayIndexKey: Same placeholders
+import { CopyIcon, MoreHorizontalIcon } from 'lucide-react';
+
+import Image from 'next/image';
+
 import { TimelineChart } from '@/components/dashboard/timeline-chart';
 import { TopSourcesChart } from '@/components/dashboard/top-sources-chart';
+import { PageSizeSelect } from '@/components/search/page-size-select';
+import { SearchPagination } from '@/components/search/search-pagination';
+import { Avatar, AvatarImage } from '@/components/ui/avatar';
+import { Button } from '@/components/ui/button';
 import {
   Card,
   CardAction,
@@ -9,6 +18,14 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { getNewsTrends, getTopNewsSource } from '@/lib/data/news';
 import { cn } from '@/lib/utils';
@@ -16,12 +33,15 @@ import { cn } from '@/lib/utils';
 export default function DashboardPage() {
   return (
     <main className="flex flex-1 flex-col gap-4 p-6">
-      <Statistics />
+      <StatisticsSection />
       <TimelineCard />
       <div className="grid grid-cols-2 gap-4">
         <AdditionalStatistics />
         <TopNewsSourceCard />
+        <TopSourceCard />
+        <TopSourceEndpointCard />
       </div>
+      <APIGatewayLogsSection />
     </main>
   );
 }
@@ -53,13 +73,13 @@ const statistics = [
   },
 ];
 
-function Statistics() {
+function StatisticsSection() {
   return (
-    <div className="flex gap-4">
+    <section className="flex gap-4">
       {statistics.map((statistic) => (
         <StatisticCard key={statistic.title} {...statistic} />
       ))}
-    </div>
+    </section>
   );
 }
 
@@ -97,7 +117,7 @@ async function TimelineCard() {
   });
 
   return (
-    <Card className="border">
+    <Card>
       <CardHeader>
         <CardDescription>Timeline</CardDescription>
         <CardTitle>Data Timeline</CardTitle>
@@ -185,7 +205,7 @@ async function TopNewsSourceCard() {
   });
 
   return (
-    <Card className="border">
+    <Card>
       <CardHeader>
         <CardDescription>Top</CardDescription>
         <CardTitle>News Source</CardTitle>
@@ -310,6 +330,442 @@ function TotalUserIcon() {
         d="M22.7733 18.8667C19.0533 16.3867 12.9866 16.3867 9.23995 18.8667C7.54661 20 6.61328 21.5334 6.61328 23.1734C6.61328 24.8134 7.54661 26.3334 9.22661 27.4534C11.0933 28.7067 13.5466 29.3334 15.9999 29.3334C18.4533 29.3334 20.9066 28.7067 22.7733 27.4534C24.4533 26.32 25.3866 24.8 25.3866 23.1467C25.3733 21.5067 24.4533 19.9867 22.7733 18.8667Z"
         fill="#5575A5"
       />
+    </svg>
+  );
+}
+
+const topSource = [
+  {
+    label: 'Tokopedia',
+    url: 'https://tokopedia.com',
+    value: 84,
+    logo: '/images/tokopedia.png',
+  },
+  {
+    label: 'Shopee',
+    url: 'https://shopee.com',
+    value: 84,
+    logo: '/images/shopee.png',
+  },
+  {
+    label: 'Bukalapak',
+    url: 'https://bukalapak.com',
+    value: 84,
+    logo: '/images/bukalapak.png',
+  },
+  {
+    label: 'detik.com',
+    url: 'https://detik.com',
+    value: 84,
+    logo: '/images/detik.png',
+  },
+  {
+    label: 'liputan6',
+    url: 'https://liputan6.com',
+    value: 84,
+    logo: '/images/liputan6.png',
+  },
+  {
+    label: 'Tokopedia',
+    url: 'https://tokopedia.com',
+    value: 84,
+    logo: '/images/tokopedia.png',
+  },
+  {
+    label: 'Bukalapak',
+    url: 'https://bukalapak.com',
+    value: 84,
+    logo: '/images/bukalapak.png',
+  },
+  {
+    label: 'bola.id',
+    url: 'https://bola.id',
+    value: 84,
+    logo: '/images/bolaid.png',
+  },
+  {
+    label: 'Wikipedia',
+    url: 'https://wikipedia.com',
+    value: 84,
+    logo: '/images/wikipedia.png',
+  },
+  {
+    label: 'bola.id',
+    url: 'https://bola.id',
+    value: 84,
+    logo: '/images/bolaid.png',
+  },
+];
+
+function TopSourceCard() {
+  return (
+    <Card>
+      <CardHeader>
+        <CardDescription>Top</CardDescription>
+        <CardTitle>Source</CardTitle>
+        <CardAction>
+          <Tabs defaultValue="year">
+            <TabsList>
+              <TabsTrigger value="month">Month</TabsTrigger>
+              <TabsTrigger value="year">Year</TabsTrigger>
+            </TabsList>
+          </Tabs>
+        </CardAction>
+      </CardHeader>
+      <CardContent>
+        <Separator className="mb-2" />
+        <Table>
+          <TableBody>
+            {topSource.map((item, index) => (
+              <TableRow className="border-none" key={index}>
+                <TableCell>
+                  <Image
+                    alt={item.label}
+                    height={24}
+                    src={item.logo}
+                    width={24}
+                  />
+                </TableCell>
+                <TableCell>{item.label}</TableCell>
+                <TableCell>{item.url}</TableCell>
+                <TableCell className="text-right font-semibold text-primary">
+                  {item.value}
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </CardContent>
+    </Card>
+  );
+}
+
+const topSourceEndpoint = [
+  {
+    url: '/tokopedia/search_product',
+    value: 84,
+  },
+  {
+    url: '/search_engine/search',
+    value: 84,
+  },
+  {
+    url: '/tokopedia/get_filter',
+    value: 84,
+  },
+  {
+    url: '/tokopedia/get_city',
+    value: 84,
+  },
+  {
+    url: '/shopee/get_city',
+    value: 84,
+  },
+  {
+    url: '/bukalapak/get_city',
+    value: 84,
+  },
+  {
+    url: '/detik/get_city',
+    value: 84,
+  },
+  {
+    url: '/tokopedia/get_city',
+    value: 84,
+  },
+  {
+    url: '/search_engine/search',
+    value: 84,
+  },
+  {
+    url: '/search_engine/search',
+    value: 84,
+  },
+];
+
+function TopSourceEndpointCard() {
+  return (
+    <Card>
+      <CardHeader>
+        <CardDescription>Top</CardDescription>
+        <CardTitle>Source Endpoint</CardTitle>
+        <CardAction>
+          <Tabs defaultValue="year">
+            <TabsList>
+              <TabsTrigger value="month">Month</TabsTrigger>
+              <TabsTrigger value="year">Year</TabsTrigger>
+            </TabsList>
+          </Tabs>
+        </CardAction>
+      </CardHeader>
+      <CardContent>
+        <Separator className="mb-2" />
+        <Table>
+          <TableBody>
+            {topSourceEndpoint.map((item, index) => (
+              <TableRow className="h-10 border-none" key={index}>
+                <TableCell>{item.url}</TableCell>
+                <TableCell className="text-right font-semibold text-primary">
+                  {item.value}
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </CardContent>
+    </Card>
+  );
+}
+
+const logs = [
+  {
+    user: {
+      name: 'James Maddison',
+      username: 'jamesmaddison',
+      image: '/images/james-maddison.png',
+    },
+    path: {
+      name: 'search_engine/search',
+      type: 'json_params',
+    },
+    endpoint: '/tiktok/downloader',
+    token: {
+      value: 'MTAwODdkNjhhZDcyNDZm',
+      type: 'Social Media',
+    },
+    status: 200,
+    execute_time: 100,
+  },
+  {
+    user: {
+      name: 'Albert Flores',
+      username: 'alfloor',
+      image: '/images/albert-flores.png',
+    },
+    path: {
+      name: 'search_engine/search',
+      type: 'json_params',
+    },
+    endpoint: '/tokopedia/search-product',
+    token: {
+      value: 'MTAwODdkNjhhZDcyNDZm',
+      type: 'News',
+    },
+    status: 404,
+    execute_time: 100,
+  },
+  {
+    user: {
+      name: 'Leslie Alexander',
+      username: 'lesliealex',
+      image: '/images/leslie-alexander.png',
+    },
+    path: {
+      name: 'search_engine/search',
+      type: 'json_params',
+    },
+    endpoint: '/tokopedia/get-filter',
+    token: {
+      value: 'MTAwODdkNjhhZDcyNDZm',
+      type: 'Wikipedia',
+    },
+    status: 500,
+    execute_time: 100,
+  },
+  {
+    user: {
+      name: 'Jenny Wilson',
+      username: 'jennywils',
+      image: '/images/jenny-wilson.png',
+    },
+    path: {
+      name: 'search_engine/search',
+      type: 'json_params',
+    },
+    endpoint: '/tokopedia/get-city',
+    token: {
+      value: 'MTAwODdkNjhhZDcyNDZm',
+      type: 'Social Media',
+    },
+    status: 200,
+    execute_time: 100,
+  },
+  {
+    user: {
+      name: 'Marvin McKinney',
+      username: 'marvinkin',
+      image: '/images/marvin-mckinney.png',
+    },
+    path: {
+      name: 'search_engine/search',
+      type: 'json_params',
+    },
+    endpoint: '/tiktok/downloader',
+    token: {
+      value: 'MTAwODdkNjhhZDcyNDZm',
+      type: 'Social Media',
+    },
+    status: 200,
+    execute_time: 100,
+  },
+];
+
+function APIGatewayLogsSection() {
+  return (
+    <section className="flex flex-col gap-8 py-4">
+      <div className="flex items-center justify-between">
+        <h2 className="font-semibold">API Gateway Logs</h2>
+        <div className="flex size-9 items-center justify-center rounded-md border border-primary">
+          <FilterIcon />
+        </div>
+      </div>
+      <div className="max-w-full overflow-hidden rounded-lg border">
+        <Table>
+          <TableHeader>
+            <TableRow className="[&>*:not(:last-child)]:border-r [&>*]:h-12 [&>*]:p-2">
+              <TableHead>
+                <Button className="w-full justify-between" variant="ghost">
+                  NO <ExpandIcon />
+                </Button>
+              </TableHead>
+              <TableHead>
+                <Button className="w-full justify-between" variant="ghost">
+                  USER <ExpandIcon />
+                </Button>
+              </TableHead>
+              <TableHead>
+                <Button className="w-full justify-between" variant="ghost">
+                  PATH <ExpandIcon />
+                </Button>
+              </TableHead>
+              <TableHead>
+                <Button className="w-full justify-between" variant="ghost">
+                  ENDPOINT <ExpandIcon />
+                </Button>
+              </TableHead>
+              <TableHead>
+                <Button className="w-full justify-between" variant="ghost">
+                  TOKEN <ExpandIcon />
+                </Button>
+              </TableHead>
+              <TableHead>
+                <Button className="w-full justify-between" variant="ghost">
+                  STATUS <ExpandIcon />
+                </Button>
+              </TableHead>
+              <TableHead>
+                <Button className="w-full justify-between" variant="ghost">
+                  EXECUTE TIME <ExpandIcon />
+                </Button>
+              </TableHead>
+              <TableHead />
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {logs.map((log, index) => (
+              <TableRow
+                className="[&>*]:h-24 [&>*]:p-2"
+                key={log.user.username}
+              >
+                <TableCell className="!pl-6">{index + 1}</TableCell>
+                <TableCell>
+                  <div className="flex items-center gap-2">
+                    <Avatar className="size-10">
+                      <AvatarImage alt={log.user.name} src={log.user.image} />
+                    </Avatar>
+                    <div className="flex flex-col">
+                      <p>{log.user.name}</p>
+                      <p className="text-muted-foreground text-xs">
+                        {log.user.username}
+                      </p>
+                    </div>
+                  </div>
+                </TableCell>
+                <TableCell>
+                  <p>{log.path.name}</p>
+                  <p className="text-muted-foreground text-xs">
+                    ({log.path.type})
+                  </p>
+                </TableCell>
+                <TableCell>{log.endpoint}</TableCell>
+                <TableCell>
+                  <div className="flex items-center gap-4">
+                    <p>{log.token.value}</p>
+                    <CopyIcon className="size-4 stroke-muted-foreground" />
+                  </div>
+                  <p className="text-muted-foreground text-xs">
+                    {log.token.type}
+                  </p>
+                </TableCell>
+                <TableCell>{log.status}</TableCell>
+                <TableCell>{log.execute_time}ms</TableCell>
+                <TableCell>
+                  <Button size="icon" variant="ghost">
+                    <MoreHorizontalIcon />
+                  </Button>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+        <Separator />
+        <div className="flex items-center gap-2 p-4">
+          <PageSizeSelect className="w-fit text-primary" initialSize="5" />
+          <SearchPagination
+            count={254}
+            has_next
+            has_prev={false}
+            page={1}
+            size={5}
+            total_pages={3}
+          />
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function FilterIcon() {
+  return (
+    <svg
+      fill="none"
+      height="18"
+      viewBox="0 0 18 18"
+      width="18"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <title>Filter</title>
+      <path
+        d="M4.04981 1.575H13.9498C14.7748 1.575 15.4498 2.25 15.4498 3.075V4.725C15.4498 5.325 15.0748 6.075 14.6998 6.45L11.4748 9.3C11.0248 9.675 10.7248 10.425 10.7248 11.025V14.25C10.7248 14.7 10.4248 15.3 10.0498 15.525L8.99981 16.2C8.02481 16.8 6.67481 16.125 6.67481 14.925V10.95C6.67481 10.425 6.37481 9.75 6.07481 9.375L3.2248 6.375C2.8498 6 2.5498 5.325 2.5498 4.875V3.15C2.5498 2.25 3.2248 1.575 4.04981 1.575Z"
+        stroke="#5575A5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeMiterlimit="10"
+        strokeWidth="1.5"
+      />
+      <path
+        d="M8.1975 1.575L4.5 7.5"
+        stroke="#5575A5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeMiterlimit="10"
+        strokeWidth="1.5"
+      />
+    </svg>
+  );
+}
+
+function ExpandIcon() {
+  return (
+    <svg
+      fill="none"
+      height="13"
+      viewBox="0 0 12 13"
+      width="12"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <title>Expand</title>
+      <path d="M9 5L6 2L3 5H9ZM9 8L6 11L3 8H9Z" fill="#33353D" />
     </svg>
   );
 }
