@@ -25,7 +25,7 @@ export default async function BlogPage(props: BlogPageProps) {
   return (
     <main className="flex w-full flex-1 flex-col">
       <NewsHeader />
-      <div className="flex w-full gap-8 border-t px-24 py-8 shadow-xs">
+      <div className="flex w-full flex-col gap-8 border-t p-8 shadow-xs lg:flex-row lg:px-24">
         <NewsSection {...searchParams} />
         <RecommendationSection {...searchParams} />
       </div>
@@ -35,8 +35,8 @@ export default async function BlogPage(props: BlogPageProps) {
 
 function NewsHeader() {
   return (
-    <section className="flex justify-between bg-[#FAFBFC] px-24 pt-10">
-      <article className="max-w-[500px] space-y-4">
+    <section className="flex flex-col gap-8 bg-[#FAFBFC] px-8 pt-8 lg:flex-row lg:justify-between lg:px-24 lg:pt-10">
+      <article className="space-y-2 lg:max-w-[500px] lg:space-y-4">
         <h1 className="font-bold text-2xl">Read News Articles</h1>
         <p>
           Displays information, visualizations, graphics and text with a display
@@ -70,7 +70,7 @@ async function NewsSection(props: NewsSectionProps) {
       <Suspense fallback={null}>
         <SearchInput className="max-w-sm" placeholder="Search news articles" />
       </Suspense>
-      <div className="grid grid-cols-3 gap-8">
+      <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
         {news.data.map((article) => (
           <ArticleCard article={article} key={article.id} />
         ))}
@@ -157,20 +157,29 @@ async function RecommendationSection(props: NewsSectionProps) {
   const recentNews = news.data.slice(0, MAX_RECENT_NEWS);
 
   return (
-    <section className="space-y-4 border-l px-8">
-      <h2 className="font-medium text-xl">Recommended Tags</h2>
-      <div className="flex flex-wrap gap-2">
-        {recommendedTags.map((tag) => (
-          <Button key={tag.id} size="rounded" type="button" variant="secondary">
-            {tag.name}
-          </Button>
-        ))}
+    <section className="space-y-8 border-t px-0 py-8 lg:border-t-0 lg:border-l lg:px-8">
+      <div className="space-y-4">
+        <h2 className="font-medium text-xl">Recommended Tags</h2>
+        <div className="flex flex-wrap gap-2">
+          {recommendedTags.map((tag) => (
+            <Button
+              key={tag.id}
+              size="rounded"
+              type="button"
+              variant="secondary"
+            >
+              {tag.name}
+            </Button>
+          ))}
+        </div>
       </div>
-      <h2 className="font-medium text-xl">Recently Saved</h2>
-      <div className="flex flex-col">
-        {recentNews.map((article) => (
-          <RecentlySavedCard article={article} key={article.id} />
-        ))}
+      <div className="space-y-4">
+        <h2 className="font-medium text-xl">Recently Saved</h2>
+        <div className="flex flex-col">
+          {recentNews.map((article) => (
+            <RecentlySavedCard article={article} key={article.id} />
+          ))}
+        </div>
       </div>
       <Button className="w-full" type="button" variant="outline">
         See all <ArrowUpRightIcon />

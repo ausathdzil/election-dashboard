@@ -34,7 +34,7 @@ const features = [
     icon: <CalculatorIcon />,
     title: 'Data Verification',
     description:
-      'We make bookkeeping easy through our accounting solution and give you access to an accountant for questions at any ',
+      'We make bookkeeping easy through our accounting solution and give you access to an accountant for questions at any time.',
   },
   {
     icon: <MoneyIcon />,
@@ -46,19 +46,19 @@ const features = [
 
 function HeroSection() {
   return (
-    <section className="bg-primary/5 px-24 pt-4 pb-12">
-      <div className="grid grid-cols-2 items-center">
+    <section className="bg-primary/5 p-8 pb-12 lg:px-24 lg:pt-4">
+      <div className="grid grid-cols-1 items-center gap-8 lg:grid-cols-2">
         <article className="flex flex-col gap-6">
-          <h1 className="font-extrabold text-6xl leading-20">
+          <h1 className="font-extrabold text-2xl lg:text-6xl lg:leading-20">
             Vortex <br />
             Center <span className="text-primary">(Welcome)</span>
           </h1>
-          <p className="text-muted-foreground leading-8">
+          <p className="text-muted-foreground lg:leading-8">
             We provide the professional services you need to start & run a
             company in Malaysia and we've build a platform to make it as simple
             as 1-2-3
           </p>
-          <div className="flex gap-4">
+          <div className="flex flex-col gap-4 lg:flex-row">
             <Link className={buttonVariants({ size: 'lg' })} href="/signup">
               Daftar Sekarang
             </Link>
@@ -76,12 +76,13 @@ function HeroSection() {
           alt="Hero Image"
           className="size-full object-cover"
           height={500}
+          priority
           quality={100}
           src="/images/hero.png"
           width={500}
         />
       </div>
-      <div className="-translate-y-12 flex w-full max-w-[90%] gap-6">
+      <div className="lg:-translate-y-12 flex w-full flex-col gap-6 lg:flex-row">
         {features.map((feature) => (
           <FeatureCard key={feature.title} {...feature} />
         ))}
@@ -195,12 +196,12 @@ const partners = [
 
 function AboutSection() {
   return (
-    <section className="px-24">
+    <section className="px-8 lg:px-24">
       <div className="space-y-6 py-14">
-        <h2 className="text-center font-semibold text-2xl">
+        <h2 className="text-center font-semibold text-lg lg:text-2xl">
           Mitra Bekerjasama dengan
         </h2>
-        <div className="flex items-center justify-center gap-16">
+        <div className="flex flex-col items-center justify-center gap-8 lg:flex-row lg:gap-16">
           {partners.map((partner) => (
             <Image
               alt={partner.alt}
@@ -214,7 +215,7 @@ function AboutSection() {
           ))}
         </div>
       </div>
-      <div className="grid grid-cols-2 items-center gap-16 py-14">
+      <div className="grid grid-cols-1 items-center gap-8 py-7 lg:grid-cols-2 lg:gap-16 lg:py-14">
         <Image
           alt="About"
           className="size-full object-cover"
@@ -223,15 +224,17 @@ function AboutSection() {
           src="/images/about.png"
           width={500}
         />
-        <article className="space-y-6">
+        <article className="space-y-4 lg:space-y-6">
           <h2 className="font-semibold text-primary">ABOUT US</h2>
-          <h1 className="font-semibold text-5xl">Apa itu Vortex</h1>
-          <p className="text-muted-foreground leading-7">
+          <h1 className="font-semibold text-3xl lg:text-5xl">Apa itu Vortex</h1>
+          <p className="text-muted-foreground lg:leading-7">
             Program pengembangan kompetensi bagi pemuda yang menekankan pada “On
             The Job Learning” dengan memberikan kesempatan pekerjaan temporer
             (proyek/tugas) berbayar dari klien dunia usaha atau organisasi.
           </p>
-          <Button size="lg">Get In Touch</Button>
+          <Button className="w-full lg:w-auto" size="lg">
+            Get In Touch
+          </Button>
         </article>
       </div>
     </section>
@@ -258,11 +261,11 @@ const additionalFeatures = [
 
 function AdditionalFeaturesSection() {
   return (
-    <section className="relative bg-primary/5 px-24 pt-14">
+    <section className="relative bg-primary/5 p-8 lg:px-24 lg:pt-14">
       <div className="-z-10 absolute top-0 left-0 size-full overflow-hidden">
         <Decoration />
       </div>
-      <div className="grid grid-cols-2 items-end gap-16">
+      <div className="flex flex-col-reverse gap-8 lg:grid lg:grid-cols-2 lg:gap-16">
         <Image
           alt="Additional Features"
           className="mx-auto object-cover"
@@ -272,11 +275,11 @@ function AdditionalFeaturesSection() {
           width={500}
         />
         <article className="space-y-5 pb-14">
-          <h1 className="font-semibold text-5xl leading-16">
+          <h1 className="text-center font-semibold text-3xl lg:text-left lg:text-5xl lg:leading-16">
             Kenapa <br />
             memakai <span className="text-primary">Vortex</span>?
           </h1>
-          <div className="max-w-3/4 space-y-5 [&>*:nth-child(2)]:translate-x-6">
+          <div className="space-y-5 lg:max-w-3/4 lg:[&>*:nth-child(2)]:translate-x-6">
             {additionalFeatures.map((feature) => (
               <AdditionalFeatureCard key={feature.title} {...feature} />
             ))}
@@ -365,26 +368,31 @@ const statistics = [
 function TestimonialSection() {
   return (
     <section>
-      <div className="mx-auto flex w-full max-w-5xl items-center justify-between py-14">
+      <div className="mx-auto flex w-full max-w-5xl flex-col justify-between gap-8 px-8 py-14 lg:flex-row lg:items-center lg:gap-0 lg:px-0">
         {statistics.map((statistic) => (
-          <div className="space-y-4 text-center" key={statistic.label}>
-            <p className="font-extrabold text-4xl text-primary">
+          <div
+            className="flex items-center gap-2 lg:flex-col lg:gap-4 lg:text-center"
+            key={statistic.label}
+          >
+            <p className="font-extrabold text-2xl text-primary lg:text-4xl">
               {statistic.value}
             </p>
             <p>{statistic.label}</p>
           </div>
         ))}
       </div>
-      <div className="flex">
-        <article className="w-full max-w-2/5 space-y-16 px-24 py-14">
+      <div className="flex flex-col lg:flex-row">
+        <article className="w-full space-y-8 p-8 lg:max-w-2/5 lg:space-y-16 lg:px-24 lg:py-14">
           <div className="space-y-4">
             <h2 className="font-semibold text-primary">TESTIMONIAL</h2>
-            <h1 className="font-bold text-5xl leading-16">
+            <h1 className="font-bold text-3xl lg:text-5xl lg:leading-16">
               Ulasan tentang client Vortex
             </h1>
           </div>
           <div className="space-y-4">
-            <h2 className="font-semibold text-5xl text-primary">A+ Rating</h2>
+            <h2 className="font-semibold text-3xl text-primary lg:text-5xl">
+              A+ Rating
+            </h2>
             <p>Avg rating 4.8 makes us the best Website.</p>
           </div>
         </article>

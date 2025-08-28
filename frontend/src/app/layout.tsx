@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { Epilogue } from 'next/font/google';
+import { Sora } from 'next/font/google';
 import './globals.css';
 
 import { UserProvider } from '@/components/layout/user-provider';
@@ -8,9 +8,9 @@ import { ThemeProvider } from '@/components/theme-provider';
 import { verifySession } from '@/lib/session';
 import { cn } from '@/lib/utils';
 
-const epilogue = Epilogue({
+const sora = Sora({
   subsets: ['latin'],
-  variable: '--font-epilogue',
+  variable: '--font-sora',
 });
 
 export const metadata: Metadata = {
@@ -27,7 +27,7 @@ export default function RootLayout({
 
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={cn(epilogue.variable, 'font-sans antialiased')}>
+      <body className={cn(sora.variable, 'font-sans antialiased')}>
         <UserProvider userPromise={userPromise}>
           <QueryProvider>
             <ThemeProvider

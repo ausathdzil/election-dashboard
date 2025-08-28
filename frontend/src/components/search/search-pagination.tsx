@@ -1,4 +1,3 @@
-// biome-ignore-all lint/suspicious/noArrayIndexKey: Required for pagination keys
 'use client';
 
 import {
@@ -7,7 +6,9 @@ import {
   ChevronsLeftIcon,
   ChevronsRightIcon,
 } from 'lucide-react';
+
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+
 import { Button } from '@/components/ui/button';
 
 type PaginationLike = {
@@ -35,19 +36,20 @@ export function SearchPagination(pageInfo: PaginationLike) {
   };
 
   return (
-    <div className="flex w-full items-center justify-between">
+    <div className="flex w-full flex-col items-start gap-4 lg:flex-row lg:items-center lg:justify-between">
       <p className="text-muted-foreground text-sm [&>span]:font-medium [&>span]:text-primary">
         Showing <span>{(pageInfo.page - 1) * pageInfo.size + 1}</span>-
         <span>{Math.min(pageInfo.page * pageInfo.size, pageInfo.count)} </span>
         of <span>{pageInfo.count}</span> results
       </p>
-      <div className="flex items-center space-x-2">
+      <div className="flex flex-wrap items-center space-x-2">
         <Button
+          className="hidden lg:block"
           disabled={!pageInfo.has_prev}
           onClick={() => handlePageChange(1)}
           size="icon"
           title="Go to first page"
-          variant="outline"
+          variant="ghost"
         >
           <ChevronsLeftIcon />
         </Button>
@@ -56,7 +58,7 @@ export function SearchPagination(pageInfo: PaginationLike) {
           onClick={() => handlePageChange(pageInfo.page - 1)}
           size="icon"
           title="Go to previous page"
-          variant="outline"
+          variant="ghost"
         >
           <ChevronLeftIcon />
         </Button>
@@ -68,7 +70,7 @@ export function SearchPagination(pageInfo: PaginationLike) {
               typeof page === 'number' ? handlePageChange(page) : undefined
             }
             size="icon"
-            variant={page === pageInfo.page ? 'default' : 'outline'}
+            variant={page === pageInfo.page ? 'default' : 'ghost'}
           >
             {page}
           </Button>
@@ -78,16 +80,17 @@ export function SearchPagination(pageInfo: PaginationLike) {
           onClick={() => handlePageChange(pageInfo.page + 1)}
           size="icon"
           title="Go to next page"
-          variant="outline"
+          variant="ghost"
         >
           <ChevronRightIcon />
         </Button>
         <Button
+          className="hidden lg:block"
           disabled={!pageInfo.has_next}
           onClick={() => handlePageChange(pageInfo.total_pages)}
           size="icon"
           title="Go to last page"
-          variant="outline"
+          variant="ghost"
         >
           <ChevronsRightIcon />
         </Button>

@@ -1,6 +1,6 @@
 import type { UrlObject } from 'node:url';
 import Link from 'next/link';
-
+import { MobileNav } from '@/components/layout/mobile-nav';
 import { UserButton } from '@/components/layout/user-button';
 import { UserProvider } from '@/components/layout/user-provider';
 import { Button } from '@/components/ui/button';
@@ -54,15 +54,16 @@ const navItems = [
 
 function Header() {
   return (
-    <header className="relative flex w-full items-center justify-center px-20 shadow-xs">
+    <header className="relative flex w-full items-center justify-center shadow-xs lg:px-20">
       <div className="flex w-full items-center justify-between p-4">
-        <Link className="flex items-center gap-2" href="/">
+        <Link className="hidden items-center gap-2 lg:flex" href="/">
           <VortexLogo color="#5575A5" />
           <h1 className="font-bold text-lg">Vector</h1>
         </Link>
+        <MobileNav navItems={navItems} />
         <UserButton />
       </div>
-      <nav className="absolute">
+      <nav className="absolute hidden lg:block">
         <ul className="flex w-full justify-center gap-12 font-semibold">
           {navItems.map((item) => (
             <li key={item.label}>
@@ -173,8 +174,8 @@ const footerLinks = [
 
 function Footer() {
   return (
-    <footer className="flex min-h-[200px] w-full flex-col gap-20 bg-[#060522] px-24 py-20 text-primary-foreground">
-      <div className="grid grid-cols-5 gap-8">
+    <footer className="flex min-h-[200px] w-full flex-col gap-10 bg-[#060522] px-6 py-12 text-primary-foreground lg:gap-20 lg:px-24 lg:py-20">
+      <div className="grid grid-cols-1 gap-8 lg:grid-cols-5">
         <div className="space-y-4">
           <div className="flex items-center gap-2">
             <VortexLogo color="#fff" />
@@ -208,9 +209,11 @@ function Footer() {
           </div>
         ))}
       </div>
-      <div className="flex items-start justify-between">
+      <div className="flex flex-col items-start justify-between gap-6 lg:flex-row lg:gap-0">
         <article className="space-y-2">
-          <h1 className="font-semibold text-2xl">Join Our App Newsletter</h1>
+          <h1 className="font-semibold text-xl lg:text-2xl">
+            Join Our App Newsletter
+          </h1>
           <p className="text-muted-foreground">
             Get the latest news on starting & running your dream US business!
           </p>

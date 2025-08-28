@@ -1,5 +1,5 @@
-import { getNewsById } from '@/lib/data/news';
 import Image from 'next/image';
+import { getNewsById } from '@/lib/data/news';
 
 type NewsDetailPageProps = {
   params: Promise<{ id: string }>;
@@ -11,12 +11,12 @@ export default async function NewsDetailPage(props: NewsDetailPageProps) {
   const article = await getNewsById({ id });
 
   return (
-    <main className="flex w-full flex-1 flex-col p-16 max-w-4xl gap-8">
+    <main className="flex w-full max-w-4xl flex-1 flex-col gap-8 p-16">
       <article className="flex flex-col items-center space-y-4">
-        <h1 className="text-4xl text-center leading-snug font-medium text-primary">
+        <h1 className="text-center font-medium text-4xl text-primary leading-snug">
           {article.title}
         </h1>
-        <a>{article.author}</a>
+        <p>{article.author}</p>
         <time dateTime={article.publish_date}>
           {new Date(article.publish_date).toLocaleString('id-ID', {
             year: 'numeric',
@@ -28,7 +28,7 @@ export default async function NewsDetailPage(props: NewsDetailPageProps) {
         </time>
       </article>
       {article.main_image && (
-        <div className="relative w-full h-[500px] overflow-hidden">
+        <div className="relative h-[500px] w-full overflow-hidden">
           <Image
             alt={article.title}
             className="object-cover object-center"

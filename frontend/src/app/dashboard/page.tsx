@@ -1,4 +1,3 @@
-// biome-ignore-all lint/suspicious/noArrayIndexKey: Same placeholders
 import { CopyIcon, MoreHorizontalIcon } from 'lucide-react';
 
 import Image from 'next/image';
@@ -28,14 +27,13 @@ import {
 } from '@/components/ui/table';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { getNewsTrends, getTopNewsSource } from '@/lib/data/news';
-import { cn } from '@/lib/utils';
 
 export default function DashboardPage() {
   return (
     <main className="flex flex-1 flex-col gap-4 p-6">
       <StatisticsSection />
       <TimelineCard />
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
         <AdditionalStatistics />
         <TopNewsSourceCard />
         <TopSourceCard />
@@ -75,7 +73,7 @@ const statistics = [
 
 function StatisticsSection() {
   return (
-    <section className="flex gap-4">
+    <section className="grid grid-cols-1 gap-4 lg:grid-cols-4">
       {statistics.map((statistic) => (
         <StatisticCard key={statistic.title} {...statistic} />
       ))}
@@ -95,7 +93,7 @@ function StatisticCard({
   description: string;
 }) {
   return (
-    <Card className="basis-1/4 border">
+    <Card>
       <CardHeader>
         <CardTitle className="space-y-4">
           {icon}
@@ -163,7 +161,7 @@ const additionalStatistics = [
 
 function AdditionalStatistics() {
   return (
-    <div className="grid grid-cols-2 gap-4">
+    <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
       {additionalStatistics.map((statistic) => (
         <AdditionalStatisticCard key={statistic.title} {...statistic} />
       ))}
@@ -183,9 +181,7 @@ function AdditionalStatisticCard({
   description: string;
 }) {
   return (
-    <Card
-      className={cn('border', active && 'bg-primary text-primary-foreground')}
-    >
+    <Card className={active ? 'bg-primary text-primary-foreground' : ''}>
       <CardHeader>
         <CardTitle className="flex flex-col gap-4">
           <span className="font-semibold text-3xl">{value}</span>
@@ -709,7 +705,7 @@ function APIGatewayLogsSection() {
           </TableBody>
         </Table>
         <Separator />
-        <div className="flex items-center gap-2 p-4">
+        <div className="flex flex-col items-start gap-4 p-4 lg:flex-row lg:items-center lg:gap-2">
           <PageSizeSelect className="w-fit text-primary" initialSize="5" />
           <SearchPagination
             count={254}
