@@ -38,7 +38,7 @@ function DashboardHeader() {
         <span className="font-medium text-xl">Dashboard</span>
       </div>
       <div className="flex items-center gap-4">
-        <div className="flex items-center gap-2">
+        <div className="hidden lg:flex items-center gap-2">
           <ClockIcon className="size-5 stroke-muted-foreground" />
           <span className="text-muted-foreground text-sm">
             {new Date().toLocaleString('en-ID', {

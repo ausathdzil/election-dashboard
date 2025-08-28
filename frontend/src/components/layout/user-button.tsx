@@ -66,7 +66,7 @@ export function UserButton() {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button
-          className="hidden rounded-full lg:flex"
+          className="rounded-full"
           size="icon"
           variant="outline"
         >
