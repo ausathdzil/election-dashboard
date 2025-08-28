@@ -86,7 +86,6 @@ export function TestimonialCarousel() {
             className={`h-2 w-2 rounded-full transition-colors duration-200 ${
               index === current - 1 ? 'bg-primary' : 'bg-primary/50'
             }`}
-            // biome-ignore lint/suspicious/noArrayIndexKey: Carousel
             key={index}
           />
         ))}
@@ -113,7 +112,6 @@ export function TestimonialCard(props: TestimonialCardProps) {
             {Array.from({ length: rating }).map((_, index) => (
               <StarIcon
                 className="size-6 fill-yellow-500 stroke-card"
-                // biome-ignore lint/suspicious/noArrayIndexKey: No other way to do this
                 key={index}
               />
             ))}

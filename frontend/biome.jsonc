@@ -21,7 +21,12 @@
     ]
   },
   "linter": {
-    "domains": { "next": "recommended", "react": "recommended" }
+    "domains": { "next": "recommended", "react": "recommended" },
+    "rules": {
+      "suspicious": {
+        "noArrayIndexKey": "off"
+      }
+    }
   },
   "assist": {
     "actions": {

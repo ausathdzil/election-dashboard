@@ -1,13 +1,12 @@
 import type { UrlObject } from 'node:url';
 import Link from 'next/link';
-
+import { MobileNav } from '@/components/layout/mobile-nav';
 import { UserButton } from '@/components/layout/user-button';
 import { UserProvider } from '@/components/layout/user-provider';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { VortexLogo } from '@/components/votex-logo';
 import { verifySession } from '@/lib/session';
-import { MobileNav } from '@/components/layout/mobile-nav';
 
 export default function DashboardLayout({
   children,
@@ -55,9 +54,9 @@ const navItems = [
 
 function Header() {
   return (
-    <header className="relative flex w-full items-center justify-center lg:px-20 shadow-xs">
+    <header className="relative flex w-full items-center justify-center shadow-xs lg:px-20">
       <div className="flex w-full items-center justify-between p-4">
-        <Link className="items-center gap-2 hidden lg:flex" href="/">
+        <Link className="hidden items-center gap-2 lg:flex" href="/">
           <VortexLogo color="#5575A5" />
           <h1 className="font-bold text-lg">Vector</h1>
         </Link>

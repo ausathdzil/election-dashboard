@@ -1,4 +1,3 @@
-// biome-ignore-all lint/suspicious/noArrayIndexKey: Same placeholders
 import { CopyIcon, MoreHorizontalIcon } from 'lucide-react';
 
 import Image from 'next/image';

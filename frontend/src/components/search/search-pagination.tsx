@@ -1,4 +1,3 @@
-// biome-ignore-all lint/suspicious/noArrayIndexKey: Required for pagination keys
 'use client';
 
 import {

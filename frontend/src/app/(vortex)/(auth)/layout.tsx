@@ -6,7 +6,7 @@ export default function AuthLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <main className="lg:my-20 flex w-full flex-1 flex-col items-center gap-6 p-8">
+    <main className="flex w-full flex-1 flex-col items-center gap-6 p-8 lg:my-20">
       <article className="space-y-2 text-center">
         <h1 className="font-semibold text-xl">Selamat Datang</h1>
         <p className="text-muted-foreground">

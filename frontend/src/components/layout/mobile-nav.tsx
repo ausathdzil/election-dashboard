@@ -1,6 +1,6 @@
 'use client';
 
-import { LogOutIcon, MenuIcon } from 'lucide-react';
+import { MenuIcon } from 'lucide-react';
 
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -12,9 +12,9 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover';
+import { logout } from '@/lib/actions/auth';
 import { cn } from '@/lib/utils';
 import { useUser } from './user-provider';
-import { logout } from '@/lib/actions/auth';
 
 type MobileNavProps = {
   navItems: {
@@ -48,7 +48,7 @@ export function MobileNav(props: MobileNavProps) {
   const { navItems } = props;
 
   return (
-    <Popover open={open} onOpenChange={setOpen}>
+    <Popover onOpenChange={setOpen} open={open}>
       <PopoverTrigger asChild>
         <Button className="lg:hidden" size="sm" variant="ghost">
           <MenuIcon />
@@ -56,24 +56,24 @@ export function MobileNav(props: MobileNavProps) {
         </Button>
       </PopoverTrigger>
       <PopoverContent
-        className="bg-background/90 no-scrollbar h-(--radix-popper-available-height) w-(--radix-popper-available-width) overflow-y-auto rounded-none border-none p-0 shadow-none backdrop-blur duration-100"
         align="start"
-        side="bottom"
         alignOffset={-16}
+        className="no-scrollbar h-(--radix-popper-available-height) w-(--radix-popper-available-width) overflow-y-auto rounded-none border-none bg-background/90 p-0 shadow-none backdrop-blur duration-100"
+        side="bottom"
         sideOffset={14}
       >
         <div className="flex flex-col gap-12 overflow-auto p-6">
           <div className="flex flex-col gap-4">
-            <span className="text-sm text-muted-foreground font-medium">
+            <span className="font-medium text-muted-foreground text-sm">
               Menu
             </span>
             <nav className="flex flex-col gap-3">
               {navItems.map((item, index) => (
                 <MobileLink
-                  key={index}
                   href={
                     item.href as __next_route_internal_types__.RouteImpl<string>
                   }
+                  key={index}
                   onOpenChange={setOpen}
                 >
                   {item.label}
@@ -83,27 +83,28 @@ export function MobileNav(props: MobileNavProps) {
           </div>
           {user ? (
             <div className="flex flex-col gap-4">
-              <span className="text-sm text-muted-foreground font-medium">
+              <span className="font-medium text-muted-foreground text-sm">
                 Account
               </span>
               <nav className="flex flex-col gap-3">
                 {accountItems.map((item, index) => (
                   <MobileLink
-                    key={index}
                     href={
                       item.href as __next_route_internal_types__.RouteImpl<string>
                     }
+                    key={index}
                     onOpenChange={setOpen}
                   >
                     {item.label}
                   </MobileLink>
                 ))}
                 <button
-                  className="text-left text-2xl font-medium"
+                  className="text-left font-medium text-2xl"
                   onClick={async () => {
                     setOpen(false);
                     await logout();
                   }}
+                  type="button"
                 >
                   Log Out
                 </button>
@@ -111,16 +112,16 @@ export function MobileNav(props: MobileNavProps) {
             </div>
           ) : (
             <div className="flex flex-col gap-4">
-              <span className="text-sm text-muted-foreground font-medium">
+              <span className="font-medium text-muted-foreground text-sm">
                 Get Started
               </span>
               <nav className="flex flex-col gap-3">
                 {authItems.map((item, index) => (
                   <MobileLink
-                    key={index}
                     href={
                       item.href as __next_route_internal_types__.RouteImpl<string>
                     }
+                    key={index}
                     onOpenChange={setOpen}
                   >
                     {item.label}
@@ -149,12 +150,12 @@ function MobileLink({
   const router = useRouter();
   return (
     <Link
+      className={cn('font-medium text-2xl', className)}
       href={href}
       onClick={() => {
         router.push(href);
         onOpenChange?.(false);
       }}
-      className={cn('text-2xl font-medium', className)}
     >
       {children}
     </Link>
