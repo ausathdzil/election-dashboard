@@ -1,4 +1,5 @@
 import type {
+  Article,
   ArticleTrend,
   CitySummary,
   News,
@@ -47,6 +48,21 @@ export async function getNews(params: GetNewsParams): Promise<News> {
 
   if (!response.ok) {
     throw new Error('Failed to fetch news');
+  }
+
+  const data = await response.json();
+  return data;
+}
+
+type GetNewsByIdParams = {
+  id: string;
+};
+
+export async function getNewsById(params: GetNewsByIdParams): Promise<Article> {
+  const response = await fetch(`${API_URL}/news/${params.id}`);
+
+  if (!response.ok) {
+    throw new Error('Failed to fetch news by id');
   }
 
   const data = await response.json();
