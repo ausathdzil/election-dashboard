@@ -66,7 +66,7 @@ async function NewsSection(props: NewsSectionProps) {
   const news = await getNews(props);
 
   return (
-    <section className="lg:max-w-3/4 space-y-8">
+    <section className="space-y-8 lg:max-w-3/4">
       <Suspense fallback={null}>
         <SearchInput className="max-w-sm" placeholder="Search news articles" />
       </Suspense>

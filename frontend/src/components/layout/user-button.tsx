@@ -1,5 +1,6 @@
 'use client';
 
+import type { UrlObject } from 'node:url';
 import {
   ChartNoAxesColumnDecreasingIcon,
   HomeIcon,
@@ -9,7 +10,6 @@ import {
   UserIcon,
 } from 'lucide-react';
 import Link from 'next/link';
-import type { UrlObject } from 'node:url';
 
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Button, buttonVariants } from '@/components/ui/button';
@@ -65,11 +65,7 @@ export function UserButton() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button
-          className="rounded-full"
-          size="icon"
-          variant="outline"
-        >
+        <Button className="rounded-full" size="icon" variant="outline">
           <UserIcon className="h-[1.2rem] w-[1.2rem]" />
           <span className="sr-only">Toggle theme</span>
         </Button>

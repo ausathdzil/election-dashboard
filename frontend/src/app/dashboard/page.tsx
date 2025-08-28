@@ -608,8 +608,8 @@ const logs = [
 
 function APIGatewayLogsSection() {
   return (
-    <section className="hidden lg:flex flex-col gap-8 py-4">
-      <div className="px-2 flex items-center justify-between">
+    <section className="hidden flex-col gap-8 py-4 lg:flex">
+      <div className="flex items-center justify-between px-2">
         <h2 className="font-semibold">API Gateway Logs</h2>
         <div className="flex size-9 items-center justify-center rounded-md border border-primary">
           <FilterIcon />
