@@ -1,6 +1,7 @@
 import { ArrowUpRightIcon } from 'lucide-react';
 
 import Image from 'next/image';
+import Link from 'next/link';
 import { Suspense } from 'react';
 
 import { SearchInput } from '@/components/search/search-input';
@@ -88,12 +89,7 @@ async function NewsSection(props: NewsSectionProps) {
 
 function ArticleCard({ article }: { article: Article }) {
   return (
-    <a
-      className="group flex flex-col gap-2"
-      href={article.url}
-      rel="noopener noreferrer"
-      target="_blank"
-    >
+    <Link className="group flex flex-col gap-2" href={`/news/${article.id}`}>
       {article.main_image ? (
         <div className="relative h-[200px] w-[300px]">
           <Image
@@ -125,7 +121,7 @@ function ArticleCard({ article }: { article: Article }) {
           minute: '2-digit',
         })}
       </time>
-    </a>
+    </Link>
   );
 }
 
