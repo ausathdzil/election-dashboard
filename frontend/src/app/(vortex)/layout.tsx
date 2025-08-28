@@ -54,7 +54,7 @@ const navItems = [
 
 function Header() {
   return (
-    <header className="relative flex w-full items-center justify-center px-20 font-sora shadow-xs">
+    <header className="relative flex w-full items-center justify-center px-20 shadow-xs">
       <div className="flex w-full items-center justify-between p-4">
         <Link className="flex items-center gap-2" href="/">
           <VortexLogo color="#5575A5" />
@@ -173,7 +173,7 @@ const footerLinks = [
 
 function Footer() {
   return (
-    <footer className="flex min-h-[200px] w-full flex-col gap-20 bg-[#060522] px-24 py-20 font-epilogue text-primary-foreground">
+    <footer className="flex min-h-[200px] w-full flex-col gap-20 bg-[#060522] px-24 py-20 text-primary-foreground">
       <div className="grid grid-cols-5 gap-8">
         <div className="space-y-4">
           <div className="flex items-center gap-2">

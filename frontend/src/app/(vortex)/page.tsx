@@ -1,6 +1,8 @@
 import { CircleCheckIcon, StarIcon } from 'lucide-react';
+
 import Image from 'next/image';
 import Link from 'next/link';
+
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button, buttonVariants } from '@/components/ui/button';
 import {
@@ -14,7 +16,7 @@ import {
 
 export default function Home() {
   return (
-    <main className="flex w-full flex-1 flex-col font-epilogue">
+    <main className="flex w-full flex-1 flex-col">
       <HeroSection />
       <AboutSection />
       <AdditionalFeaturesSection />
@@ -100,7 +102,7 @@ function FeatureCard(props: FeatureCardProps) {
   const { title, description, icon } = props;
 
   return (
-    <Card className="basis-1/4 shadow-sm">
+    <Card className="basis-1/4 border-none shadow-sm">
       <CardHeader>
         <div className="mb-6 flex size-14 items-center justify-center rounded-lg border-2 border-primary shadow-[-4px_4px_0px_rgba(68,63,222,0.5)]">
           {icon}
@@ -296,7 +298,7 @@ function AdditionalFeatureCard(props: AdditionalFeatureCardProps) {
   const { title, description } = props;
 
   return (
-    <Card className="rounded-none">
+    <Card className="rounded-none border-none">
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <CircleCheckIcon className="fill-pink-400 stroke-card" />
@@ -425,7 +427,7 @@ type TestimonialCardProps = {
 function TestimonialCard(props: TestimonialCardProps) {
   const { rating, testimonial, name, avatar } = props;
   return (
-    <Card>
+    <Card className="border-none">
       <CardHeader>
         <CardTitle className="flex items-center gap-4">
           <div className="flex items-center gap-1">
