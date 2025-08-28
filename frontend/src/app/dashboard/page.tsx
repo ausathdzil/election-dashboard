@@ -618,41 +618,48 @@ function APIGatewayLogsSection() {
       <div className="overflow-x-auto rounded-lg border">
         <Table>
           <TableHeader>
-            <TableRow className="[&>*:not(:last-child)]:border-r [&>*]:h-12 [&>*]:p-2">
+            <TableRow className="[&>*:not(:last-child)]:border-r [&>*]:h-12 [&>*]:p-4">
               <TableHead>
-                <Button className="w-full justify-between" variant="ghost">
-                  NO <ExpandIcon />
-                </Button>
+                <div className="flex items-center justify-between gap-2">
+                  <span>NO</span>
+                  <ExpandIcon />
+                </div>
               </TableHead>
               <TableHead>
-                <Button className="w-full justify-between" variant="ghost">
-                  USER <ExpandIcon />
-                </Button>
+                <div className="flex items-center justify-between gap-2">
+                  <span>USER</span>
+                  <ExpandIcon />
+                </div>
               </TableHead>
               <TableHead>
-                <Button className="w-full justify-between" variant="ghost">
-                  PATH <ExpandIcon />
-                </Button>
+                <div className="flex items-center justify-between gap-2">
+                  <span>PATH</span>
+                  <ExpandIcon />
+                </div>
               </TableHead>
               <TableHead>
-                <Button className="w-full justify-between" variant="ghost">
-                  ENDPOINT <ExpandIcon />
-                </Button>
+                <div className="flex items-center justify-between gap-2">
+                  <span>ENDPOINT</span>
+                  <ExpandIcon />
+                </div>
               </TableHead>
               <TableHead>
-                <Button className="w-full justify-between" variant="ghost">
-                  TOKEN <ExpandIcon />
-                </Button>
+                <div className="flex items-center justify-between gap-2">
+                  <span>TOKEN</span>
+                  <ExpandIcon />
+                </div>
               </TableHead>
               <TableHead>
-                <Button className="w-full justify-between" variant="ghost">
-                  STATUS <ExpandIcon />
-                </Button>
+                <div className="flex items-center justify-between gap-2">
+                  <span>STATUS</span>
+                  <ExpandIcon />
+                </div>
               </TableHead>
               <TableHead>
-                <Button className="w-full justify-between" variant="ghost">
-                  EXECUTE TIME <ExpandIcon />
-                </Button>
+                <div className="flex items-center justify-between gap-2">
+                  <span>EXECUTE TIME</span>
+                  <ExpandIcon />
+                </div>
               </TableHead>
               <TableHead />
             </TableRow>
