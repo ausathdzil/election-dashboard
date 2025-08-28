@@ -93,11 +93,12 @@ def add_news_to_topic(
     news = session.get(News, news_id)
     if not news:
         raise HTTPException(status_code=404, detail="News not found")
-    if news not in topic.news:
-        topic.news.append(news)
-        session.add(topic)
-        session.commit()
-        session.refresh(topic)
+    if news in topic.news:
+        raise HTTPException(status_code=400, detail="News already in topic")
+    topic.news.append(news)
+    session.add(topic)
+    session.commit()
+    session.refresh(topic)
     return Message(message=f"News {news_id} added to topic successfully")
 
 
