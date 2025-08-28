@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { Sora } from 'next/font/google';
+import { Outfit } from 'next/font/google';
 import './globals.css';
 
 import { UserProvider } from '@/components/layout/user-provider';
@@ -8,9 +8,9 @@ import { ThemeProvider } from '@/components/theme-provider';
 import { verifySession } from '@/lib/session';
 import { cn } from '@/lib/utils';
 
-const sora = Sora({
+const outfit = Outfit({
   subsets: ['latin'],
-  variable: '--font-sora',
+  variable: '--font-outfit',
 });
 
 export const metadata: Metadata = {
@@ -27,7 +27,7 @@ export default function RootLayout({
 
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={cn(sora.variable, 'font-sans antialiased')}>
+      <body className={cn(outfit.variable, 'font-sans antialiased')}>
         <UserProvider userPromise={userPromise}>
           <QueryProvider>
             <ThemeProvider

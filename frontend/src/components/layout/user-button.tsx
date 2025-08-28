@@ -1,13 +1,15 @@
 'use client';
 
-import type { UrlObject } from 'node:url';
 import {
   ChartNoAxesColumnDecreasingIcon,
+  HomeIcon,
   LogOutIcon,
+  NewspaperIcon,
   ShieldIcon,
   UserIcon,
 } from 'lucide-react';
 import Link from 'next/link';
+import type { UrlObject } from 'node:url';
 
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Button, buttonVariants } from '@/components/ui/button';
@@ -24,6 +26,16 @@ import { logout } from '@/lib/actions/auth';
 import { useUser } from './user-provider';
 
 const navItems = [
+  {
+    title: 'Home',
+    url: '/',
+    icon: HomeIcon,
+  },
+  {
+    title: 'News',
+    url: '/news',
+    icon: NewspaperIcon,
+  },
   {
     title: 'Dashboard',
     url: '/dashboard',
