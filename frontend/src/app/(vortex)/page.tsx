@@ -1,15 +1,13 @@
-import { CircleCheckIcon, StarIcon } from 'lucide-react';
+import { CircleCheckIcon } from 'lucide-react';
 
 import Image from 'next/image';
 import Link from 'next/link';
 
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { TestimonialCarousel } from '@/components/home/testimonial-carousel';
 import { Button, buttonVariants } from '@/components/ui/button';
 import {
   Card,
-  CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
@@ -364,23 +362,6 @@ const statistics = [
   },
 ];
 
-const testimonials = [
-  {
-    rating: 5,
-    testimonial:
-      'Semoga dapat membantu dalam mencari pekerjaan dan meningkatkan skill',
-    name: 'Ranti Sotejo',
-    avatar: '/images/ranti-sotejo.png',
-  },
-  {
-    rating: 4,
-    testimonial:
-      'Vortex menyajikan informasi mulai dari program, basis data Klien, Talenta, Mentor hingga tips.',
-    name: 'Ahmad Raka',
-    avatar: '/images/ahmad-raka.png',
-  },
-];
-
 function TestimonialSection() {
   return (
     <section>
@@ -407,53 +388,8 @@ function TestimonialSection() {
             <p>Avg rating 4.8 makes us the best Website.</p>
           </div>
         </article>
-        <div className="flex w-full max-w-3/5 gap-6 bg-primary/5 py-14 pl-14">
-          {testimonials.map((testimonial) => (
-            <TestimonialCard key={testimonial.name} {...testimonial} />
-          ))}
-        </div>
+        <TestimonialCarousel />
       </div>
     </section>
-  );
-}
-
-type TestimonialCardProps = {
-  rating: number;
-  testimonial: string;
-  name: string;
-  avatar: string;
-};
-
-function TestimonialCard(props: TestimonialCardProps) {
-  const { rating, testimonial, name, avatar } = props;
-  return (
-    <Card className="border-none">
-      <CardHeader>
-        <CardTitle className="flex items-center gap-4">
-          <div className="flex items-center gap-1">
-            {Array.from({ length: rating }).map((_, index) => (
-              <StarIcon
-                className="size-6 fill-yellow-500 stroke-card"
-                // biome-ignore lint/suspicious/noArrayIndexKey: No other way to do this
-                key={index}
-              />
-            ))}
-          </div>
-          <p className="translate-y-0.5 font-semibold text-xl">
-            {rating.toFixed(1)}
-          </p>
-        </CardTitle>
-      </CardHeader>
-      <CardContent>
-        <p className="text-xl leading-10">&quot;{testimonial}&quot;</p>
-      </CardContent>
-      <CardFooter className="flex items-center gap-4">
-        <Avatar className="size-12">
-          <AvatarImage src={avatar} />
-          <AvatarFallback>{name.slice(0, 2)}</AvatarFallback>
-        </Avatar>
-        <p className="font-semibold text-xl">{name}</p>
-      </CardFooter>
-    </Card>
   );
 }
