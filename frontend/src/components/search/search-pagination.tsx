@@ -44,7 +44,7 @@ export function SearchPagination(pageInfo: PaginationLike) {
       </p>
       <div className="flex flex-wrap items-center space-x-2">
         <Button
-          className="hidden lg:block"
+          className="hidden lg:flex"
           disabled={!pageInfo.has_prev}
           onClick={() => handlePageChange(1)}
           size="icon"
@@ -85,7 +85,7 @@ export function SearchPagination(pageInfo: PaginationLike) {
           <ChevronRightIcon />
         </Button>
         <Button
-          className="hidden lg:block"
+          className="hidden lg:flex"
           disabled={!pageInfo.has_next}
           onClick={() => handlePageChange(pageInfo.total_pages)}
           size="icon"
