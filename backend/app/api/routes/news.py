@@ -1,10 +1,6 @@
 from datetime import datetime, timedelta
 from typing import Annotated
 
-from dateutil.relativedelta import relativedelta
-from fastapi import APIRouter, HTTPException, Query, status
-from sqlmodel import func, literal_column, select, text
-
 from app.api.deps import SessionDep
 from app.models.news import (
     CitySummaryProperties,
@@ -13,13 +9,16 @@ from app.models.news import (
     GeoJSONFeatureCollection,
     GeoJSONGeometry,
     Granularity,
-    News,
     NewsPublic,
     NewsTrendsPublic,
     NewsWithRank,
     ProvinceSummaryPublic,
     TopNewsSourcePublic,
 )
+from app.models.schema import News
+from dateutil.relativedelta import relativedelta
+from fastapi import APIRouter, HTTPException, Query, status
+from sqlmodel import func, literal_column, select, text
 
 router = APIRouter(prefix="/news", tags=["news"])
 

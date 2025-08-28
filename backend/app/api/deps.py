@@ -4,8 +4,8 @@ import jwt
 from app.core import security
 from app.core.config import settings
 from app.core.db import engine
+from app.models.schema import User
 from app.models.token import TokenPayload
-from app.models.user import User
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 from jwt.exceptions import InvalidTokenError

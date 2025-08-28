@@ -1,8 +1,8 @@
 import pandas as pd
 from app.core.config import settings
 from app.crud.user import create_user
-from app.models.news import News
-from app.models.user import User, UserCreate
+from app.models.schema import News, User
+from app.models.user import UserCreate
 from sqlmodel import Session, SQLModel, create_engine, select, text
 
 engine = create_engine(str(settings.SQLALCHEMY_DATABASE_URI))

@@ -5,8 +5,9 @@ from app.api.deps import SessionDep
 from app.core.config import settings
 from app.core.security import create_access_token
 from app.crud.user import authenticate, create_user, get_user_by_email
+from app.models.schema import User
 from app.models.token import Token
-from app.models.user import User, UserCreate, UserPublic, UserRegister
+from app.models.user import UserCreate, UserPublic, UserRegister
 from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordRequestForm
 

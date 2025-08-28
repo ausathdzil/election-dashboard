@@ -4,7 +4,8 @@ from typing import Annotated
 from app.api.deps import CurrentUser, SessionDep, get_current_superuser
 from app.crud.user import create_user, get_user_by_email, update_user
 from app.models.generic import Message
-from app.models.user import User, UserCreate, UserPublic, UsersPublic, UserUpdate
+from app.models.schema import User
+from app.models.user import UserCreate, UserPublic, UsersPublic, UserUpdate
 from fastapi import APIRouter, Depends, HTTPException, Query, status
 from sqlmodel import func, select
 
