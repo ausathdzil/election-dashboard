@@ -1,24 +1,33 @@
-from app.api.deps import CurrentUser, SessionDep
+from app.api.deps import CurrentUser, CurrentUserOptional, SessionDep
 from app.models.generic import Message
-from app.models.schema import Topic
+from app.models.schema import News, Topic
 from app.models.topic import TopicCreate, TopicPublic, TopicsPublic, TopicUpdate
 from fastapi import APIRouter, HTTPException
-from sqlmodel import select
+from sqlmodel import func, select, or_
 
 router = APIRouter(prefix="/topics", tags=["topics"])
 
 
 @router.get("/", response_model=TopicsPublic)
-def read_topics(session: SessionDep) -> TopicsPublic:
-    statement = select(Topic).where(Topic.is_public)
-    result = session.exec(statement).all()
+def read_topics(session: SessionDep, current_user: CurrentUserOptional) -> TopicsPublic:
+    base_statement = select(Topic)
+    if current_user is None:
+        base_statement = base_statement.where(Topic.is_public)
+    elif not current_user.is_superuser:
+        base_statement = base_statement.where(
+            or_(Topic.is_public, Topic.owner_id == current_user.id)
+        )
+    count_statement = select(func.count()).select_from(base_statement.subquery())
+    count = session.exec(count_statement).one()
+    result = session.exec(base_statement).all()
+    return TopicsPublic(data=result, count=count)
 
-    return TopicsPublic(data=result)
 
-
-@router.get("/{id}", response_model=TopicPublic)
-def read_topic(session: SessionDep, current_user: CurrentUser, id: int) -> TopicPublic:
-    topic = session.get(Topic, id)
+@router.get("/{topic_id}", response_model=TopicPublic)
+def read_topic(
+    session: SessionDep, current_user: CurrentUser, topic_id: int
+) -> TopicPublic:
+    topic = session.get(Topic, topic_id)
     if not topic:
         raise HTTPException(status_code=404, detail="Topic not found")
     if not topic.is_public and topic.owner_id != current_user.id:
@@ -37,11 +46,15 @@ def create_topic(
     return topic
 
 
-@router.put("/{id}", response_model=TopicPublic)
+@router.put("/{topic_id}", response_model=TopicPublic)
 def update_topic(
-    *, session: SessionDep, current_user: CurrentUser, id: int, topic_in: TopicUpdate
+    *,
+    session: SessionDep,
+    current_user: CurrentUser,
+    topic_id: int,
+    topic_in: TopicUpdate,
 ) -> TopicPublic:
-    topic = session.get(Topic, id)
+    topic = session.get(Topic, topic_id)
     if not topic:
         raise HTTPException(status_code=404, detail="Topic not found")
     if not topic.owner_id == current_user.id:
@@ -54,9 +67,11 @@ def update_topic(
     return topic
 
 
-@router.delete("/{id}", response_model=Message)
-def delete_topic(*, session: SessionDep, current_user: CurrentUser, id: int) -> Message:
-    topic = session.get(Topic, id)
+@router.delete("/{topic_id}", response_model=Message)
+def delete_topic(
+    *, session: SessionDep, current_user: CurrentUser, topic_id: int
+) -> Message:
+    topic = session.get(Topic, topic_id)
     if not topic:
         raise HTTPException(status_code=404, detail="Topic not found")
     if not topic.owner_id == current_user.id:
@@ -64,3 +79,44 @@ def delete_topic(*, session: SessionDep, current_user: CurrentUser, id: int) -> 
     session.delete(topic)
     session.commit()
     return Message(message="Topic deleted successfully")
+
+
+@router.post("/{topic_id}/news/{news_id}", response_model=Message)
+def add_news_to_topic(
+    *, session: SessionDep, current_user: CurrentUser, topic_id: int, news_id: int
+):
+    topic = session.get(Topic, topic_id)
+    if not topic:
+        raise HTTPException(status_code=404, detail="Topic not found")
+    if topic.owner_id != current_user.id:
+        raise HTTPException(status_code=403, detail="Forbidden")
+    news = session.get(News, news_id)
+    if not news:
+        raise HTTPException(status_code=404, detail="News not found")
+    if news not in topic.news:
+        topic.news.append(news)
+        session.add(topic)
+        session.commit()
+        session.refresh(topic)
+    return Message(message=f"News {news_id} added to topic successfully")
+
+
+@router.delete("/{topic_id}/news/{news_id}", response_model=Message)
+def remove_news_from_topic(
+    *, session: SessionDep, current_user: CurrentUser, topic_id: int, news_id: int
+):
+    topic = session.get(Topic, topic_id)
+    if not topic:
+        raise HTTPException(status_code=404, detail="Topic not found")
+    if topic.owner_id != current_user.id:
+        raise HTTPException(status_code=403, detail="Forbidden")
+    news = session.get(News, news_id)
+    if not news:
+        raise HTTPException(status_code=404, detail="News not found")
+    if news not in topic.news:
+        raise HTTPException(status_code=404, detail="News not found in topic")
+    topic.news.remove(news)
+    session.add(topic)
+    session.commit()
+    session.refresh(topic)
+    return Message(message=f"News {news_id} removed from topic successfully")

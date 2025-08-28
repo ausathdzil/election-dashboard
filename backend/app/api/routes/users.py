@@ -1,4 +1,3 @@
-import uuid
 from typing import Annotated
 
 from app.api.deps import CurrentUser, SessionDep, get_current_superuser
@@ -78,7 +77,7 @@ def admin_create_user(session: SessionDep, user_in: UserCreate) -> UserPublic:
     response_model=UserPublic,
 )
 def admin_update_user(
-    *, session: SessionDep, user_id: uuid.UUID, user_in: UserUpdate
+    *, session: SessionDep, user_id: int, user_in: UserUpdate
 ) -> UserPublic:
     db_user = session.get(User, user_id)
     if not db_user:
@@ -103,7 +102,7 @@ def admin_update_user(
     response_model=Message,
 )
 def admin_delete_user(
-    *, session: SessionDep, current_user: CurrentUser, user_id: uuid.UUID
+    *, session: SessionDep, current_user: CurrentUser, user_id: int
 ) -> Message:
     user = session.get(User, user_id)
     if not user:

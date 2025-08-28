@@ -1,3 +1,6 @@
+from datetime import datetime
+
+from app.models.news import NewsBase
 from sqlmodel import Field, SQLModel
 
 
@@ -18,11 +21,13 @@ class TopicUpdate(TopicBase):
 class TopicPublic(TopicBase):
     id: int
     owner_id: int
+    created_at: datetime
+    news: list[NewsBase]
 
 
 class TopicsPublic(SQLModel):
     data: list[TopicPublic]
-    # count: int
+    count: int
     # page: int
     # size: int
     # total_pages: int
