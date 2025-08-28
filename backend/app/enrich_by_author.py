@@ -2,7 +2,7 @@ import logging
 import random
 
 from app.core.db import engine
-from app.models.news import News
+from app.models.schema import News
 from sqlmodel import Session, select
 
 logging.basicConfig(level=logging.INFO)

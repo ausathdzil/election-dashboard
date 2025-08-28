@@ -1,8 +1,7 @@
 from datetime import datetime
 from enum import Enum
 
-from sqlalchemy.dialects.postgresql import TSVECTOR
-from sqlmodel import Column, Computed, Field, SQLModel, text
+from sqlmodel import Field, SQLModel
 
 
 class NewsBase(SQLModel):
@@ -16,23 +15,6 @@ class NewsBase(SQLModel):
     province: str | None = Field(index=True)
     latitude: float | None = None
     longitude: float | None = None
-
-
-class News(NewsBase, table=True):
-    id: int | None = Field(default=None, primary_key=True)
-
-    search_vector: str | None = Field(
-        sa_column=Column(
-            TSVECTOR,
-            Computed(
-                text(
-                    "setweight(to_tsvector('indonesian', coalesce(title, '')), 'A') ||"
-                    "setweight(to_tsvector('indonesian', coalesce(article_text, '')), 'B')"
-                ),
-                persisted=True,
-            ),
-        )
-    )
 
 
 class NewsWithRank(NewsBase):
