@@ -89,14 +89,6 @@ def get_news(
     )
 
 
-@router.get("/{news_id}", response_model=News)
-def get_news_by_id(session: SessionDep, news_id: str):
-    news = session.get(News, news_id)
-    if not news:
-        raise HTTPException(status_code=404, detail="News not found")
-    return news
-
-
 @router.get("/top-sources", response_model=TopNewsSourcePublic)
 def get_top_sources(
     session: SessionDep,
@@ -214,3 +206,11 @@ def get_city_summary(session: SessionDep, province: str):
         features.append(feature)
 
     return GeoJSONFeatureCollection(features=features)
+
+
+@router.get("/{news_id}", response_model=News)
+def get_news_by_id(session: SessionDep, news_id: int):
+    news = session.get(News, news_id)
+    if not news:
+        raise HTTPException(status_code=404, detail="News not found")
+    return news
