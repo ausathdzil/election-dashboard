@@ -118,7 +118,7 @@ export function TestimonialCard(props: TestimonialCardProps) {
               />
             ))}
           </div>
-          <p className="translate-y-0.5 font-semibold text-xl">
+          <p className="font-semibold text-xl">
             {rating.toFixed(1)}
           </p>
         </CardTitle>

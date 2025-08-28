@@ -46,7 +46,7 @@ export function SearchPagination(pageInfo: PaginationLike) {
           onClick={() => handlePageChange(1)}
           size="icon"
           title="Go to first page"
-          variant="outline"
+          variant="ghost"
         >
           <ChevronsLeftIcon />
         </Button>
@@ -55,7 +55,7 @@ export function SearchPagination(pageInfo: PaginationLike) {
           onClick={() => handlePageChange(pageInfo.page - 1)}
           size="icon"
           title="Go to previous page"
-          variant="outline"
+          variant="ghost"
         >
           <ChevronLeftIcon />
         </Button>
@@ -67,7 +67,7 @@ export function SearchPagination(pageInfo: PaginationLike) {
               typeof page === 'number' ? handlePageChange(page) : undefined
             }
             size="icon"
-            variant={page === pageInfo.page ? 'default' : 'outline'}
+            variant={page === pageInfo.page ? 'default' : 'ghost'}
           >
             {page}
           </Button>
@@ -77,7 +77,7 @@ export function SearchPagination(pageInfo: PaginationLike) {
           onClick={() => handlePageChange(pageInfo.page + 1)}
           size="icon"
           title="Go to next page"
-          variant="outline"
+          variant="ghost"
         >
           <ChevronRightIcon />
         </Button>
@@ -86,7 +86,7 @@ export function SearchPagination(pageInfo: PaginationLike) {
           onClick={() => handlePageChange(pageInfo.total_pages)}
           size="icon"
           title="Go to last page"
-          variant="outline"
+          variant="ghost"
         >
           <ChevronsRightIcon />
         </Button>

@@ -79,6 +79,7 @@ function HeroSection() {
           quality={100}
           src="/images/hero.png"
           width={500}
+          priority
         />
       </div>
       <div className="lg:-translate-y-12 flex flex-col lg:flex-row w-full gap-6">

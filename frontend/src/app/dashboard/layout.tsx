@@ -34,12 +34,12 @@ function DashboardHeader() {
           className="size-6 stroke-primary"
           style={{ transform: 'rotate(90deg)' }}
         />
-        <span className="translate-y-0.5 font-medium text-xl">Dashboard</span>
+        <span className="font-medium text-xl">Dashboard</span>
       </div>
       <div className="flex items-center gap-4">
         <div className="flex items-center gap-2">
           <ClockIcon className="size-5 stroke-muted-foreground" />
-          <span className="translate-y-0.5 text-muted-foreground text-sm">
+          <span className="text-muted-foreground text-sm">
             {new Date().toLocaleString('en-ID', {
               day: 'numeric',
               month: 'long',

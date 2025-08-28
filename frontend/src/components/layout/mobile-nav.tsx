@@ -52,7 +52,7 @@ export function MobileNav(props: MobileNavProps) {
       <PopoverTrigger asChild>
         <Button className="lg:hidden" size="sm" variant="ghost">
           <MenuIcon />
-          <span className="translate-y-0.5 text-xl">Menu</span>
+          <span className="text-lg">Menu</span>
         </Button>
       </PopoverTrigger>
       <PopoverContent
