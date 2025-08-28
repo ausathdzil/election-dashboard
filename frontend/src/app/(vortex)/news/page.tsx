@@ -66,7 +66,7 @@ async function NewsSection(props: NewsSectionProps) {
   const news = await getNews(props);
 
   return (
-    <section className="max-w-3/4 space-y-8">
+    <section className="lg:max-w-3/4 space-y-8">
       <Suspense fallback={null}>
         <SearchInput className="max-w-sm" placeholder="Search news articles" />
       </Suspense>
@@ -91,7 +91,7 @@ function ArticleCard({ article }: { article: Article }) {
   return (
     <Link className="group flex flex-col gap-2" href={`/news/${article.id}`}>
       {article.main_image ? (
-        <div className="relative h-[200px] w-[300px]">
+        <div className="relative h-[200px] w-full">
           <Image
             alt={article.title}
             className="object-cover object-center"
