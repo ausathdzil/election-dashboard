@@ -6,7 +6,9 @@ import {
   ChevronsLeftIcon,
   ChevronsRightIcon,
 } from 'lucide-react';
+
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+
 import { Button } from '@/components/ui/button';
 
 type PaginationLike = {
@@ -34,14 +36,15 @@ export function SearchPagination(pageInfo: PaginationLike) {
   };
 
   return (
-    <div className="flex w-full items-center justify-between">
+    <div className="flex flex-col lg:flex-row w-full items-start lg:items-center lg:justify-between gap-4">
       <p className="text-muted-foreground text-sm [&>span]:font-medium [&>span]:text-primary">
         Showing <span>{(pageInfo.page - 1) * pageInfo.size + 1}</span>-
         <span>{Math.min(pageInfo.page * pageInfo.size, pageInfo.count)} </span>
         of <span>{pageInfo.count}</span> results
       </p>
-      <div className="flex items-center space-x-2">
+      <div className="flex flex-wrap items-center space-x-2">
         <Button
+          className="hidden lg:block"
           disabled={!pageInfo.has_prev}
           onClick={() => handlePageChange(1)}
           size="icon"
@@ -82,6 +85,7 @@ export function SearchPagination(pageInfo: PaginationLike) {
           <ChevronRightIcon />
         </Button>
         <Button
+          className="hidden lg:block"
           disabled={!pageInfo.has_next}
           onClick={() => handlePageChange(pageInfo.total_pages)}
           size="icon"
