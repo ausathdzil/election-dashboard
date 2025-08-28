@@ -15,7 +15,7 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <SidebarProvider className="font-epilogue">
+    <SidebarProvider>
       <DashboardSidebar />
       <div className="flex flex-1 flex-col">
         <DashboardHeader />

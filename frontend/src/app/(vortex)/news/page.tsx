@@ -22,7 +22,7 @@ export default async function BlogPage(props: BlogPageProps) {
   const searchParams = await props.searchParams;
 
   return (
-    <main className="flex w-full flex-1 flex-col font-outfit">
+    <main className="flex w-full flex-1 flex-col">
       <NewsHeader />
       <div className="flex w-full gap-8 border-t px-24 py-8 shadow-xs">
         <NewsSection {...searchParams} />

@@ -8,6 +8,7 @@ const nextConfig: NextConfig = {
         hostname: '**',
       },
     ],
+    qualities: [75, 100],
   },
   transpilePackages: ['echarts', 'zrender'],
   typedRoutes: true,

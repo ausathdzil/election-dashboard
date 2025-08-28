@@ -15,6 +15,7 @@
       "!dist",
       "!build",
       "!public",
+      "!next.config.ts",
       "!src/components/ui/*",
       "!src/lib/types/*.d.ts"
     ]
