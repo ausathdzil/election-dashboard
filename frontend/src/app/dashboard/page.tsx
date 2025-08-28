@@ -1,4 +1,5 @@
 import { TimelineChart } from '@/components/dashboard/timeline-chart';
+import { TopSourcesChart } from '@/components/dashboard/top-sources-chart';
 import {
   Card,
   CardAction,
@@ -7,8 +8,9 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
+import { Separator } from '@/components/ui/separator';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { getNewsTrends } from '@/lib/data/news';
+import { getNewsTrends, getTopNewsSource } from '@/lib/data/news';
 import { cn } from '@/lib/utils';
 
 export default function DashboardPage() {
@@ -100,10 +102,10 @@ async function TimelineCard() {
         <CardDescription>Timeline</CardDescription>
         <CardTitle>Data Timeline</CardTitle>
         <CardAction>
-          <Tabs defaultValue="month">
+          <Tabs defaultValue="year">
             <TabsList>
-              <TabsTrigger value="week">Week</TabsTrigger>
               <TabsTrigger value="month">Month</TabsTrigger>
+              <TabsTrigger value="year">Year</TabsTrigger>
             </TabsList>
           </Tabs>
         </CardAction>
@@ -177,21 +179,29 @@ function AdditionalStatisticCard({
   );
 }
 
-function TopNewsSourceCard() {
+async function TopNewsSourceCard() {
+  const chartData = await getTopNewsSource({
+    province: null,
+  });
+
   return (
     <Card className="border">
       <CardHeader>
         <CardDescription>Top</CardDescription>
         <CardTitle>News Source</CardTitle>
         <CardAction>
-          <Tabs defaultValue="month">
+          <Tabs defaultValue="year">
             <TabsList>
-              <TabsTrigger value="week">Week</TabsTrigger>
               <TabsTrigger value="month">Month</TabsTrigger>
+              <TabsTrigger value="year">Year</TabsTrigger>
             </TabsList>
           </Tabs>
         </CardAction>
       </CardHeader>
+      <CardContent>
+        <Separator />
+        <TopSourcesChart chartData={chartData.data} />
+      </CardContent>
     </Card>
   );
 }
