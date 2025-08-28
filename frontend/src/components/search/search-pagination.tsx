@@ -36,7 +36,7 @@ export function SearchPagination(pageInfo: PaginationLike) {
   };
 
   return (
-    <div className="flex flex-col lg:flex-row w-full items-start lg:items-center lg:justify-between gap-4">
+    <div className="flex w-full flex-col items-start gap-4 lg:flex-row lg:items-center lg:justify-between">
       <p className="text-muted-foreground text-sm [&>span]:font-medium [&>span]:text-primary">
         Showing <span>{(pageInfo.page - 1) * pageInfo.size + 1}</span>-
         <span>{Math.min(pageInfo.page * pageInfo.size, pageInfo.count)} </span>

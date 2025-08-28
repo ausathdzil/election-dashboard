@@ -18,7 +18,6 @@ import {
   CarouselContent,
   CarouselItem,
 } from '@/components/ui/carousel';
-import { useIsMobile } from '@/hooks/use-mobile';
 
 const testimonials = [
   {
@@ -48,7 +47,6 @@ export function TestimonialCarousel() {
   const [api, setApi] = useState<CarouselApi>();
   const [current, setCurrent] = useState(0);
   const [count, setCount] = useState(testimonials.length);
-  const isMobile = useIsMobile();
 
   useEffect(() => {
     if (!api) {
@@ -64,7 +62,7 @@ export function TestimonialCarousel() {
   }, [api]);
 
   return (
-    <div className="flex w-full lg:max-w-3/5 flex-col gap-4 bg-primary/5 p-8 lg:py-14 lg:pl-14">
+    <div className="flex w-full flex-col gap-4 bg-primary/5 p-8 lg:max-w-3/5 lg:py-14 lg:pl-14">
       <Carousel
         opts={{
           align: 'start',
@@ -118,9 +116,7 @@ export function TestimonialCard(props: TestimonialCardProps) {
               />
             ))}
           </div>
-          <p className="font-semibold text-xl">
-            {rating.toFixed(1)}
-          </p>
+          <p className="font-semibold text-xl">{rating.toFixed(1)}</p>
         </CardTitle>
       </CardHeader>
       <CardContent>

@@ -46,8 +46,8 @@ const features = [
 
 function HeroSection() {
   return (
-    <section className="bg-primary/5 p-8 lg:px-24 lg:pt-4 pb-12">
-      <div className="grid grid-cols-1 lg:grid-cols-2 items-center gap-8">
+    <section className="bg-primary/5 p-8 pb-12 lg:px-24 lg:pt-4">
+      <div className="grid grid-cols-1 items-center gap-8 lg:grid-cols-2">
         <article className="flex flex-col gap-6">
           <h1 className="font-extrabold text-2xl lg:text-6xl lg:leading-20">
             Vortex <br />
@@ -58,7 +58,7 @@ function HeroSection() {
             company in Malaysia and we've build a platform to make it as simple
             as 1-2-3
           </p>
-          <div className="flex flex-col lg:flex-row gap-4">
+          <div className="flex flex-col gap-4 lg:flex-row">
             <Link className={buttonVariants({ size: 'lg' })} href="/signup">
               Daftar Sekarang
             </Link>
@@ -76,13 +76,13 @@ function HeroSection() {
           alt="Hero Image"
           className="size-full object-cover"
           height={500}
+          priority
           quality={100}
           src="/images/hero.png"
           width={500}
-          priority
         />
       </div>
-      <div className="lg:-translate-y-12 flex flex-col lg:flex-row w-full gap-6">
+      <div className="lg:-translate-y-12 flex w-full flex-col gap-6 lg:flex-row">
         {features.map((feature) => (
           <FeatureCard key={feature.title} {...feature} />
         ))}
@@ -201,7 +201,7 @@ function AboutSection() {
         <h2 className="text-center font-semibold text-lg lg:text-2xl">
           Mitra Bekerjasama dengan
         </h2>
-        <div className="flex flex-col lg:flex-row items-center justify-center gap-8 lg:gap-16">
+        <div className="flex flex-col items-center justify-center gap-8 lg:flex-row lg:gap-16">
           {partners.map((partner) => (
             <Image
               alt={partner.alt}
@@ -215,7 +215,7 @@ function AboutSection() {
           ))}
         </div>
       </div>
-      <div className="grid grid-cols-1 lg:grid-cols-2 items-center gap-8 lg:gap-16 py-7 lg:py-14">
+      <div className="grid grid-cols-1 items-center gap-8 py-7 lg:grid-cols-2 lg:gap-16 lg:py-14">
         <Image
           alt="About"
           className="size-full object-cover"
@@ -265,7 +265,7 @@ function AdditionalFeaturesSection() {
       <div className="-z-10 absolute top-0 left-0 size-full overflow-hidden">
         <Decoration />
       </div>
-      <div className="flex flex-col-reverse gap-8 lg:gap-16 lg:grid lg:grid-cols-2">
+      <div className="flex flex-col-reverse gap-8 lg:grid lg:grid-cols-2 lg:gap-16">
         <Image
           alt="Additional Features"
           className="mx-auto object-cover"
@@ -275,11 +275,11 @@ function AdditionalFeaturesSection() {
           width={500}
         />
         <article className="space-y-5 pb-14">
-          <h1 className="font-semibold text-3xl lg:text-5xl lg:leading-16 text-center lg:text-left">
+          <h1 className="text-center font-semibold text-3xl lg:text-left lg:text-5xl lg:leading-16">
             Kenapa <br />
             memakai <span className="text-primary">Vortex</span>?
           </h1>
-          <div className="lg:max-w-3/4 space-y-5 lg:[&>*:nth-child(2)]:translate-x-6">
+          <div className="space-y-5 lg:max-w-3/4 lg:[&>*:nth-child(2)]:translate-x-6">
             {additionalFeatures.map((feature) => (
               <AdditionalFeatureCard key={feature.title} {...feature} />
             ))}
@@ -368,13 +368,13 @@ const statistics = [
 function TestimonialSection() {
   return (
     <section>
-      <div className="mx-auto flex flex-col lg:flex-row gap-8 lg:gap-0 w-full max-w-5xl lg:items-center justify-between px-8 lg:px-0 py-14">
+      <div className="mx-auto flex w-full max-w-5xl flex-col justify-between gap-8 px-8 py-14 lg:flex-row lg:items-center lg:gap-0 lg:px-0">
         {statistics.map((statistic) => (
           <div
-            className="flex items-center lg:flex-col lg:text-center gap-2 lg:gap-4"
+            className="flex items-center gap-2 lg:flex-col lg:gap-4 lg:text-center"
             key={statistic.label}
           >
-            <p className="font-extrabold text-2xl lg:text-4xl text-primary">
+            <p className="font-extrabold text-2xl text-primary lg:text-4xl">
               {statistic.value}
             </p>
             <p>{statistic.label}</p>
@@ -382,7 +382,7 @@ function TestimonialSection() {
         ))}
       </div>
       <div className="flex flex-col lg:flex-row">
-        <article className="w-full lg:max-w-2/5 space-y-8 lg:space-y-16 p-8 lg:px-24 lg:py-14">
+        <article className="w-full space-y-8 p-8 lg:max-w-2/5 lg:space-y-16 lg:px-24 lg:py-14">
           <div className="space-y-4">
             <h2 className="font-semibold text-primary">TESTIMONIAL</h2>
             <h1 className="font-bold text-3xl lg:text-5xl lg:leading-16">
@@ -390,7 +390,7 @@ function TestimonialSection() {
             </h1>
           </div>
           <div className="space-y-4">
-            <h2 className="font-semibold text-3xl lg:text-5xl text-primary">
+            <h2 className="font-semibold text-3xl text-primary lg:text-5xl">
               A+ Rating
             </h2>
             <p>Avg rating 4.8 makes us the best Website.</p>

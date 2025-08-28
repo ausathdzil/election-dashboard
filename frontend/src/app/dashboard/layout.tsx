@@ -7,7 +7,7 @@ import {
 
 import { DashboardSidebar } from '@/components/dashboard/dashboard-sidebar';
 import { UserButton } from '@/components/layout/user-button';
-import { SidebarProvider } from '@/components/ui/sidebar';
+import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
 
 export default function DashboardLayout({
   children,
@@ -29,9 +29,10 @@ function DashboardHeader() {
   return (
     <header className="flex justify-between border-b p-6">
       <div className="flex items-center gap-2">
+        <SidebarTrigger className="block lg:hidden" />
         <ChartNoAxesColumnDecreasingIcon
           aria-hidden="true"
-          className="size-6 stroke-primary"
+          className="hidden size-6 stroke-primary lg:block"
           style={{ transform: 'rotate(90deg)' }}
         />
         <span className="font-medium text-xl">Dashboard</span>
