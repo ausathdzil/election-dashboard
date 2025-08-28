@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { VortexLogo } from '@/components/votex-logo';
 import { verifySession } from '@/lib/session';
+import { MobileNav } from '@/components/layout/mobile-nav';
 
 export default function DashboardLayout({
   children,
@@ -54,15 +55,16 @@ const navItems = [
 
 function Header() {
   return (
-    <header className="relative flex w-full items-center justify-center px-20 shadow-xs">
+    <header className="relative flex w-full items-center justify-center lg:px-20 shadow-xs">
       <div className="flex w-full items-center justify-between p-4">
-        <Link className="flex items-center gap-2" href="/">
+        <Link className="items-center gap-2 hidden lg:flex" href="/">
           <VortexLogo color="#5575A5" />
           <h1 className="font-bold text-lg">Vector</h1>
         </Link>
+        <MobileNav navItems={navItems} />
         <UserButton />
       </div>
-      <nav className="absolute">
+      <nav className="absolute hidden md:block">
         <ul className="flex w-full justify-center gap-12 font-semibold">
           {navItems.map((item) => (
             <li key={item.label}>

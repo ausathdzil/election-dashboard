@@ -36,7 +36,7 @@ export function UserButton() {
 
   if (!user) {
     return (
-      <div className="flex items-center gap-4">
+      <div className="hidden lg:flex items-center gap-4">
         <Link
           className={buttonVariants({ variant: 'ghost', size: 'rounded' })}
           href="/login"
@@ -53,7 +53,7 @@ export function UserButton() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button className="rounded-full" size="icon" variant="outline">
+        <Button className="rounded-full hidden lg:flex" size="icon" variant="outline">
           <UserIcon className="h-[1.2rem] w-[1.2rem]" />
           <span className="sr-only">Toggle theme</span>
         </Button>
@@ -116,7 +116,7 @@ export function UserButton() {
             }}
           >
             <LogOutIcon />
-            Log out
+            Log Out
           </DropdownMenuItem>
         </DropdownMenuGroup>
       </DropdownMenuContent>
