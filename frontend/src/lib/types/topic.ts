@@ -9,7 +9,7 @@ export type Topic = {
   created_at: string;
 };
 
-export type UpdateTopicFormState =
+export type UpsertTopicFormState =
   | {
       errors?: {
         title?: string[];
@@ -25,8 +25,8 @@ export type UpdateTopicFormState =
     }
   | undefined;
 
-export const UpdateTopicFormSchema = z.object({
-  topic_id: z.string().min(1, { message: 'Topic ID is required.' }),
+export const UpsertFormSchema = z.object({
+  topic_id: z.string().optional(),
   title: z.string().min(1, { message: 'Title is required.' }).trim(),
   tags: z.array(z.string()).min(1, { message: 'Tags are required.' }),
   is_public: z.boolean(),

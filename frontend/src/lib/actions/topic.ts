@@ -3,26 +3,39 @@
 import { revalidatePath } from 'next/cache';
 import { z } from 'zod/v4';
 
-import {
-  UpdateTopicFormSchema,
-  type UpdateTopicFormState,
-} from '../types/topic';
+import { UpsertFormSchema, UpsertTopicFormState } from '../types/topic';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
+export async function createTopic(
+  token: string,
+  _state: UpsertTopicFormState,
+  formData: FormData
+) {
+  return upsertTopic(token, _state, formData);
+}
+
 export async function updateTopic(
   token: string,
-  _state: UpdateTopicFormState,
+  _state: UpsertTopicFormState,
+  formData: FormData
+) {
+  return upsertTopic(token, _state, formData);
+}
+
+export async function upsertTopic(
+  token: string,
+  _state: UpsertTopicFormState,
   formData: FormData
 ) {
   const rawFormData = {
-    topic_id: formData.get('topic_id') as string,
+    topic_id: (formData.get('topic_id') as string) ?? undefined,
     title: formData.get('title') as string,
     tags: JSON.parse(formData.get('tags') as string) as string[],
     is_public: (formData.get('is_public') as string) === 'true',
   };
 
-  const validatedFields = UpdateTopicFormSchema.safeParse(rawFormData);
+  const validatedFields = UpsertFormSchema.safeParse(rawFormData);
 
   if (!validatedFields.success) {
     return {
@@ -34,8 +47,13 @@ export async function updateTopic(
   const { topic_id, title, tags, is_public } = validatedFields.data;
 
   try {
-    const response = await fetch(`${API_URL}/topics/${topic_id}`, {
-      method: 'PUT',
+    const isUpdate = Boolean(topic_id);
+    const url = isUpdate
+      ? `${API_URL}/topics/${topic_id}`
+      : `${API_URL}/topics`;
+    const method = isUpdate ? 'PUT' : 'POST';
+    const response = await fetch(url, {
+      method,
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${token}`,
@@ -64,7 +82,9 @@ export async function updateTopic(
   revalidatePath('/dashboard/topics');
 
   return {
-    message: 'Topic updated successfully',
+    message: rawFormData.topic_id
+      ? 'Topic updated successfully'
+      : 'Topic created successfully',
     fields: { ...rawFormData },
   };
 }

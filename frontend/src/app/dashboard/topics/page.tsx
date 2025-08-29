@@ -10,7 +10,7 @@ import { redirect } from 'next/navigation';
 
 import { SearchInput } from '@/components/search/search-input';
 import { DeleteTopicDialog } from '@/components/topic/delete-topic-dialog';
-import { UpdateTopicDialog } from '@/components/topic/update-topic-dialog';
+import { UpsertTopicDialog } from '@/components/topic/upsert-topic-dialog';
 import { Badge } from '@/components/ui/badge';
 import {
   Card,
@@ -46,7 +46,10 @@ export default async function TopicsPage({ searchParams }: TopicsPageProps) {
 
   return (
     <main className="flex flex-1 flex-col gap-4 p-6">
-      <SearchInput className="max-w-sm" placeholder="Search topics" />
+      <div className="w-full flex items-center gap-2">
+        <SearchInput className="min-w-sm" placeholder="Search topics" />
+        <UpsertTopicDialog mode="create" token={session.token} />
+      </div>
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-4">
         {topics.data.map((topic) => (
           <TopicCard key={topic.id} token={session.token} topic={topic} />
@@ -75,7 +78,7 @@ function TopicCard({ topic, token }: { topic: Topic; token: string }) {
           )}
         </CardTitle>
         <CardAction>
-          <UpdateTopicDialog token={token} topic={topic} />
+          <UpsertTopicDialog mode="update" token={token} topic={topic} />
           <DeleteTopicDialog token={token} topicId={topic.id} />
         </CardAction>
       </CardHeader>

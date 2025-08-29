@@ -1,7 +1,7 @@
 'use client';
 
 import { type Tag, TagInput } from 'emblor';
-import { EditIcon, LoaderIcon } from 'lucide-react';
+import { EditIcon, LoaderIcon, PlusIcon } from 'lucide-react';
 import { useActionState, useState } from 'react';
 
 import { Button } from '@/components/ui/button';
@@ -23,51 +23,70 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { updateTopic } from '@/lib/actions/topic';
+import { createTopic, updateTopic } from '@/lib/actions/topic';
 import type { Topic } from '@/lib/types/topic';
 
-type UpdateTopicDialogProps = {
+type UpsertTopicDialogProps = {
   token: string;
-  topic: Topic;
+  topic?: Topic;
+  mode: 'create' | 'update';
 };
 
-export function UpdateTopicDialog(props: UpdateTopicDialogProps) {
-  const { topic, token } = props;
+export function UpsertTopicDialog(props: UpsertTopicDialogProps) {
+  const { topic, token, mode } = props;
 
   const [tags, setTags] = useState<Tag[]>(
-    topic.tags.map((tag, idx) => ({
+    (topic?.tags ?? []).map((tag, idx) => ({
       id: `${idx}`,
       text: tag,
     }))
   );
   const [activeTagIndex, setActiveTagIndex] = useState<number | null>(null);
   const [visibility, setVisibility] = useState<string>(
-    topic.is_public ? 'public' : 'private'
+    topic?.is_public ?? false ? 'public' : 'private'
   );
 
-  const updateTopicWithToken = updateTopic.bind(null, token);
-  const [state, action, pending] = useActionState(
-    updateTopicWithToken,
-    undefined
+  const actionFn = (mode === 'create' ? createTopic : updateTopic).bind(
+    null,
+    token
   );
+  const [state, action, pending] = useActionState(actionFn, undefined);
 
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button size="icon" variant="ghost">
-          <EditIcon className="stroke-muted-foreground" />
+        <Button
+          size={mode === 'create' ? 'default' : 'icon'}
+          variant={mode === 'create' ? 'secondary' : 'ghost'}
+        >
+          {mode === 'create' ? (
+            <>
+              <PlusIcon className="stroke-muted-foreground" />
+              Add Topic
+            </>
+          ) : (
+            <EditIcon className="stroke-muted-foreground" />
+          )}
         </Button>
       </DialogTrigger>
       <DialogContent>
         <form action={action} className="flex w-full flex-col gap-4">
           <DialogHeader>
-            <DialogTitle>Update Topic</DialogTitle>
-            <DialogDescription>Edit title and add new tags</DialogDescription>
+            <DialogTitle>
+              {mode === 'create' ? 'Create Topic' : 'Update Topic'}
+            </DialogTitle>
+            <DialogDescription>
+              {mode === 'create'
+                ? 'Create a topic with title, visibility, and tags'
+                : 'Edit title and add new tags'}
+            </DialogDescription>
           </DialogHeader>
-          <input name="topic_id" type="hidden" value={topic.id} />
+          {mode === 'update' && topic ? (
+            <input name="topic_id" type="hidden" value={topic.id} />
+          ) : null}
           <div className="grid gap-2">
             <Label htmlFor="title">Title</Label>
-            <Input defaultValue={topic.title} id="title" name="title" />
+            <Input defaultValue={topic?.title ?? ''} id="title" name="title" />
             {state?.errors?.title && (
               <p className="text-destructive text-xs">
                 {state.errors.title[0]}
@@ -134,7 +153,13 @@ export function UpdateTopicDialog(props: UpdateTopicDialogProps) {
           </div>
           <DialogFooter>
             <Button disabled={pending} type="submit">
-              {pending ? <LoaderIcon className="animate-spin" /> : 'Save'}
+              {pending ? (
+                <LoaderIcon className="animate-spin" />
+              ) : mode === 'create' ? (
+                'Create'
+              ) : (
+                'Save'
+              )}
             </Button>
           </DialogFooter>
         </form>
