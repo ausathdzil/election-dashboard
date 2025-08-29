@@ -32,6 +32,11 @@ def init_db(session: Session, seed_csv: str | None = None) -> None:
                 "CREATE INDEX IF NOT EXISTS idx_news_search_vector ON public.news USING GIN (search_vector);"
             )
         )
+        session.exec(
+            text(
+                "CREATE INDEX IF NOT EXISTS idx_news_province_publish_date ON public.news (province, publish_date DESC);"
+            )
+        )
         session.commit()
 
 

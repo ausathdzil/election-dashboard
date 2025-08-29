@@ -38,7 +38,9 @@ export default async function NewsDetailPage(props: NewsDetailPageProps) {
         </div>
       )}
       <article>
-        <p className="leading-relaxed">{article.article_text}</p>
+        <p className="whitespace-pre-line leading-relaxed">
+          {article.article_text}
+        </p>
       </article>
     </main>
   );

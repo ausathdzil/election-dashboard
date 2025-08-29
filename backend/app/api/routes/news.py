@@ -1,3 +1,4 @@
+import math
 from datetime import datetime, timedelta
 from typing import Annotated
 
@@ -15,7 +16,7 @@ from app.models.news import (
     ProvinceSummaryPublic,
     TopNewsSourcePublic,
 )
-from app.models.schema import News
+from app.models.schema import News, Topic
 from dateutil.relativedelta import relativedelta
 from fastapi import APIRouter, HTTPException, Query, status
 from sqlmodel import func, literal_column, select, text
@@ -30,44 +31,104 @@ def get_news(
     page: Annotated[int | None, Query(ge=1)] = 1,
     size: Annotated[int | None, Query(ge=6, le=20)] = 6,
     province: str | None = None,
+    topic_id: Annotated[int | None, Query(ge=1)] = None,
 ):
-    if q:
-        base_statement = (
-            select(
-                News,
-                text(
-                    "ts_rank_cd(news.search_vector, plainto_tsquery('indonesian', :q_param)) as rank"
-                ).bindparams(q_param=q),
-            )
-            .where(
-                News.province == province if province else True,
-                text(
-                    "news.search_vector @@ plainto_tsquery('indonesian', :q_param)"
-                ).bindparams(q_param=q),
-            )
-            .order_by(literal_column("rank").desc())
+    tags_query: str | None = None
+    if topic_id is not None:
+        topic = session.get(Topic, topic_id)
+        if topic is None:
+            raise HTTPException(status_code=404, detail="Topic not found")
+        tags = sorted({t for t in topic.tags if t})
+        if tags:
+            tags_query = " | ".join(tags)
+
+    filters = [News.province == province] if province else []
+    count_statement = select(func.count(News.id))
+    if filters:
+        count_statement = count_statement.where(*filters)
+    data_statement = select(News)
+    if filters:
+        data_statement = data_statement.where(*filters)
+    data_statement = data_statement.order_by(News.publish_date.desc())
+
+    if q and tags_query:
+        data_statement = select(
+            News,
+            text(
+                "ts_rank_cd(news.search_vector, plainto_tsquery('indonesian', :q_param)) + "
+                "ts_rank_cd(news.search_vector, to_tsquery('indonesian', :tags_param)) as rank"
+            ).bindparams(q_param=q, tags_param=tags_query),
         )
-    else:
-        base_statement = (
-            select(News)
-            .where(News.province == province if province else True)
-            .order_by(News.publish_date.desc())
+        if filters:
+            data_statement = data_statement.where(*filters)
+        data_statement = data_statement.where(
+            text(
+                "news.search_vector @@ plainto_tsquery('indonesian', :q_param)"
+            ).bindparams(q_param=q),
+            text(
+                "news.search_vector @@ to_tsquery('indonesian', :tags_param)"
+            ).bindparams(tags_param=tags_query),
+        ).order_by(literal_column("rank").desc(), News.publish_date.desc())
+        count_statement = count_statement.where(
+            text(
+                "news.search_vector @@ plainto_tsquery('indonesian', :q_param)"
+            ).bindparams(q_param=q),
+            text(
+                "news.search_vector @@ to_tsquery('indonesian', :tags_param)"
+            ).bindparams(tags_param=tags_query),
+        )
+    elif q:
+        data_statement = select(
+            News,
+            text(
+                "ts_rank_cd(news.search_vector, plainto_tsquery('indonesian', :q_param)) as rank"
+            ).bindparams(q_param=q),
+        )
+        if filters:
+            data_statement = data_statement.where(*filters)
+        data_statement = data_statement.where(
+            text(
+                "news.search_vector @@ plainto_tsquery('indonesian', :q_param)"
+            ).bindparams(q_param=q),
+        ).order_by(literal_column("rank").desc(), News.publish_date.desc())
+        count_statement = count_statement.where(
+            text(
+                "news.search_vector @@ plainto_tsquery('indonesian', :q_param)"
+            ).bindparams(q_param=q),
+        )
+    elif tags_query:
+        data_statement = select(
+            News,
+            text(
+                "ts_rank_cd(news.search_vector, to_tsquery('indonesian', :tags_param)) as rank"
+            ).bindparams(tags_param=tags_query),
+        )
+        if filters:
+            data_statement = data_statement.where(*filters)
+        data_statement = data_statement.where(
+            text(
+                "news.search_vector @@ to_tsquery('indonesian', :tags_param)"
+            ).bindparams(tags_param=tags_query)
+        ).order_by(literal_column("rank").desc(), News.publish_date.desc())
+        count_statement = count_statement.where(
+            text(
+                "news.search_vector @@ to_tsquery('indonesian', :tags_param)"
+            ).bindparams(tags_param=tags_query)
         )
 
-    total_statement = select(func.count()).select_from(base_statement.subquery())
-    total = session.exec(total_statement).one()
+    count = session.exec(count_statement).one()
 
-    total_pages = (total + size - 1) // size if total > 0 else 0
+    total_pages = math.ceil(count / size) if count > 0 else 0
     has_next = page < total_pages
     has_prev = page > 1
 
     skip = (page - 1) * size
 
-    statement = base_statement.offset(skip).limit(size)
-    result = session.exec(statement).all()
+    data_statement = data_statement.offset(skip).limit(size)
+    result = session.exec(data_statement).all()
 
     news = []
-    if q:
+    if q or tags_query:
         for news_instance, rank_value in result:
             news_item = NewsWithRank.model_validate(news_instance)
             news_item.rank = rank_value
@@ -79,7 +140,7 @@ def get_news(
 
     return NewsPublic(
         data=news,
-        count=total,
+        count=count,
         page=page,
         size=size,
         total_pages=total_pages,
