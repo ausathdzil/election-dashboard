@@ -34,7 +34,7 @@ export default async function TopicsPage({ searchParams }: TopicsPageProps) {
   const { q } = await searchParams;
 
   const topics = await getTopics(
-    { q, owner_id: session.user.id },
+    { q: q || undefined, owner_id: session.user.id },
     session.token
   );
 

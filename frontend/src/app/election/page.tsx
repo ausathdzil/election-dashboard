@@ -12,11 +12,12 @@ type HomeProps = {
     end_date: string;
     granularity: string;
     province: string;
+    topic_id: string;
   }>;
 };
 
 export default async function Home(props: HomeProps) {
-  const { q, page, size, start_date, end_date, granularity, province } =
+  const { q, page, size, start_date, end_date, granularity, province, topic_id } =
     await props.searchParams;
 
   return (
@@ -26,7 +27,7 @@ export default async function Home(props: HomeProps) {
         searchParams={{ start_date, end_date, granularity, province }}
       />
       <TopNews province={province} />
-      <ArticleCard searchParams={{ q, page, size, province }} />
+      <ArticleCard searchParams={{ q, page, size, province, topic_id }} />
     </main>
   );
 }

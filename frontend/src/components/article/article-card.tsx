@@ -22,6 +22,7 @@ type ArticleCardProps = {
     page: string;
     size: string;
     province: string;
+    topic_id: string;
   };
 };
 export async function ArticleCard(props: ArticleCardProps) {

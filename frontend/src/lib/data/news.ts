@@ -104,7 +104,6 @@ type GetNewsTrendsParams = {
   end_date: string | null;
   granularity: string | null;
   province: string | null;
-  topic_id: string | null;
 };
 
 export async function getNewsTrends(
@@ -122,9 +121,6 @@ export async function getNewsTrends(
   }
   if (params.province) {
     searchParams.set('province', params.province);
-  }
-  if (params.topic_id) {
-    searchParams.set('topic_id', params.topic_id);
   }
 
   const response = await fetch(
