@@ -92,10 +92,6 @@ function TopicCard({ topic, token }: { topic: Topic; token: string }) {
           {topic.tags.map((tag) => (
             <Badge key={tag}>{tag}</Badge>
           ))}
-          <Badge variant="secondary">
-            <PlusIcon />
-            Add tag
-          </Badge>
         </div>
       </CardContent>
       <Separator />

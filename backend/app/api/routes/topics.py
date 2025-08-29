@@ -15,7 +15,7 @@ def read_topics(
     owner_id: int | None = None,
     q: str | None = None,
 ) -> TopicsPublic:
-    base_statement = select(Topic)
+    base_statement = select(Topic).order_by(Topic.created_at.desc())
 
     if current_user is None:
         if owner_id is not None:
