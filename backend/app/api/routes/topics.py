@@ -1,9 +1,9 @@
 from app.api.deps import CurrentUser, CurrentUserOptional, SessionDep
 from app.models.generic import Message
-from app.models.schema import News, Topic
+from app.models.schema import Topic
 from app.models.topic import TopicCreate, TopicPublic, TopicsPublic, TopicUpdate
 from fastapi import APIRouter, HTTPException
-from sqlmodel import func, select, or_
+from sqlmodel import func, or_, select
 
 router = APIRouter(prefix="/topics", tags=["topics"])
 
@@ -17,6 +17,7 @@ def read_topics(session: SessionDep, current_user: CurrentUserOptional) -> Topic
         base_statement = base_statement.where(
             or_(Topic.is_public, Topic.owner_id == current_user.id)
         )
+
     count_statement = select(func.count()).select_from(base_statement.subquery())
     count = session.exec(count_statement).one()
     result = session.exec(base_statement).all()
@@ -25,13 +26,17 @@ def read_topics(session: SessionDep, current_user: CurrentUserOptional) -> Topic
 
 @router.get("/{topic_id}", response_model=TopicPublic)
 def read_topic(
-    session: SessionDep, current_user: CurrentUser, topic_id: int
+    session: SessionDep, topic_id: int, current_user: CurrentUserOptional
 ) -> TopicPublic:
     topic = session.get(Topic, topic_id)
     if not topic:
         raise HTTPException(status_code=404, detail="Topic not found")
-    if not topic.is_public and topic.owner_id != current_user.id:
+
+    if not topic.is_public and (
+        current_user is None or topic.owner_id != current_user.id
+    ):
         raise HTTPException(status_code=403, detail="Forbidden")
+
     return topic
 
 
@@ -57,7 +62,7 @@ def update_topic(
     topic = session.get(Topic, topic_id)
     if not topic:
         raise HTTPException(status_code=404, detail="Topic not found")
-    if not topic.owner_id == current_user.id:
+    if topic.owner_id != current_user.id:
         raise HTTPException(status_code=403, detail="Forbidden")
     update_dict = topic_in.model_dump(exclude_unset=True)
     topic.sqlmodel_update(update_dict)
@@ -74,50 +79,8 @@ def delete_topic(
     topic = session.get(Topic, topic_id)
     if not topic:
         raise HTTPException(status_code=404, detail="Topic not found")
-    if not topic.owner_id == current_user.id:
+    if topic.owner_id != current_user.id:
         raise HTTPException(status_code=403, detail="Forbidden")
     session.delete(topic)
     session.commit()
     return Message(message="Topic deleted successfully")
-
-
-@router.post("/{topic_id}/news/{news_id}", response_model=Message)
-def add_news_to_topic(
-    *, session: SessionDep, current_user: CurrentUser, topic_id: int, news_id: int
-):
-    topic = session.get(Topic, topic_id)
-    if not topic:
-        raise HTTPException(status_code=404, detail="Topic not found")
-    if topic.owner_id != current_user.id:
-        raise HTTPException(status_code=403, detail="Forbidden")
-    news = session.get(News, news_id)
-    if not news:
-        raise HTTPException(status_code=404, detail="News not found")
-    if news in topic.news:
-        raise HTTPException(status_code=400, detail="News already in topic")
-    topic.news.append(news)
-    session.add(topic)
-    session.commit()
-    session.refresh(topic)
-    return Message(message=f"News {news_id} added to topic successfully")
-
-
-@router.delete("/{topic_id}/news/{news_id}", response_model=Message)
-def remove_news_from_topic(
-    *, session: SessionDep, current_user: CurrentUser, topic_id: int, news_id: int
-):
-    topic = session.get(Topic, topic_id)
-    if not topic:
-        raise HTTPException(status_code=404, detail="Topic not found")
-    if topic.owner_id != current_user.id:
-        raise HTTPException(status_code=403, detail="Forbidden")
-    news = session.get(News, news_id)
-    if not news:
-        raise HTTPException(status_code=404, detail="News not found")
-    if news not in topic.news:
-        raise HTTPException(status_code=404, detail="News not found in topic")
-    topic.news.remove(news)
-    session.add(topic)
-    session.commit()
-    session.refresh(topic)
-    return Message(message=f"News {news_id} removed from topic successfully")
