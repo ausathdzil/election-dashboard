@@ -19,7 +19,7 @@ export const verifySession = cache(async () => {
     return null;
   }
 
-  return user;
+  return { user, token: cookie.value };
 });
 
 export async function deleteSession() {

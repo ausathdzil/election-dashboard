@@ -2,20 +2,47 @@ from app.api.deps import CurrentUser, CurrentUserOptional, SessionDep
 from app.models.generic import Message
 from app.models.schema import Topic
 from app.models.topic import TopicCreate, TopicPublic, TopicsPublic, TopicUpdate
-from fastapi import APIRouter, HTTPException
-from sqlmodel import func, or_, select
+from fastapi import APIRouter, HTTPException, status
+from sqlmodel import and_, func, or_, select
 
 router = APIRouter(prefix="/topics", tags=["topics"])
 
 
 @router.get("/", response_model=TopicsPublic)
-def read_topics(session: SessionDep, current_user: CurrentUserOptional) -> TopicsPublic:
+def read_topics(
+    session: SessionDep,
+    current_user: CurrentUserOptional,
+    owner_id: int | None = None,
+    q: str | None = None,
+) -> TopicsPublic:
     base_statement = select(Topic)
+
     if current_user is None:
+        if owner_id is not None:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Authentication required to filter by ownership",
+            )
         base_statement = base_statement.where(Topic.is_public)
+    elif owner_id is not None:
+        if current_user.is_superuser or owner_id == current_user.id:
+            base_statement = base_statement.where(Topic.owner_id == owner_id)
+        else:
+            base_statement = base_statement.where(
+                and_(Topic.owner_id == owner_id, Topic.is_public)
+            )
     elif not current_user.is_superuser:
         base_statement = base_statement.where(
             or_(Topic.is_public, Topic.owner_id == current_user.id)
+        )
+
+    if q:
+        search_term = f"%{q}%"
+        base_statement = base_statement.where(
+            or_(
+                Topic.title.ilike(search_term),
+                Topic.tags.any(lambda tag: tag.ilike(search_term)),
+            )
         )
 
     count_statement = select(func.count()).select_from(base_statement.subquery())

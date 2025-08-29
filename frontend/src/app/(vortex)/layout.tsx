@@ -1,27 +1,23 @@
-import type { UrlObject } from 'node:url';
 import Link from 'next/link';
+import type { UrlObject } from 'node:url';
+
 import { MobileNav } from '@/components/layout/mobile-nav';
 import { UserButton } from '@/components/layout/user-button';
-import { UserProvider } from '@/components/layout/user-provider';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { VortexLogo } from '@/components/votex-logo';
-import { verifySession } from '@/lib/session';
 
 export default function DashboardLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const userPromise = verifySession();
   return (
-    <UserProvider userPromise={userPromise}>
-      <div className="flex min-h-screen flex-col items-center">
-        <Header />
-        {children}
-        <Footer />
-      </div>
-    </UserProvider>
+    <div className="flex min-h-screen flex-col items-center">
+      <Header />
+      {children}
+      <Footer />
+    </div>
   );
 }
 

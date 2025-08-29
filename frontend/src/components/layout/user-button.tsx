@@ -1,6 +1,5 @@
 'use client';
 
-import type { UrlObject } from 'node:url';
 import {
   ChartNoAxesColumnDecreasingIcon,
   HomeIcon,
@@ -10,6 +9,7 @@ import {
   UserIcon,
 } from 'lucide-react';
 import Link from 'next/link';
+import type { UrlObject } from 'node:url';
 
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Button, buttonVariants } from '@/components/ui/button';
@@ -23,7 +23,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { logout } from '@/lib/actions/auth';
-import { useUser } from './user-provider';
+import { useSession } from './session-provider';
 
 const navItems = [
   {
@@ -44,9 +44,9 @@ const navItems = [
 ];
 
 export function UserButton() {
-  const user = useUser();
+  const session = useSession();
 
-  if (!user) {
+  if (!session?.user) {
     return (
       <div className="hidden items-center gap-4 lg:flex">
         <Link
@@ -61,6 +61,8 @@ export function UserButton() {
       </div>
     );
   }
+
+  const user = session.user;
 
   return (
     <DropdownMenu>

@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { Lexend } from 'next/font/google';
 import './globals.css';
 
-import { UserProvider } from '@/components/layout/user-provider';
+import { SessionProvider } from '@/components/layout/session-provider';
 import { QueryProvider } from '@/components/query-provider';
 import { ThemeProvider } from '@/components/theme-provider';
 import { verifySession } from '@/lib/session';
@@ -23,12 +23,12 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const userPromise = verifySession();
+  const sessionPromise = verifySession();
 
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={cn(lexend.variable, 'font-sans antialiased')}>
-        <UserProvider userPromise={userPromise}>
+        <SessionProvider sessionPromise={sessionPromise}>
           <QueryProvider>
             <ThemeProvider
               attribute="class"
@@ -39,7 +39,7 @@ export default function RootLayout({
               {children}
             </ThemeProvider>
           </QueryProvider>
-        </UserProvider>
+        </SessionProvider>
       </body>
     </html>
   );

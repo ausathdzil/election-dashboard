@@ -9,10 +9,10 @@ import {
   SidebarFooter,
   SidebarHeader,
 } from '@/components/ui/sidebar';
+import { useSession } from '../layout/session-provider';
 import { VortexLogo } from '../votex-logo';
 import { NavMain } from './nav-main';
 import { NavSecondary } from './nav-secondary';
-import { useUser } from '../layout/user-provider';
 
 const sidebarData = {
   navMain: [
@@ -71,7 +71,7 @@ const sidebarData = {
 };
 
 export function DashboardSidebar() {
-  const user = useUser();
+  const session = useSession();
 
   return (
     <Sidebar className="px-2">
@@ -85,7 +85,7 @@ export function DashboardSidebar() {
         <NavMain items={sidebarData.navMain} />
         <NavSecondary items={sidebarData.navData} title="DATA" />
         <NavSecondary items={sidebarData.navGorilla} title="GORILLA" />
-        {user?.is_superuser && (
+        {session?.user?.is_superuser && (
           <NavSecondary items={sidebarData.navSettings} title="SETTINGS" />
         )}
       </SidebarContent>
