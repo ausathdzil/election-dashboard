@@ -43,3 +43,26 @@ export async function getTopics(
   const data = await response.json();
   return data;
 }
+
+export async function getTopic(
+  topic_id?: string,
+  token?: string
+): Promise<Topic | null> {
+  if (!topic_id) {
+    return null;
+  }
+
+  const headers: Record<string, string> = {};
+  if (token) {
+    headers.Authorization = `Bearer ${token}`;
+  }
+
+  const response = await fetch(`${API_URL}/topics/${topic_id}`, { headers });
+
+  if (!response.ok) {
+    throw new Error('Failed to fetch topic');
+  }
+
+  const data = await response.json();
+  return data;
+}

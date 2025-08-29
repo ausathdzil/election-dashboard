@@ -7,9 +7,11 @@ import { Suspense } from 'react';
 import { TopicButtons } from '@/components/news/topic-buttons';
 import { SearchInput } from '@/components/search/search-input';
 import { SearchPagination } from '@/components/search/search-pagination';
+import { Badge } from '@/components/ui/badge';
 import { Button, buttonVariants } from '@/components/ui/button';
 import { getNews } from '@/lib/data/news';
-import { getTopics } from '@/lib/data/topic';
+import { getTopic, getTopics } from '@/lib/data/topic';
+import { verifySession } from '@/lib/session';
 import type { Article } from '@/lib/types/news';
 import { cn } from '@/lib/utils';
 
@@ -70,13 +72,33 @@ type NewsSectionProps = {
 };
 
 async function NewsSection(props: NewsSectionProps) {
+  const session = await verifySession();
   const news = await getNews(props);
+  const currentTopic = await getTopic(props.topic_id, session?.token);
 
   return (
     <section className="space-y-8 lg:max-w-3/4">
-      <Suspense fallback={null}>
-        <SearchInput className="max-w-sm" placeholder="Search news articles" />
-      </Suspense>
+      <div className="flex flex-wrap items-center gap-4">
+        <Suspense fallback={null}>
+          <SearchInput className="min-w-lg" placeholder="Search articles" />
+        </Suspense>
+        {currentTopic && (
+          <div className="flex items-center lg:gap-8">
+            <p className="font-medium text-sm lg:text-base">
+              Current topic:{' '}
+              <span className="text-primary">{currentTopic.title}</span>
+            </p>
+            <div className="flex items-center gap-2">
+              <p className="text-sm">Tags: </p>
+              <div className="flex flex-wrap gap-2">
+                {currentTopic.tags.map((tag) => (
+                  <Badge key={tag}>{tag}</Badge>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
       <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
         {news.data.map((article) => (
           <ArticleCard article={article} key={article.id} />
@@ -135,9 +157,13 @@ function ArticleCard({ article }: { article: Article }) {
 const MAX_RECENT_NEWS = 3;
 
 async function RecommendationSection(props: NewsSectionProps) {
+  const session = await verifySession();
   const news = await getNews(props);
   const recentNews = news.data.slice(0, MAX_RECENT_NEWS);
-  const topics = await getTopics();
+  const topics = await getTopics(
+    undefined,
+    session?.token ? session.token : undefined
+  );
 
   return (
     <section className="space-y-8 border-t px-0 py-8 lg:border-t-0 lg:border-l lg:px-8">

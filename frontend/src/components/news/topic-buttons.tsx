@@ -14,18 +14,24 @@ export function TopicButtons({ topics }: { topics: Topic[] }) {
   const pathname = usePathname();
   const router = useRouter();
 
-  const [selectedTag, setSelectedTag] = useState<number | null>(
+  const [selectedTopic, setSelectedTopic] = useState<number | null>(
     searchParams.get('topic_id') ? Number(searchParams.get('topic_id')) : null
   );
 
-  const handleTagClick = useDebouncedCallback((tag: Topic | null) => {
+  const handleTagClick = useDebouncedCallback((topic: Topic | null) => {
     const params = new URLSearchParams(searchParams);
-    if (tag) {
-      setSelectedTag(tag.id);
-      params.set('topic_id', tag.id.toString());
+
+    if (topic && selectedTopic === topic.id) {
+      setSelectedTopic(null);
+      params.delete('topic_id');
+    } else if (topic) {
+      setSelectedTopic(topic.id);
+      params.set('topic_id', topic.id.toString());
     } else {
+      setSelectedTopic(null);
       params.delete('topic_id');
     }
+
     const newParams =
       `${pathname}?${params.toString()}` as __next_route_internal_types__.RouteImpl<string>;
     router.replace(newParams, { scroll: false });
@@ -33,15 +39,15 @@ export function TopicButtons({ topics }: { topics: Topic[] }) {
 
   return (
     <div className="flex flex-wrap gap-2">
-      {topics.map((tag) => (
+      {topics.map((topic) => (
         <Button
-          key={tag.id}
-          onClick={() => handleTagClick(tag)}
+          key={topic.id}
+          onClick={() => handleTagClick(topic)}
           size="rounded"
           type="button"
-          variant={selectedTag === tag.id ? 'default' : 'secondary'}
+          variant={selectedTopic === topic.id ? 'default' : 'secondary'}
         >
-          {tag.title}
+          {topic.title}
         </Button>
       ))}
     </div>
