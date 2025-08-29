@@ -68,3 +68,35 @@ export async function updateTopic(
     fields: { ...rawFormData },
   };
 }
+
+export async function deleteTopic(
+  topicId: number,
+  token: string
+): Promise<{ message: string }> {
+  try {
+    const response = await fetch(`${API_URL}/topics/${topicId}`, {
+      method: 'DELETE',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.detail[0].msg ? data.detail[0].msg : data.detail);
+    }
+
+    revalidatePath('/dashboard/topics');
+    return data.message;
+  } catch (error) {
+    if (error instanceof Error) {
+      return {
+        message: error.message,
+      };
+    }
+    return {
+      message: 'Something went wrong.',
+    };
+  }
+}

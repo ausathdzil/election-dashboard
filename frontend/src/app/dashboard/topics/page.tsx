@@ -4,15 +4,14 @@ import {
   LockOpenIcon,
   PlusIcon,
   TagsIcon,
-  Trash2Icon,
 } from 'lucide-react';
 
 import { redirect } from 'next/navigation';
 
 import { SearchInput } from '@/components/search/search-input';
+import { DeleteTopicDialog } from '@/components/topic/delete-topic-dialog';
 import { UpdateTopicDialog } from '@/components/topic/update-topic-dialog';
 import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
 import {
   Card,
   CardAction,
@@ -77,9 +76,7 @@ function TopicCard({ topic, token }: { topic: Topic; token: string }) {
         </CardTitle>
         <CardAction>
           <UpdateTopicDialog token={token} topic={topic} />
-          <Button size="icon" variant="ghost">
-            <Trash2Icon className="stroke-destructive" />
-          </Button>
+          <DeleteTopicDialog token={token} topicId={topic.id} />
         </CardAction>
       </CardHeader>
       <Separator />
