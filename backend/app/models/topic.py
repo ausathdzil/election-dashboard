@@ -1,11 +1,11 @@
 from datetime import datetime
 
-from app.models.news import NewsBase
-from sqlmodel import Field, SQLModel
+from sqlmodel import ARRAY, Column, Field, SQLModel, String
 
 
 class TopicBase(SQLModel):
     title: str = Field(min_length=1, max_length=255)
+    tags: set[str] = Field(default_factory=set, sa_column=Column(ARRAY(String)))
     is_public: bool = False
 
 
@@ -15,6 +15,7 @@ class TopicCreate(TopicBase):
 
 class TopicUpdate(TopicBase):
     title: str | None = Field(default=None, min_length=1, max_length=255)
+    tags: set[str] | None = Field(default=None)
     is_public: bool | None = Field(default=None)
 
 
@@ -22,7 +23,6 @@ class TopicPublic(TopicBase):
     id: int
     owner_id: int
     created_at: datetime
-    news: list[NewsBase]
 
 
 class TopicsPublic(SQLModel):

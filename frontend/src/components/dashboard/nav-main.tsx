@@ -1,6 +1,8 @@
 'use client';
 
+import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import type { UrlObject } from 'node:url';
 
 import {
   SidebarGroup,
@@ -29,12 +31,21 @@ export function NavMain({
           {items.map((item) => (
             <SidebarMenuItem key={item.title}>
               <SidebarMenuButton
+                asChild
                 className="group"
                 isActive={pathname === item.url}
                 tooltip={item.title}
               >
-                <item.icon className="!size-5 fill-foreground group-data-[active=true]:fill-primary-foreground" />
-                <span>{item.title}</span>
+                <Link
+                  href={
+                    item.url as
+                      | UrlObject
+                      | __next_route_internal_types__.RouteImpl<string>
+                  }
+                >
+                  <item.icon className="!size-5 fill-foreground group-data-[active=true]:fill-primary-foreground" />
+                  <span>{item.title}</span>
+                </Link>
               </SidebarMenuButton>
             </SidebarMenuItem>
           ))}

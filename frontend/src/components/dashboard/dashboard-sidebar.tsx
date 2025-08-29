@@ -1,5 +1,6 @@
 'use client';
 
+import { TagsIcon } from 'lucide-react';
 import Link from 'next/link';
 
 import {
@@ -11,6 +12,7 @@ import {
 import { VortexLogo } from '../votex-logo';
 import { NavMain } from './nav-main';
 import { NavSecondary } from './nav-secondary';
+import { useUser } from '../layout/user-provider';
 
 const sidebarData = {
   navMain: [
@@ -20,9 +22,9 @@ const sidebarData = {
       icon: DashboardIcon,
     },
     {
-      title: 'Token',
-      url: '#',
-      icon: TokenIcon,
+      title: 'Topics',
+      url: '/dashboard/topics',
+      icon: TagsIcon,
     },
   ],
   navData: [
@@ -69,6 +71,8 @@ const sidebarData = {
 };
 
 export function DashboardSidebar() {
+  const user = useUser();
+
   return (
     <Sidebar className="px-2">
       <SidebarHeader className="p-4">
@@ -81,7 +85,9 @@ export function DashboardSidebar() {
         <NavMain items={sidebarData.navMain} />
         <NavSecondary items={sidebarData.navData} title="DATA" />
         <NavSecondary items={sidebarData.navGorilla} title="GORILLA" />
-        <NavSecondary items={sidebarData.navSettings} title="SETTINGS" />
+        {user?.is_superuser && (
+          <NavSecondary items={sidebarData.navSettings} title="SETTINGS" />
+        )}
       </SidebarContent>
       <SidebarFooter />
     </Sidebar>

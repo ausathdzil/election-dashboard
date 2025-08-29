@@ -15,11 +15,6 @@ class User(UserBase, table=True):
     topics: list["Topic"] = Relationship(back_populates="owner", cascade_delete=True)
 
 
-class TopicNewsLink(SQLModel, table=True):
-    news_id: int | None = Field(default=None, foreign_key="news.id", primary_key=True)
-    topic_id: int | None = Field(default=None, foreign_key="topic.id", primary_key=True)
-
-
 class News(NewsBase, table=True):
     id: int | None = Field(default=None, primary_key=True)
 
@@ -36,10 +31,6 @@ class News(NewsBase, table=True):
         )
     )
 
-    topics: list["Topic"] = Relationship(
-        back_populates="news", link_model=TopicNewsLink
-    )
-
 
 class Topic(TopicBase, table=True):
     id: int | None = Field(default=None, primary_key=True)
@@ -49,4 +40,3 @@ class Topic(TopicBase, table=True):
         default=None, foreign_key="user.id", ondelete="CASCADE"
     )
     owner: User | None = Relationship(back_populates="topics")
-    news: list["News"] = Relationship(back_populates="topics", link_model=TopicNewsLink)
