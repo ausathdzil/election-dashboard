@@ -71,6 +71,11 @@ def admin_create_user(session: SessionDep, user_in: UserCreate) -> UserPublic:
     return user
 
 
+@router.get("/me", response_model=UserPublic)
+def read_users_me(current_user: CurrentUser) -> User:
+    return current_user
+
+
 @router.patch(
     "/{user_id}",
     dependencies=[Depends(get_current_superuser)],
@@ -118,8 +123,3 @@ def admin_delete_user(
     session.delete(user)
     session.commit()
     return Message(message="User deleted successfully")
-
-
-@router.get("/me", response_model=UserPublic)
-def read_users_me(current_user: CurrentUser) -> User:
-    return current_user
