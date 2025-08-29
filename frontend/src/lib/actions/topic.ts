@@ -3,7 +3,7 @@
 import { revalidatePath } from 'next/cache';
 import { z } from 'zod/v4';
 
-import { UpsertFormSchema, UpsertTopicFormState } from '../types/topic';
+import { UpsertFormSchema, type UpsertTopicFormState } from '../types/topic';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -12,7 +12,7 @@ export async function createTopic(
   _state: UpsertTopicFormState,
   formData: FormData
 ) {
-  return upsertTopic(token, _state, formData);
+  return await upsertTopic(token, _state, formData);
 }
 
 export async function updateTopic(
@@ -20,7 +20,7 @@ export async function updateTopic(
   _state: UpsertTopicFormState,
   formData: FormData
 ) {
-  return upsertTopic(token, _state, formData);
+  return await upsertTopic(token, _state, formData);
 }
 
 export async function upsertTopic(

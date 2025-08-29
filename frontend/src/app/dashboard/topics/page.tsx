@@ -1,10 +1,4 @@
-import {
-  ClockIcon,
-  LockIcon,
-  LockOpenIcon,
-  PlusIcon,
-  TagsIcon,
-} from 'lucide-react';
+import { ClockIcon, LockIcon, LockOpenIcon, TagsIcon } from 'lucide-react';
 
 import { redirect } from 'next/navigation';
 
@@ -46,7 +40,7 @@ export default async function TopicsPage({ searchParams }: TopicsPageProps) {
 
   return (
     <main className="flex flex-1 flex-col gap-4 p-6">
-      <div className="w-full flex items-center gap-2">
+      <div className="flex w-full items-center gap-2">
         <SearchInput className="min-w-sm" placeholder="Search topics" />
         <UpsertTopicDialog mode="create" token={session.token} />
       </div>

@@ -1,13 +1,15 @@
+// biome-ignore-all lint/complexity/noExcessiveCognitiveComplexity: Reusable upsert component
+// biome-ignore-all lint/style/noNestedTernary: Reusable upsert component
+
 'use client';
 
 import { type Tag, TagInput } from 'emblor';
-import { EditIcon, LoaderIcon, PlusIcon } from 'lucide-react';
+import { EditIcon, LoaderIcon, PlusIcon, SaveIcon } from 'lucide-react';
 import { useActionState, useState } from 'react';
 
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
-  DialogClose,
   DialogContent,
   DialogDescription,
   DialogFooter,
@@ -44,7 +46,7 @@ export function UpsertTopicDialog(props: UpsertTopicDialogProps) {
   );
   const [activeTagIndex, setActiveTagIndex] = useState<number | null>(null);
   const [visibility, setVisibility] = useState<string>(
-    topic?.is_public ?? false ? 'public' : 'private'
+    (topic?.is_public ?? false) ? 'public' : 'private'
   );
 
   const actionFn = (mode === 'create' ? createTopic : updateTopic).bind(
@@ -157,10 +159,11 @@ export function UpsertTopicDialog(props: UpsertTopicDialogProps) {
               {pending ? (
                 <LoaderIcon className="animate-spin" />
               ) : mode === 'create' ? (
-                'Create'
+                <PlusIcon />
               ) : (
-                'Save'
+                <SaveIcon />
               )}
+              {mode === 'create' ? 'Create' : 'Save'}
             </Button>
           </DialogFooter>
         </form>
