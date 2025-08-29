@@ -14,6 +14,7 @@ type GetNewsParams = {
   page: string | null;
   size: string | null;
   province: string | null;
+  topic_id: string | null;
 };
 
 const MIN_PAGE_SIZE = 6;
@@ -43,8 +44,13 @@ export async function getNews(params: GetNewsParams): Promise<News> {
   if (params.province) {
     searchParams.set('province', params.province);
   }
+  if (params.topic_id) {
+    searchParams.set('topic_id', params.topic_id);
+  }
 
-  const response = await fetch(`${API_URL}/news?${searchParams.toString()}`);
+  const response = await fetch(`${API_URL}/news?${searchParams.toString()}`, {
+    cache: 'force-cache',
+  });
 
   if (!response.ok) {
     throw new Error('Failed to fetch news');
@@ -98,6 +104,7 @@ type GetNewsTrendsParams = {
   end_date: string | null;
   granularity: string | null;
   province: string | null;
+  topic_id: string | null;
 };
 
 export async function getNewsTrends(
@@ -115,6 +122,9 @@ export async function getNewsTrends(
   }
   if (params.province) {
     searchParams.set('province', params.province);
+  }
+  if (params.topic_id) {
+    searchParams.set('topic_id', params.topic_id);
   }
 
   const response = await fetch(

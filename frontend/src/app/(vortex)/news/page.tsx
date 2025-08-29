@@ -4,11 +4,16 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { Suspense } from 'react';
 
+import { TopicButtons } from '@/components/news/topic-buttons';
 import { SearchInput } from '@/components/search/search-input';
 import { SearchPagination } from '@/components/search/search-pagination';
-import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { Button, buttonVariants } from '@/components/ui/button';
 import { getNews } from '@/lib/data/news';
+import { getTopic, getTopics } from '@/lib/data/topic';
+import { verifySession } from '@/lib/session';
 import type { Article } from '@/lib/types/news';
+import { cn } from '@/lib/utils';
 
 type BlogPageProps = {
   searchParams: Promise<{
@@ -16,6 +21,7 @@ type BlogPageProps = {
     page: string;
     size: string;
     province: string;
+    topic_id: string;
   }>;
 };
 
@@ -42,7 +48,9 @@ function NewsHeader() {
           Displays information, visualizations, graphics and text with a display
           that is more interesting to explore.
         </p>
-        <Button className="mt-4 bg-[#141414]">Create a Topic</Button>
+        <Link className={cn(buttonVariants(), 'mt-4')} href="/topics">
+          Find Topics
+        </Link>
       </article>
       <Image
         alt="Blog Header"
@@ -60,16 +68,37 @@ type NewsSectionProps = {
   page: string;
   size: string;
   province: string;
+  topic_id: string;
 };
 
 async function NewsSection(props: NewsSectionProps) {
+  const session = await verifySession();
   const news = await getNews(props);
+  const currentTopic = await getTopic(props.topic_id, session?.token);
 
   return (
     <section className="space-y-8 lg:max-w-3/4">
-      <Suspense fallback={null}>
-        <SearchInput className="max-w-sm" placeholder="Search news articles" />
-      </Suspense>
+      <div className="flex flex-wrap items-center gap-4">
+        <Suspense fallback={null}>
+          <SearchInput className="min-w-lg" placeholder="Search articles" />
+        </Suspense>
+        {currentTopic && (
+          <div className="flex items-center lg:gap-8">
+            <p className="font-medium text-sm lg:text-base">
+              Current topic:{' '}
+              <span className="text-primary">{currentTopic.title}</span>
+            </p>
+            <div className="flex items-center gap-2">
+              <p className="text-sm">Tags: </p>
+              <div className="flex flex-wrap gap-2">
+                {currentTopic.tags.map((tag) => (
+                  <Badge key={tag}>{tag}</Badge>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
       <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
         {news.data.map((article) => (
           <ArticleCard article={article} key={article.id} />
@@ -125,59 +154,28 @@ function ArticleCard({ article }: { article: Article }) {
   );
 }
 
-const recommendedTags = [
-  {
-    id: 1,
-    name: 'Mental Health',
-  },
-
-  {
-    id: 2,
-    name: 'Software Development',
-  },
-
-  {
-    id: 3,
-    name: 'Startup',
-  },
-  {
-    id: 4,
-    name: 'Education',
-  },
-  {
-    id: 5,
-    name: 'Politic',
-  },
-];
-
 const MAX_RECENT_NEWS = 3;
 
 async function RecommendationSection(props: NewsSectionProps) {
+  const session = await verifySession();
   const news = await getNews(props);
   const recentNews = news.data.slice(0, MAX_RECENT_NEWS);
+  const topics = await getTopics(
+    undefined,
+    session?.token ? session.token : undefined
+  );
 
   return (
     <section className="space-y-8 border-t px-0 py-8 lg:border-t-0 lg:border-l lg:px-8">
       <div className="space-y-4">
         <h2 className="font-medium text-xl">Recommended Tags</h2>
-        <div className="flex flex-wrap gap-2">
-          {recommendedTags.map((tag) => (
-            <Button
-              key={tag.id}
-              size="rounded"
-              type="button"
-              variant="secondary"
-            >
-              {tag.name}
-            </Button>
-          ))}
-        </div>
+        <TopicButtons topics={topics.data} />
       </div>
       <div className="space-y-4">
-        <h2 className="font-medium text-xl">Recently Saved</h2>
+        <h2 className="font-medium text-xl">Recent News</h2>
         <div className="flex flex-col">
           {recentNews.map((article) => (
-            <RecentlySavedCard article={article} key={article.id} />
+            <RecentNewsCard article={article} key={article.id} />
           ))}
         </div>
       </div>
@@ -188,23 +186,27 @@ async function RecommendationSection(props: NewsSectionProps) {
   );
 }
 
-function RecentlySavedCard({ article }: { article: Article }) {
+function RecentNewsCard({ article }: { article: Article }) {
   return (
-    <article className="flex flex-col gap-2 border-b py-2">
-      <p className="text-muted-foreground text-sm">{article.author}</p>
-      <p className="line-clamp-2 font-semibold">{article.title}</p>
-      <time
-        className="text-muted-foreground text-sm"
-        dateTime={article.publish_date}
-      >
-        {new Date(article.publish_date).toLocaleString('en-ID', {
-          year: 'numeric',
-          month: 'short',
-          day: 'numeric',
-          hour: '2-digit',
-          minute: '2-digit',
-        })}
-      </time>
-    </article>
+    <Link className="group" href={`/news/${article.id}`}>
+      <article className="flex flex-col gap-2 border-b py-2">
+        <p className="text-muted-foreground text-sm">{article.author}</p>
+        <h1 className="line-clamp-2 font-semibold group-hover:text-primary">
+          {article.title}
+        </h1>
+        <time
+          className="text-muted-foreground text-sm"
+          dateTime={article.publish_date}
+        >
+          {new Date(article.publish_date).toLocaleString('en-ID', {
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit',
+          })}
+        </time>
+      </article>
+    </Link>
   );
 }

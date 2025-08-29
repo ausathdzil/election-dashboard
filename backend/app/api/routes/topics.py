@@ -1,8 +1,10 @@
+import math
+from typing import Annotated
 from app.api.deps import CurrentUser, CurrentUserOptional, SessionDep
 from app.models.generic import Message
 from app.models.schema import Topic
 from app.models.topic import TopicCreate, TopicPublic, TopicsPublic, TopicUpdate
-from fastapi import APIRouter, HTTPException, status
+from fastapi import APIRouter, HTTPException, Query, status
 from sqlmodel import and_, func, or_, select
 
 router = APIRouter(prefix="/topics", tags=["topics"])
@@ -13,7 +15,9 @@ def read_topics(
     session: SessionDep,
     current_user: CurrentUserOptional,
     owner_id: int | None = None,
-    q: str | None = None,
+    q: Annotated[str | None, Query(max_length=50)] = None,
+    page: Annotated[int | None, Query(ge=1)] = 1,
+    size: Annotated[int | None, Query(ge=6, le=20)] = 6,
 ) -> TopicsPublic:
     base_statement = select(Topic).order_by(Topic.created_at.desc())
 
@@ -41,8 +45,25 @@ def read_topics(
 
     count_statement = select(func.count()).select_from(base_statement.subquery())
     count = session.exec(count_statement).one()
+
+    total_pages = math.ceil(count / size) if count > 0 else 0
+    has_next = page < total_pages
+    has_prev = page > 1
+
+    skip = (page - 1) * size
+
+    base_statement = base_statement.offset(skip).limit(size)
     result = session.exec(base_statement).all()
-    return TopicsPublic(data=result, count=count)
+
+    return TopicsPublic(
+        data=result,
+        count=count,
+        page=page,
+        size=size,
+        total_pages=total_pages,
+        has_next=has_next,
+        has_prev=has_prev,
+    )
 
 
 @router.get("/{topic_id}", response_model=TopicPublic)

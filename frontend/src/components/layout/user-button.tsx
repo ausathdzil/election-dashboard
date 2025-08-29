@@ -6,7 +6,7 @@ import {
   HomeIcon,
   LogOutIcon,
   NewspaperIcon,
-  ShieldIcon,
+  TagsIcon,
   UserIcon,
 } from 'lucide-react';
 import Link from 'next/link';
@@ -27,6 +27,11 @@ import { useSession } from './session-provider';
 
 const navItems = [
   {
+    title: 'Dashboard',
+    url: '/dashboard',
+    icon: ChartNoAxesColumnDecreasingIcon,
+  },
+  {
     title: 'Home',
     url: '/',
     icon: HomeIcon,
@@ -37,9 +42,9 @@ const navItems = [
     icon: NewspaperIcon,
   },
   {
-    title: 'Dashboard',
-    url: '/dashboard',
-    icon: ChartNoAxesColumnDecreasingIcon,
+    title: 'Topics',
+    url: '/topics',
+    icon: TagsIcon,
   },
 ];
 
@@ -114,14 +119,14 @@ export function UserButton() {
               </Link>
             </DropdownMenuItem>
           ))}
-          {user.is_superuser && (
+          {/* {user.is_superuser && (
             <DropdownMenuItem asChild className="cursor-pointer" key="admin">
-              <Link href="/election/admin">
+              <Link href="/dashboard/user-management">
                 <ShieldIcon />
-                Admin Dashboard
+                Manage Users
               </Link>
             </DropdownMenuItem>
-          )}
+          )} */}
           <DropdownMenuSeparator />
           <DropdownMenuItem
             className="cursor-pointer"
