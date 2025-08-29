@@ -28,8 +28,8 @@ class TopicPublic(TopicBase):
 class TopicsPublic(SQLModel):
     data: list[TopicPublic]
     count: int
-    # page: int
-    # size: int
-    # total_pages: int
-    # has_next: bool
-    # has_prev: bool
+    page: int
+    size: int
+    total_pages: int
+    has_next: bool
+    has_prev: bool

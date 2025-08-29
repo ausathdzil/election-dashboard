@@ -31,7 +31,7 @@ def get_news(
     page: Annotated[int | None, Query(ge=1)] = 1,
     size: Annotated[int | None, Query(ge=6, le=20)] = 6,
     province: str | None = None,
-    topic_id: Annotated[int | None, Query(ge=1)] = None,
+    topic_id: Annotated[int | None, Query()] = None,
 ):
     tags_query: str | None = None
     if topic_id is not None:
@@ -40,7 +40,17 @@ def get_news(
             raise HTTPException(status_code=404, detail="Topic not found")
         tags = sorted({t for t in topic.tags if t})
         if tags:
-            tags_query = " | ".join(tags)
+            tags_query_parts = []
+            for t in tags:
+                term = t.strip()
+                if not term:
+                    continue
+                if " " in term:
+                    tags_query_parts.append(f'"{term}"')
+                else:
+                    tags_query_parts.append(term)
+            if tags_query_parts:
+                tags_query = " OR ".join(tags_query_parts)
 
     filters = [News.province == province] if province else []
     count_statement = select(func.count(News.id))
@@ -56,7 +66,7 @@ def get_news(
             News,
             text(
                 "ts_rank_cd(news.search_vector, plainto_tsquery('indonesian', :q_param)) + "
-                "ts_rank_cd(news.search_vector, to_tsquery('indonesian', :tags_param)) as rank"
+                "ts_rank_cd(news.search_vector, websearch_to_tsquery('indonesian', :tags_param)) as rank"
             ).bindparams(q_param=q, tags_param=tags_query),
         )
         if filters:
@@ -66,7 +76,7 @@ def get_news(
                 "news.search_vector @@ plainto_tsquery('indonesian', :q_param)"
             ).bindparams(q_param=q),
             text(
-                "news.search_vector @@ to_tsquery('indonesian', :tags_param)"
+                "news.search_vector @@ websearch_to_tsquery('indonesian', :tags_param)"
             ).bindparams(tags_param=tags_query),
         ).order_by(literal_column("rank").desc(), News.publish_date.desc())
         count_statement = count_statement.where(
@@ -74,7 +84,7 @@ def get_news(
                 "news.search_vector @@ plainto_tsquery('indonesian', :q_param)"
             ).bindparams(q_param=q),
             text(
-                "news.search_vector @@ to_tsquery('indonesian', :tags_param)"
+                "news.search_vector @@ websearch_to_tsquery('indonesian', :tags_param)"
             ).bindparams(tags_param=tags_query),
         )
     elif q:
@@ -100,19 +110,19 @@ def get_news(
         data_statement = select(
             News,
             text(
-                "ts_rank_cd(news.search_vector, to_tsquery('indonesian', :tags_param)) as rank"
+                "ts_rank_cd(news.search_vector, websearch_to_tsquery('indonesian', :tags_param)) as rank"
             ).bindparams(tags_param=tags_query),
         )
         if filters:
             data_statement = data_statement.where(*filters)
         data_statement = data_statement.where(
             text(
-                "news.search_vector @@ to_tsquery('indonesian', :tags_param)"
+                "news.search_vector @@ websearch_to_tsquery('indonesian', :tags_param)"
             ).bindparams(tags_param=tags_query)
         ).order_by(literal_column("rank").desc(), News.publish_date.desc())
         count_statement = count_statement.where(
             text(
-                "news.search_vector @@ to_tsquery('indonesian', :tags_param)"
+                "news.search_vector @@ websearch_to_tsquery('indonesian', :tags_param)"
             ).bindparams(tags_param=tags_query)
         )
 
