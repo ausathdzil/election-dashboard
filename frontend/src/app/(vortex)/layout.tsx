@@ -1,5 +1,5 @@
-import Link from 'next/link';
 import type { UrlObject } from 'node:url';
+import Link from 'next/link';
 
 import { MobileNav } from '@/components/layout/mobile-nav';
 import { UserButton } from '@/components/layout/user-button';

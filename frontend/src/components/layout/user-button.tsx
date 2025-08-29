@@ -1,5 +1,6 @@
 'use client';
 
+import type { UrlObject } from 'node:url';
 import {
   ChartNoAxesColumnDecreasingIcon,
   HomeIcon,
@@ -9,7 +10,6 @@ import {
   UserIcon,
 } from 'lucide-react';
 import Link from 'next/link';
-import type { UrlObject } from 'node:url';
 
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Button, buttonVariants } from '@/components/ui/button';

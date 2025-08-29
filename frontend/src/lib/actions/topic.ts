@@ -3,7 +3,10 @@
 import { revalidatePath } from 'next/cache';
 import { z } from 'zod/v4';
 
-import { UpdateTopicFormSchema, UpdateTopicFormState } from '../types/topic';
+import {
+  UpdateTopicFormSchema,
+  type UpdateTopicFormState,
+} from '../types/topic';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 

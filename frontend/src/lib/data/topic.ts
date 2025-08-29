@@ -1,4 +1,4 @@
-import { Topic } from '../types/topic';
+import type { Topic } from '../types/topic';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -18,8 +18,6 @@ export async function getTopics(
   if (params.owner_id) {
     searchParams.set('owner_id', params.owner_id);
   }
-
-  console.log(`${API_URL}/topics?${searchParams.toString()}`);
 
   const response = await fetch(`${API_URL}/topics?${searchParams.toString()}`, {
     headers: {

@@ -1,8 +1,7 @@
 'use client';
 
+import { type Tag, TagInput } from 'emblor';
 import { EditIcon, LoaderIcon } from 'lucide-react';
-
-import { Tag, TagInput } from 'emblor';
 import { useActionState, useState } from 'react';
 
 import { Button } from '@/components/ui/button';
@@ -25,7 +24,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { updateTopic } from '@/lib/actions/topic';
-import { Topic } from '@/lib/types/topic';
+import type { Topic } from '@/lib/types/topic';
 
 type UpdateTopicDialogProps = {
   token: string;
@@ -55,22 +54,22 @@ export function UpdateTopicDialog(props: UpdateTopicDialogProps) {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="ghost" size="icon">
+        <Button size="icon" variant="ghost">
           <EditIcon className="stroke-muted-foreground" />
         </Button>
       </DialogTrigger>
       <DialogContent>
-        <form action={action} className="w-full flex flex-col gap-4">
+        <form action={action} className="flex w-full flex-col gap-4">
           <DialogHeader>
             <DialogTitle>Update Topic</DialogTitle>
             <DialogDescription>Edit title and add new tags</DialogDescription>
           </DialogHeader>
-          <input type="hidden" name="topic_id" value={topic.id} />
+          <input name="topic_id" type="hidden" value={topic.id} />
           <div className="grid gap-2">
             <Label htmlFor="title">Title</Label>
-            <Input id="title" name="title" defaultValue={topic.title} />
+            <Input defaultValue={topic.title} id="title" name="title" />
             {state?.errors?.title && (
-              <p className="text-xs text-destructive">
+              <p className="text-destructive text-xs">
                 {state.errors.title[0]}
               </p>
             )}
@@ -79,8 +78,9 @@ export function UpdateTopicDialog(props: UpdateTopicDialogProps) {
             <div className="grid gap-2">
               <Label htmlFor="tags">Tags</Label>
               <TagInput
+                activeTagIndex={activeTagIndex}
                 id="tags"
-                tags={tags}
+                setActiveTagIndex={setActiveTagIndex}
                 setTags={(newTags) => setTags(newTags)}
                 styleClasses={{
                   inlineTagsContainer:
@@ -92,28 +92,27 @@ export function UpdateTopicDialog(props: UpdateTopicDialogProps) {
                       'absolute -inset-y-px -end-px p-0 rounded-e-md flex size-7 transition-[color,box-shadow] outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[1px] text-muted-foreground/80 hover:text-foreground',
                   },
                 }}
-                activeTagIndex={activeTagIndex}
-                setActiveTagIndex={setActiveTagIndex}
+                tags={tags}
               />
               <input
-                type="hidden"
                 name="tags"
+                type="hidden"
                 value={JSON.stringify(tags.map((tag) => tag.text))}
               />
               <span
-                className="text-xs text-muted-foreground"
                 aria-live="polite"
+                className="text-muted-foreground text-xs"
               >
                 Enter any tags you have, leave blank if none
               </span>
             </div>
             {state?.errors?.tags && (
-              <p className="text-xs text-destructive">{state.errors.tags[0]}</p>
+              <p className="text-destructive text-xs">{state.errors.tags[0]}</p>
             )}
           </div>
           <div className="grid gap-2">
             <Label htmlFor="is_public">Visibility</Label>
-            <Select value={visibility} onValueChange={setVisibility}>
+            <Select onValueChange={setVisibility} value={visibility}>
               <SelectTrigger className="w-full">
                 <SelectValue placeholder="Select visibility" />
               </SelectTrigger>
@@ -123,12 +122,12 @@ export function UpdateTopicDialog(props: UpdateTopicDialogProps) {
               </SelectContent>
             </Select>
             <input
-              type="hidden"
               name="is_public"
+              type="hidden"
               value={visibility === 'public' ? 'true' : 'false'}
             />
             {state?.errors?.is_public && (
-              <p className="text-xs text-destructive">
+              <p className="text-destructive text-xs">
                 {state.errors.is_public[0]}
               </p>
             )}

@@ -1,6 +1,6 @@
 /* biome-ignore-all lint/suspicious/noUnknownAtRules: Required for Tailwind */
-@import 'tailwindcss';
-@import 'tw-animate-css';
+@import "tailwindcss";
+@import "tw-animate-css";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -120,7 +120,7 @@
     @apply bg-background text-foreground;
   }
   button:not(:disabled),
-  [role='button']:not(:disabled) {
+  [role="button"]:not(:disabled) {
     cursor: pointer;
   }
 }

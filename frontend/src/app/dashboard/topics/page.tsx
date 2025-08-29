@@ -24,7 +24,7 @@ import {
 import { Separator } from '@/components/ui/separator';
 import { getTopics } from '@/lib/data/topic';
 import { verifySession } from '@/lib/session';
-import { Topic } from '@/lib/types/topic';
+import type { Topic } from '@/lib/types/topic';
 
 type TopicsPageProps = {
   searchParams: Promise<{
@@ -50,7 +50,7 @@ export default async function TopicsPage({ searchParams }: TopicsPageProps) {
       <SearchInput className="max-w-sm" placeholder="Search topics" />
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-4">
         {topics.data.map((topic) => (
-          <TopicCard token={session.token} topic={topic} key={topic.id} />
+          <TopicCard key={topic.id} token={session.token} topic={topic} />
         ))}
       </div>
     </main>
@@ -77,7 +77,7 @@ function TopicCard({ topic, token }: { topic: Topic; token: string }) {
         </CardTitle>
         <CardAction>
           <UpdateTopicDialog token={token} topic={topic} />
-          <Button variant="ghost" size="icon">
+          <Button size="icon" variant="ghost">
             <Trash2Icon className="stroke-destructive" />
           </Button>
         </CardAction>
@@ -104,7 +104,7 @@ function TopicCard({ topic, token }: { topic: Topic; token: string }) {
           <ClockIcon className="size-4" />
           <p className="text-sm">
             Created at:{' '}
-            <span className="text-primary font-medium">
+            <span className="font-medium text-primary">
               {new Date(topic.created_at).toLocaleDateString('en-GB', {
                 day: 'numeric',
                 month: 'short',
