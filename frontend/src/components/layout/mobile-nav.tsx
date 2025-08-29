@@ -14,7 +14,7 @@ import {
 } from '@/components/ui/popover';
 import { logout } from '@/lib/actions/auth';
 import { cn } from '@/lib/utils';
-import { useUser } from './user-provider';
+import { useSession } from './session-provider';
 
 type MobileNavProps = {
   navItems: {
@@ -43,7 +43,7 @@ const accountItems = [
 
 export function MobileNav(props: MobileNavProps) {
   const [open, setOpen] = useState(false);
-  const user = useUser();
+  const session = useSession();
 
   const { navItems } = props;
 
@@ -76,7 +76,7 @@ export function MobileNav(props: MobileNavProps) {
               </MobileLink>
             ))}
           </nav>
-          {user ? (
+          {session?.user ? (
             <div className="flex flex-col gap-4">
               <span className="font-medium text-muted-foreground text-sm">
                 Account
