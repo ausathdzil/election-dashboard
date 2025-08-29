@@ -37,13 +37,7 @@ def read_topics(
         )
 
     if q:
-        search_term = f"%{q}%"
-        base_statement = base_statement.where(
-            or_(
-                Topic.title.ilike(search_term),
-                Topic.tags.any(lambda tag: tag.ilike(search_term)),
-            )
-        )
+        base_statement = base_statement.where(Topic.title.ilike(f"%{q}%"))
 
     count_statement = select(func.count()).select_from(base_statement.subquery())
     count = session.exec(count_statement).one()

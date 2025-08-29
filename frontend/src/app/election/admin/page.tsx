@@ -1,7 +1,6 @@
 import { SearchIcon } from 'lucide-react';
 
-import { cookies } from 'next/headers';
-import { forbidden } from 'next/navigation';
+import { redirect } from 'next/navigation';
 import { Suspense } from 'react';
 
 import { UserTableActions } from '@/components/admin/user-table-actions';
@@ -29,14 +28,12 @@ type AdminPageProps = {
 export default async function AdminPage(props: AdminPageProps) {
   const searchParams = await props.searchParams;
   const session = await verifySession();
-  const cookieStore = await cookies();
-  const accessToken = cookieStore.get('access_token');
 
-  if (!(session?.is_superuser && accessToken)) {
-    forbidden();
+  if (!(session?.user.is_superuser && session.token)) {
+    redirect('/login');
   }
 
-  const users = await getUsers(accessToken.value, searchParams);
+  const users = await getUsers(session.token, searchParams);
 
   return (
     <main className="flex w-full max-w-6xl flex-1 flex-col gap-8 border-x border-dashed p-8">

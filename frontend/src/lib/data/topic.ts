@@ -1,3 +1,5 @@
+import { Topic } from '../types/topic';
+
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 type GetTopicsParams = {
@@ -5,7 +7,10 @@ type GetTopicsParams = {
   owner_id: string | null;
 };
 
-export async function getTopics(params: GetTopicsParams, token: string) {
+export async function getTopics(
+  params: GetTopicsParams,
+  token: string
+): Promise<{ data: Topic[]; count: number }> {
   const searchParams = new URLSearchParams();
   if (params.q) {
     searchParams.set('q', params.q);
