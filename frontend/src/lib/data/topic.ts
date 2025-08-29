@@ -3,10 +3,10 @@ import type { Topic } from '../types/topic';
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 type GetTopicsParams = {
-  q: string;
-  owner_id: string;
-  page: string;
-  size: string;
+  q?: string;
+  owner_id?: string;
+  page?: string;
+  size?: string;
 };
 
 export async function getTopics(

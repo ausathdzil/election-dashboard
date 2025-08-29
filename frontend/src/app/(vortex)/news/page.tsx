@@ -48,8 +48,8 @@ function NewsHeader() {
           Displays information, visualizations, graphics and text with a display
           that is more interesting to explore.
         </p>
-        <Link className={cn(buttonVariants(), 'mt-4')} href="/dashboard/topics">
-          Create a Topic
+        <Link className={cn(buttonVariants(), 'mt-4')} href="/topics">
+          Find Topics
         </Link>
       </article>
       <Image

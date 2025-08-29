@@ -27,24 +27,12 @@ const navItems = [
     href: '/',
   },
   {
-    label: 'Talenta',
-    href: '#',
+    label: 'News',
+    href: '/news',
   },
   {
-    label: 'Klien',
-    href: '#',
-  },
-  {
-    label: 'Mentor',
-    href: '#',
-  },
-  {
-    label: 'Kontak',
-    href: '#',
-  },
-  {
-    label: 'FaQ',
-    href: '#',
+    label: 'Topics',
+    href: '/topics',
   },
 ];
 
